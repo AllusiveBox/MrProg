@@ -4,7 +4,7 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 09/08/18
-    Date Last Updated: 10/11/18
+    Date Last Updated: 10/12/18
     Last Update By: Th3_M4j0r
 **/
 
@@ -23,7 +23,11 @@ export interface userRow {
     clearance: clearances
     points: number,
     level: number,
-    optOut: number
+    optOut: optOutChoice
+}
+
+export enum optOutChoice {
+    optedIn = 0, optedOut = 1
 }
 
 export type clearances = "none" | "mod" | "admin" | "smod" | null; 
@@ -43,8 +47,7 @@ const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, 
     + "level = null WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
-const optOutString = "UPDATE userinfo SET optOut = 1 WHERE userId = ?";
-const optInString = "UPDATE userinfo SET optOut = 0 WHERE userId = ?";
+const changeOptString = "UPDATE userinfo SET optOut = ? WHERE userId = ?";
 const userLookupString = "SELECT * FROM userinfo WHERE userID = ? OR userID = ? "
     + "OR userName = ? OR userName = ?";
 
@@ -62,8 +65,7 @@ export default class betterSql {
     private _setNaviStmt : Statement;
     private _userLeftStmt : Statement
     private _deleteMeStmt : Statement;
-    private _optOutStmt : Statement;
-    private _optInStmt : Statement;
+    private _changeOptStmt : Statement;
     private _userLookupStmt : Statement;
 
 
@@ -95,8 +97,7 @@ export default class betterSql {
         this._setNaviStmt = await this._Database.prepare(setNaviString);
         this._userLeftStmt = await this._Database.prepare(userLeftString);
         this._deleteMeStmt = await this._Database.prepare(deleteMeString);
-        this._optOutStmt = await this._Database.prepare(optOutString);
-        this._optInStmt = await this._Database.prepare(optInString);
+        this._changeOptStmt = await this._Database.prepare(changeOptString);
         this._userLookupStmt = await this._Database.prepare(userLookupString);
         debug(`Statements prepared`);
         this._dbOpen = true;
@@ -222,7 +223,7 @@ export default class betterSql {
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
-        await this._optOutStmt.run(userId);
+        await this._changeOptStmt.run(optOutChoice.optedOut, userId);
     }
 
     /**
@@ -236,7 +237,7 @@ export default class betterSql {
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
-        await this._optInStmt.run(userId);
+        await this._changeOptStmt.run(optOutChoice.optedIn, userId);
     }
 
     /**
@@ -245,9 +246,9 @@ export default class betterSql {
      * 
      * @param {any} toCheck
      * 
-     * @returns {Promise<userRow>}
+     * @returns {Promise<?userRow>}
      */
-    async userLookup(toCheck: any): Promise<userRow> {
+    async userLookup(toCheck: any): Promise<userRow | null> {
         debug(`I am in the sql.userLookup function`);
         if (!this._dbOpen) {
             throw new NotConnectedError();
@@ -324,10 +325,8 @@ export default class betterSql {
         this._userLeftStmt = null;
         await this._deleteMeStmt.finalize();
         this._deleteMeStmt = null;
-        await this._optOutStmt.finalize();
-        this._optOutStmt = null;
-        await this._optInStmt.finalize();
-        this._optInStmt = null;
+        await this._changeOptStmt.finalize();
+        this._changeOptStmt = null;
         await this._userLookupStmt.finalize();
         this._userLookupStmt = null;
         await this._Database.close();

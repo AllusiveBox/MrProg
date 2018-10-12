@@ -3,7 +3,7 @@
  *  Mr. Prog Logging Script
  *  Version: 1
  *  Date Created: 09/21/18
- *  Last Updated: 10/11/18
+ *  Last Updated: 10/12/18
  *  Last Updated By: Th3_M4j0r
  */
 
@@ -69,4 +69,5 @@ export interface commandHelp {
     readonly name: string;
     readonly permissionLevel: "mod" | "admin" | "owner" | "normal";
     readonly adminOnly?: boolean;
+    [propname: string]: any;
 }

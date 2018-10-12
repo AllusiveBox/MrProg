@@ -13,6 +13,7 @@
 import * as Discord from "discord.js";
 import { run as disabledCommand } from "../functions/disabledCommand.js";
 import { debug, commandHelp } from "../functions/log.js";
+import { commandFunction } from "../classes/commandBot.js";
 
 
 import config = require('../files/config.json');

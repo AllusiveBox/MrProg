@@ -3,7 +3,7 @@
  * Version 4.1.0
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/10/18
+ * Last Updated: 10/12/18
  * Last Updated By: Th3_M4j0r
  * 
  */
@@ -40,7 +40,7 @@ const sql = new betterSql();
 sql.open(`./files/userinfo.sqlite`);
 
 // Misc.
-var falseCommandUsedRecently = new Set();
+var falseCommandUsedRecently: Set<Discord.Snowflake> = new Set();
 
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
@@ -68,7 +68,6 @@ fs.readdir(`./commands/`, async (error, files) => {
 // Bot on Startup
 bot.on("ready", async () => {
     debug(`${bot.user.username} is starting up...`);
-//@ts-ignore
     bot.commands.get("setstatus").updateStatus(bot, config.defaultStatus);
     onStartup(bot, process.argv);
 });
