@@ -1,7 +1,7 @@
 /*
     Command Name: disable.js
     Function: To disable a command
-    Clearance: Admin+
+    Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 10/17/17
     Last Updated: 10/10/18
@@ -17,8 +17,8 @@ import betterSql from '../classes/betterSql.js';
 import { commandBot } from '../classes/commandBot.js';
 
 // Command Variables
-const command : commandHelp = {
-    adminOnly: true,
+const command = {
+    adminOnly: false,
     bigDescription: ("This command allows an administrator to enable a command that is disabled.\n"
         + "Returns:\n\t"
         + "This command returns nothing."),
@@ -26,7 +26,7 @@ const command : commandHelp = {
     enabled: null,
     fullName: "Enable",
     name: "enable",
-    permissionLevel: "admin"
+    permissionLevel: "mod"
 }
 
 /**
