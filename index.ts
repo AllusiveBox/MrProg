@@ -168,5 +168,5 @@ bot.on("message", async message => {
     // Log Commands
     await commandLog(message.author, command, args);
 });
-
+debug("logging in");
 bot.login(bottoken.token);
