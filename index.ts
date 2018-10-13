@@ -21,7 +21,7 @@ import { run as memberJoin } from './functions/memberJoin.js';
 import { run as memberLeave } from './functions/memberLeave.js';
 import { run as onStartup } from './functions/onStartup.js';
 import { run as score } from './functions/score.js';
-import { command as commandLog, debug, error as errorLog } from './functions/log.js';
+import { command as commandLog, debug, error as errorLog, commandHelp } from './functions/log.js';
 
 //import required jsons
 import bottoken = require('./files/bottoken.json');
@@ -51,17 +51,19 @@ fs.readdir(`./commands/`, async (error, files) => {
     if (jsFile.length <= 0) {
         return debug(`Unable to locate any commands!`);
     }
-
+    if(!includedCommands) {
+        throw Error("includedCommands.json not found");
+    }
     jsFile.forEach(async (file, i) => {
-        var toInclude = eval("includedCommands." + file.substring(0, file.indexOf(".")));
-
+        //var toInclude = eval("includedCommands." + file.substring(0, file.indexOf(".")));
+        let toInclude = includedCommands[file.substring(0, file.indexOf("."))];
         // Test if Including Command
-        if (!toInclude) return debug(`${file} not loaded!`);
+        if (toInclude === false) return debug(`${file} not loaded!`);
 
         // Require Command
         let props = require(`./commands/${file}`);
 
-        bot.commands.set(props.help.name.toLowerCase(), props);
+        bot.commands.set((<commandHelp>props.help).name.toLowerCase(), props);
     });
 });
 

@@ -52,6 +52,9 @@ const userLookupString = "SELECT * FROM userinfo WHERE userID = ? OR userID = ? 
     + "OR userName = ? OR userName = ?";
 
 
+const dbOptions = {
+    promise: Promise
+}
 
 export default class betterSql {
 
@@ -85,8 +88,8 @@ export default class betterSql {
     async open(path: string): Promise<boolean> {
         debug(`Opening sqlite DB at ${path}`);
 
-        //@ts-ignore
-        this._Database = await _open(path, { promise });
+        ////@ts-ignore 
+        this._Database = await _open(path, dbOptions);
 
         debug(`Preparing statements`);
         this._userInsertStmt = await this._Database.prepare(insertUserString);
