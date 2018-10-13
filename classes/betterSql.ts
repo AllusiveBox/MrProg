@@ -90,7 +90,10 @@ export default class betterSql {
 
         ////@ts-ignore 
         this._Database = await _open(path, dbOptions);
-
+        this._Database.run("CREATE TABLE IF NOT EXISTS userinfo (userId TEXT NOT NULL, "
+        + "userName TEXT, battlecode TEXT, favechip TEXT, navi TEXT, "
+        + "clearance TEXT, points INTEGER, level INTEGER, optOut INTEGER, "
+        + "PRIMARY KEY (userId))");
         debug(`Preparing statements`);
         this._userInsertStmt = await this._Database.prepare(insertUserString);
         this._setPointsStmt = await this._Database.prepare(setPointsString);
