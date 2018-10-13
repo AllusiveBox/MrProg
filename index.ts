@@ -3,8 +3,8 @@
  * Version 4.1.0
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/12/18
- * Last Updated By: Th3_M4j0r
+ * Last Updated: 10/13/18
+ * Last Updated By: AllusiveBox
  * 
  */
 
@@ -55,8 +55,8 @@ fs.readdir(`./commands/`, async (error, files) => {
         throw Error("includedCommands.json not found");
     }
     jsFile.forEach(async (file, i) => {
-        //var toInclude = eval("includedCommands." + file.substring(0, file.indexOf(".")));
-        let toInclude = includedCommands[file.substring(0, file.indexOf("."))];
+        let toInclude = includedCommands[`${file.substring(0, file.indexOf("."))}`];
+
         // Test if Including Command
         if (toInclude === false) return debug(`${file} not loaded!`);
 
@@ -111,12 +111,17 @@ bot.on("guildMemberAdd", async member => {
 
 // Bot on Member Leave Server
 bot.on("guildMemberRemove", async member => {
+    if (config.isKicking) return config.isKicking = false;
     try {
         await memberLeave(bot, member, sql);
     } catch (error) {
         errorLog(error);
     }
 });
+
+bot.on("guildBanAdd", async member => {
+    debug("Member was Banned...");
+})
 
 // Message Handler
 bot.on("message", async message => {

@@ -4,8 +4,8 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/13/18
+    Last Update By: AllusiveBox
 
 **/
 
@@ -72,11 +72,13 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
 
     debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
         + `for ${reason}.`);
-    member.kick(reason).catch(error => {
+    await member.kick(reason).catch(error => {
         errorLog(error);
         return message.channel.send(`Sorry, ${message.author}, I could not kick `
             + `${member.user.username} because of ${error}.`);
     });
+
+    // Set isKicking flag to false
     return debug(`Kick Successful.`);
 }
 

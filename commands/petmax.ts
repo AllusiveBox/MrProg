@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/15/17
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/13/18
+    Last Updated By: AllusiveBox
 
 */
 
@@ -41,35 +41,27 @@ export function setCount(newCount: number, message: Discord.Message) {
     // Get Counter
     try {
         var counter = require(`../files/counter.json`);
-    }
-    catch (error) {
+    } catch (error) {
         errorLog(error);
-        // Build the Reply
-        let reply = (`No counter.json file was able to be located. `
-            + `Please ensure that there is a files/counter.json file and that it `
-            + `is in the right directory.`);
-        debug(reply);
-        return message.channel.send(reply);
+        return message.channel.send(`*${error.toString()}*`);
     }
 
     counter.max.total = newCount;
+
     // Save Edited File
     writeFile(`./files/counter.json`, JSON.stringify(counter), error => {
         if (error) {
             errorLog(error);
             if (message) {
-                return message.channel.send(`I was unable to update the counter. Please check the error log.`);
+                return message.channel.send(`*${error.toString()}*`);
             } else {
                 return;
             }
         }
     });
 
-    if (message) {
-        return message.channel.send(`counter.max.total set to: ${counter.max.total}`);
-    } else {
-        return;
-    }
+    // Save Successful
+    return debug(`Successfully saved!`);
 }
 
 /**
@@ -84,15 +76,9 @@ export function getCount(message: Discord.Message) {
     // Get Counter
     try {
         var counter = require(`../files/counter.json`);
-    }
-    catch (error) {
+    } catch (error) {
         errorLog(error);
-        // Build the Reply
-        let reply = (`No counter.json file was able to be located. `
-            + `Please ensure that there is a files/counter.json file and that it `
-            + `is in the right directory.`);
-        debug(reply);
-        return message.channel.send(reply);
+        return message.channel.send(`*${error.toString()}*`);
     }
 
     // Build the Reply
@@ -134,20 +120,14 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         return message.channel.send(reply);
     }
 
-    // Debug Before
-    debug(`Previous max.total: ${counter.max.total}.`);
-
     // Increase Counter
     counter.max.total++;
-
-    // Debug After
-    debug(`New max.total: ${counter.max.total}.`);
 
     // Save Edited File
     writeFile(`./files/counter.json`, JSON.stringify(counter), error => {
         if (error) {
             errorLog(error);
-            return message.channel.send(`I am sorry, ${message.author}, there was an unexpected error. I was unable to pet Max...`);
+            return message.channel.send(`*${error.toString()}*`);
         }
     });
 

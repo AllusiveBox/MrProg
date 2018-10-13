@@ -4,8 +4,8 @@
     Clearance: Mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 08/31/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/13/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -94,8 +94,8 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
             disabledDMs(message, reply);
         });
     }
-    // message.channel.send(`This is where the kick function would go...\n`
-    //   + `***IF I HAD ONE.***`);
+    // Set the isKicking flag to true
+    config.isKicking = true;
 
     kick(bot, message, toKick, reason, sql);
 }

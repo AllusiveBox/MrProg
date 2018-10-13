@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/17/17
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/13/18
+    Last Updated By: AllusiveBox
 
 */
 
@@ -43,17 +43,9 @@ function getCounter(message: Discord.Message | null) {
         counter = require(`../files/counter.json`);
     } catch (error) {
         errorLog(error);
-
-        // Build the Reply
-        let reply = (`No counter.json file was able to be located. `
-            + `Please ensure that there is a files/counter.json file and that it `
-            + `is in the right directory.`);
-        debug(reply);
-        if (message) { // If Message Param Passed...
-            message.channel.send(reply);
-        }
-        return false;
+        return message.channel.send(`*${error.toString()}*`);
     }
+
     return counter;
 }
 
@@ -105,9 +97,9 @@ export function setCount(newCount: number | null = null, message: Discord.Messag
         if (error) {
             errorLog(error);
             if (message) { // If Message Param Passed...
-                message.channel.send(`I am sorry, ${message.author}, there was an unexpected error. I was unable to pay respect to fallen progs...`);
+                return message.channel.send(`*${error.toString()}*`);
             }
-            return false;
+            return;
         }
     });
     // Save Successful
