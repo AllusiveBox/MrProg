@@ -119,9 +119,9 @@ bot.on("guildMemberRemove", async member => {
     }
 });
 
-bot.on("guildBanAdd", async member => {
+bot.on("guildBanAdd", async (guild, member) => {
     debug("Member was Banned...");
-})
+});
 
 // Message Handler
 bot.on("message", async message => {
