@@ -4,14 +4,14 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/26/18
-    Date Last Updated: 10/09/18
+    Date Last Updated: 10/13/18
     Last Update By: Th3_M4j0r
 
 **/
 
 // Load in Required Libraries and Files
 import { NoDefinedRole, UnsupportedMethodType } from '../classes/CustomErrors.js';
-import { debug, error as errorLog } from './log.js';
+import { debug } from './log.js';
 
 
 /**
