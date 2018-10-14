@@ -8,7 +8,9 @@
     "target": "es2018",
     "outDir": "build",
     "resolveJsonModule": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noUnusedParameters": false,
+    "noUnusedLocals": false
   },
     "exclude": [
         "node_modules",
