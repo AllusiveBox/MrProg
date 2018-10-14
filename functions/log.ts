@@ -3,7 +3,7 @@
  *  Mr. Prog Logging Script
  *  Version: 1
  *  Date Created: 09/21/18
- *  Last Updated: 10/12/18
+ *  Last Updated: 10/13/18
  *  Last Updated By: Th3_M4j0r
  */
 
@@ -43,7 +43,7 @@ async function commandLogger(user: Discord.User, command: string, args: string[]
     let commandLogger = new Logger("CommandLogger");
 
     // Build the Log Message
-    let logMessage = `Command recieved from ${user} to perform ${command}.`;
+    let logMessage = `Command recieved from ${user.tag} to perform ${command}.`;
 
     commandLogger.log(logMessage);
 

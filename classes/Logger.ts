@@ -4,7 +4,7 @@
  * Version: 1
  * Author: AllusiveBox
  * Date Started: 09/21/18
- * Date Last Updated: 10/09/18
+ * Date Last Updated: 10/13/18
  * Last Updated By: Th3_M4jor
  * 
  */
@@ -13,15 +13,17 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { dirname as _dirname } from 'path';
 import SpiffyDate from '../classes/SpiffyDate.js';
 
+export type logType = "DebugLogger" | "ErrorLogger" | "CommandLogger";
+
 class Logger {
-    name: string;
+    name: logType;
     logFilePath: string;
 
     /**
      * 
-     * @param {String} name
+     * @param {logType} name
      */
-    constructor(name: string = null) {
+    constructor(name: logType = null) {
         this.name = name;
         this._setLogFilePath();
         this._validateFilePath();
@@ -33,7 +35,6 @@ class Logger {
      * @param {?boolean} [debug=true]
      * 
      */
-
     log(logText: string, debug: boolean | null = true) {
         // Get SpiffyDate
         let timestamp = new SpiffyDate();
