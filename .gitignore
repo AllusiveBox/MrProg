@@ -43,10 +43,21 @@ package-lock.json
 
 # TypeScript v1 declaration files
 typings/
-build/
 
 #typescript build folder
-build/
+build/files/bottoken.json
+build/files/channels.json
+build/files/userids.json
+build/files/roles.json
+build/files/*.sqlite
+build/files/counter.json
+build/files/bentcomments.txt
+build/files/textfaces.txt
+build/img/navi_symbols/*
+build/log.txt
+build/error.txt
+build/package-lock.json
+build/node_modules
 
 # Optional npm cache directory
 .npm
