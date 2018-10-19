@@ -5,7 +5,7 @@
     Clearance: Owner Only
     Default Enabled: Cannot be Disabled
     Date Created: 07/18/18
-    Last Updated: 10/10/18
+    Last Updated: 10/19/18
     Last Update By: Th3_M4j0r
 
 */
@@ -14,8 +14,6 @@ const log_js_1 = require("../functions/log.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 // Command Variables
-// Command Variables
-const ownerID = userids.ownerID;
 const command = {
     bigDescription: ("Restarts the bot to allow changes to take place.\n"
         + "Returns:\n\t"
