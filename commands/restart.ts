@@ -4,7 +4,7 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 07/18/18
-    Last Updated: 10/10/18
+    Last Updated: 10/19/18
     Last Update By: Th3_M4j0r
 
 */
@@ -19,8 +19,6 @@ import userids = require('../files/userids.json');
 import betterSql from '../classes/betterSql.js';
 
 // Command Variables
-// Command Variables
-const ownerID = userids.ownerID;
 const command : commandHelp = {
     bigDescription: ("Restarts the bot to allow changes to take place.\n"
         + "Returns:\n\t"

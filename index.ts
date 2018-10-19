@@ -41,6 +41,7 @@ sql.open(`./files/userinfo.sqlite`);
 
 // Misc.
 var falseCommandUsedRecently: Set<Discord.Snowflake> = new Set();
+var commandRegex: RegExp = new RegExp("[^A-Za-z0-9]");
 
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
@@ -51,7 +52,7 @@ fs.readdir(`./commands/`, async (error, files) => {
     if (jsFile.length <= 0) {
         return debug(`Unable to locate any commands!`);
     }
-    if(!includedCommands) {
+    if (!includedCommands) {
         throw Error("includedCommands.json not found");
     }
     jsFile.forEach(async (file, i) => {
@@ -150,11 +151,13 @@ bot.on("message", async message => {
 
     // Check if Command or Not
     if (!message.content.startsWith(prefix)) return; // Return on Not Commands.
-
-    // Check for Valid Commands
-    if ((command.indexOf("/") > -1) || (command.indexOf(".") > -1) || (command.indexOf("\\") > -1)) {
+    if(commandRegex.test(command)) {
         return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }
+    // Check for Valid Commands
+    /*if ((command.indexOf("/") > -1) || (command.indexOf(".") > -1) || (command.indexOf("\\") > -1)) {
+        return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
+    }*/
 
     let commandFile = bot.commands.get(command);
     if (commandFile) { // If the Command Exists...
