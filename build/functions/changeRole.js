@@ -30,8 +30,6 @@ function run(bot, message, level) {
         return message.channel.send(`${message.author}, I am unable to update your `
             + `roles at this time.`);
     }
-    // Level Logic Check
-    level = level < 10 ? 0 + level : level;
     // Get The Role
     let role = serverRoles.get(roles.levelUp[`${level}`]);
     if (!role) {

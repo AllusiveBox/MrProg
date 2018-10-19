@@ -5,8 +5,8 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/09/18
-    Date Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/15/18
+    Last Update By: AllusiveBox
 
 **/
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -54,8 +54,8 @@ async function run(bot, member, sql) {
         .setThumbnail(avatar)
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
-        .addField("Joined On", member.joinedAt)
         .addField("Account Created", member.user.createdAt)
+        .addField("Joined On", member.joinedAt)
         .addField("Left On", new Date());
     // Check if there is an ID Now
     if (!logID) { // If no Log ID...
