@@ -36,8 +36,7 @@ export function run(bot: Discord.Client, message: Discord.Message, level: number
         return message.channel.send(`${message.author}, I am unable to update your `
             + `roles at this time.`);
     }
-    // Level Logic Check
-    level = level < 10 ? 0 + level : level;
+    
     // Get The Role
     let role : Discord.RoleResolvable = serverRoles.get(roles.levelUp[`${level}`]);
     if (!role) {

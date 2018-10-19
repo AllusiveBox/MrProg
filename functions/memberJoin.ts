@@ -4,8 +4,8 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/15/18
+    Last Update By: AllusiveBox
 
 **/
 
@@ -70,8 +70,8 @@ export async function run(bot : commandBot, member : Discord.GuildMember) {
         .setThumbnail(avatar)
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
-        .addField("Joined On", member.joinedAt)
         .addField("Account Created", member.user.createdAt)
+        .addField("Joined On", member.joinedAt)
         .addField("DM Successfully Sent", sentDM);
 
     // Check if there is an ID Now
