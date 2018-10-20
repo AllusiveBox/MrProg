@@ -5,8 +5,8 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 10/13/18
-    Last Update By: AllusiveBox
+    Date Last Updated: 10/19/18
+    Last Update By: Th3_M4j0r
 
 **/
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -63,11 +63,15 @@ async function run(bot, message, member, reason, sql) {
     }
     log_js_1.debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
         + `for ${reason}.`);
-    await member.kick(reason).catch(error => {
+    try {
+        await member.kick(reason);
+    }
+    catch (error) {
         log_js_1.error(error);
         return message.channel.send(`Sorry, ${message.author}, I could not kick `
             + `${member.user.username} because of ${error}.`);
-    });
+    }
+    sql.deleteUser(member.id);
     // Set isKicking flag to false
     return log_js_1.debug(`Kick Successful.`);
 }

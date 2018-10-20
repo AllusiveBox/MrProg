@@ -4,8 +4,8 @@
  * Version 4.1.0
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/13/18
- * Last Updated By: AllusiveBox
+ * Last Updated: 10/19/18
+ * Last Updated By: Th3_M4j0r
  *
  */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -24,8 +24,11 @@ const bottoken = require("./files/bottoken.json");
 const config = require("./files/config.json");
 const includedCommands = require("./files/includedCommands.json");
 const userids = require("./files/userids.json");
+const botOptions = {
+    disabledEvents: ["TYPING_START"]
+};
 // Declare the Bot Stuff
-const bot = new commandBot_js_1.commandBot();
+const bot = new commandBot_js_1.commandBot(botOptions);
 //bot.commands = new Discord.Collection<string, NodeModule>();
 // Open SQ Database
 const sql = new betterSql_js_1.default();
@@ -93,8 +96,11 @@ bot.on("guildMemberAdd", async (member) => {
 });
 // Bot on Member Leave Server
 bot.on("guildMemberRemove", async (member) => {
-    if (config.isKicking)
-        return config.isKicking = false;
+    if (config.isKicking) {
+        await log_js_1.debug("setting kick flag to false");
+        config.isKicking = false;
+        return;
+    }
     try {
         await memberLeave_js_1.run(bot, member, sql);
     }

@@ -3,7 +3,7 @@
  * Version 4.1.0
  * Author: Th3_M4j0r
  * Date Started: 10/08/18
- * Last Updated: 10/12/18
+ * Last Updated: 10/19/18
  * Last Updated By: Th3_M4j0r
  * 
  */
@@ -14,9 +14,9 @@ import betterSql from './betterSql.js';
 
 class commandBot extends Discord.Client {
     public commands: Discord.Collection<string, commandModule>
-    constructor() {
+    constructor(options?: Discord.ClientOptions | null) {
         debug('Constructing commandBot');
-        super();
+        super(options);
         this.commands = new Discord.Collection();
     }
 }

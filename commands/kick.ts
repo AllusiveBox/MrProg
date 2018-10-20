@@ -95,6 +95,7 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
         });
     }
     // Set the isKicking flag to true
+    await debug("setting kick flag to true");
     config.isKicking = true;
 
     kick(bot, message, toKick, reason, sql);

@@ -86,6 +86,7 @@ async function run(bot, message, args, sql) {
         });
     }
     // Set the isKicking flag to true
+    await log_js_1.debug("setting kick flag to true");
     config.isKicking = true;
     kick_js_1.run(bot, message, toKick, reason, sql);
 }

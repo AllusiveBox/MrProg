@@ -3,8 +3,8 @@
  * Version 4.1.0
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/13/18
- * Last Updated By: AllusiveBox
+ * Last Updated: 10/19/18
+ * Last Updated By: Th3_M4j0r
  * 
  */
 
@@ -30,9 +30,11 @@ import includedCommands = require('./files/includedCommands.json');
 import userids = require('./files/userids.json');
 
 
-
+const botOptions : Discord.ClientOptions = { //usually unnecessary and hurts performance
+    disabledEvents: ["TYPING_START"]
+}
 // Declare the Bot Stuff
-const bot = new commandBot();
+const bot = new commandBot(botOptions);
 //bot.commands = new Discord.Collection<string, NodeModule>();
 
 // Open SQ Database
@@ -112,7 +114,11 @@ bot.on("guildMemberAdd", async member => {
 
 // Bot on Member Leave Server
 bot.on("guildMemberRemove", async member => {
-    if (config.isKicking) return config.isKicking = false;
+    if (config.isKicking) {
+        await debug("setting kick flag to false");
+        config.isKicking = false;
+        return;
+    }
     try {
         await memberLeave(bot, member, sql);
     } catch (error) {
