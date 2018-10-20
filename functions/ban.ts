@@ -12,6 +12,7 @@
 // Load in Required Libraries and Files
 import * as Discord from 'discord.js';
 import { debug, error as errorLog } from './log.js';
+import betterSql from '../classes/betterSql.js';
 
 
 import config = require('../files/config.json');
@@ -26,7 +27,7 @@ import channels = require('../files/channels.json');
  * @param {Discord.GuildMember} member
  * @param {string} reason
  */
-export async function run(bot: Discord.Client, message: Discord.Message, member: Discord.GuildMember, reason: string) {
+export async function run(bot: Discord.Client, message: Discord.Message, member: Discord.GuildMember, reason: string, sql: betterSql) {
     // Debug to Console
     debug(`I am inside the ban function.`);
 
@@ -78,6 +79,6 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         let Channel = <Discord.TextChannel>bot.channels.get(logID);
         Channel.send(bannedEmbed);
     }
-
+    sql.deleteUser(member.id);
     return debug(`Ban Successful.`);
 }

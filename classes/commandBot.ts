@@ -13,11 +13,13 @@ import { debug, commandHelp } from '../functions/log.js';
 import betterSql from './betterSql.js';
 
 class commandBot extends Discord.Client {
-    public commands: Discord.Collection<string, commandModule>
+    public commands: Discord.Collection<string, commandModule>;
+    public isKicking: boolean;
     constructor(options?: Discord.ClientOptions | null) {
         debug('Constructing commandBot');
         super(options);
         this.commands = new Discord.Collection();
+        this.isKicking = false;
     }
 }
 

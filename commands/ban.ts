@@ -17,6 +17,8 @@ import { run as dmCheck } from '../functions/dmCheck.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import { debug, commandHelp } from '../functions/log.js';
+import { commandBot } from '../classes/commandBot.js';
+
 
 import config = require('../files/config.json');
 import roles = require('../files/roles.json');
@@ -40,12 +42,12 @@ const command: commandHelp = {
 
 /**
  * 
- * @param {Discord.Client} bot
+ * @param {commandBot} bot
  * @param {Discord.Message} message
  * @param {string[]} args
  * @param {betterSql} sql
  */
-export async function run(bot: Discord.Client, message: Discord.Message, args: string[], sql: betterSql) {
+export async function run(bot: commandBot, message: Discord.Message, args: string[], sql: betterSql) {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
@@ -89,9 +91,9 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
         });
     }
     // Set the isKicking flag to true
-    config.isKicking = true;
+    bot.isKicking = true;
 
-    ban(bot, message, toBan, reason);
+    ban(bot, message, toBan, reason, sql);
 }
 
 export const help = command;
