@@ -118,11 +118,20 @@ async function run(bot, message, args, sql) {
         });
     }
     // Build the Reply Message
-    let reply = (`${message.author}, your battlecode has been `
+    /*let reply = (`${message.author}, your battlecode has been `
         + `updated to: ${battleCode}`);
+
     message.author.send(reply).catch(error => {
-        disabledDMs_js_1.run(message, reply);
+        disabledDMs(message, reply);
     });
+    */
+    try {
+        await message.react('✅');
+    }
+    catch (error) {
+        message.channel.send("could not react with that emoji");
+        log_js_1.error(error);
+    }
     return log_js_1.debug(`Battlecode successfully updated.`);
 }
 exports.run = run;

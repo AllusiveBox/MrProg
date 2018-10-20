@@ -26,7 +26,7 @@ import config = require('../files/config.json');
  */
 const commandUsed: Set<Discord.Snowflake> = new Set();
 
-const command : commandHelp = {
+const command: commandHelp = {
     bigDescription: ("Allows a user to set their battlecode, which can be fetched "
         + `which can be fetched with the getBattleCode command.\n`
         + "Returns:\n\t"
@@ -139,13 +139,19 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
     }
 
     // Build the Reply Message
-    let reply = (`${message.author}, your battlecode has been `
+    /*let reply = (`${message.author}, your battlecode has been `
         + `updated to: ${battleCode}`);
 
     message.author.send(reply).catch(error => {
         disabledDMs(message, reply);
     });
-
+    */
+    try {
+        await message.react('✅');
+    } catch (error) {
+        message.channel.send("could not react with that emoji");
+        errorLog(error);
+    }
     return debug(`Battlecode successfully updated.`);
 }
 
