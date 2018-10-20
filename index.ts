@@ -157,10 +157,11 @@ bot.on("message", async message => {
 
     // Check if Command or Not
     if (!message.content.startsWith(prefix)) return; // Return on Not Commands.
+
+    // Check for Valid Commands
     if(commandRegex.test(command)) {
         return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }
-    // Check for Valid Commands
     /*if ((command.indexOf("/") > -1) || (command.indexOf(".") > -1) || (command.indexOf("\\") > -1)) {
         return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }*/
