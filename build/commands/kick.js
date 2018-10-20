@@ -15,7 +15,6 @@ const dmCheck_js_1 = require("../functions/dmCheck.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const kick_js_1 = require("../functions/kick.js");
-const config = require("../files/config.json");
 const roles = require("../files/roles.json");
 const userids = require("../files/userids.json");
 // Command Variables
@@ -87,7 +86,7 @@ async function run(bot, message, args, sql) {
     }
     // Set the isKicking flag to true
     await log_js_1.debug("setting kick flag to true");
-    config.isKicking = true;
+    bot.isKicking = true;
     kick_js_1.run(bot, message, toKick, reason, sql);
 }
 exports.run = run;

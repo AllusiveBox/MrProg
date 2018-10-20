@@ -96,9 +96,9 @@ bot.on("guildMemberAdd", async (member) => {
 });
 // Bot on Member Leave Server
 bot.on("guildMemberRemove", async (member) => {
-    if (config.isKicking) {
+    if (bot.isKicking) {
         await log_js_1.debug("setting kick flag to false");
-        config.isKicking = false;
+        bot.isKicking = false;
         return;
     }
     try {

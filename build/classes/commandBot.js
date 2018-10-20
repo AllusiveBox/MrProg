@@ -16,6 +16,7 @@ class commandBot extends Discord.Client {
         log_js_1.debug('Constructing commandBot');
         super(options);
         this.commands = new Discord.Collection();
+        this.isKicking = false;
     }
 }
 exports.commandBot = commandBot;

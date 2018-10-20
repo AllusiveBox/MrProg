@@ -15,7 +15,6 @@ const dmCheck_js_1 = require("../functions/dmCheck.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
-const config = require("../files/config.json");
 const roles = require("../files/roles.json");
 const userids = require("../files/userids.json");
 // Command Variables
@@ -35,7 +34,7 @@ const command = {
 };
 /**
  *
- * @param {Discord.Client} bot
+ * @param {commandBot} bot
  * @param {Discord.Message} message
  * @param {string[]} args
  * @param {betterSql} sql
@@ -82,8 +81,8 @@ async function run(bot, message, args, sql) {
         });
     }
     // Set the isKicking flag to true
-    config.isKicking = true;
-    ban_js_1.run(bot, message, toBan, reason);
+    bot.isKicking = true;
+    ban_js_1.run(bot, message, toBan, reason, sql);
 }
 exports.run = run;
 exports.help = command;

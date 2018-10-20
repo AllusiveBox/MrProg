@@ -23,7 +23,7 @@ const channels = require("../files/channels.json");
  * @param {Discord.GuildMember} member
  * @param {string} reason
  */
-async function run(bot, message, member, reason) {
+async function run(bot, message, member, reason, sql) {
     // Debug to Console
     log_js_1.debug(`I am inside the ban function.`);
     let logchannelColor = config.logChannelColors.memberBan;
@@ -71,6 +71,7 @@ async function run(bot, message, member, reason) {
         let Channel = bot.channels.get(logID);
         Channel.send(bannedEmbed);
     }
+    sql.deleteUser(member.id);
     return log_js_1.debug(`Ban Successful.`);
 }
 exports.run = run;
