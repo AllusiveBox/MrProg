@@ -4,3 +4,4 @@ Updated: 10/20/18
 	* Commands that DM'd successful completion of their task, but offered no real information, have had their DMs removed and instead will only react to your message.
 	* A few commands have had their detailed help text updated.
 	* A bug with deleteMe always deleting admins and mods, and not saving their clearance permissions has been resolved.
+	* A bug with the n1 command always failing has been resolved. The bot will now once again send out the invite link.

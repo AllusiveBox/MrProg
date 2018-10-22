@@ -1,8 +1,8 @@
 ﻿{
   "about": {
     "author": "AllusiveBox",
-    "lastUpdated": "10/20/2018",
-    "verNum": "4.0.7"
+    "lastUpdated": "10/22/2018",
+    "verNum": "4.0.8"
   },
   "auditColor": "#800000",
   "debug": true,
@@ -22,6 +22,7 @@
     "memberUpdate": "#CC9999",
     "messagesPurged": "#CCCC00"
   },
+  "n1gpLink": "https://discord.gg/f73hz2C",
   "prefix": "!",
   "questionChannelColor": "#FF9999",
   "returnsChannel": "This command will generate a reply back in the **__channel__** that it was used in.",
