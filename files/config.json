@@ -14,6 +14,7 @@
   "isKicking": false,
   "isOn": true,
   "isStreaming": false,
+  "issueRepoLink": "https://github.com/AllusiveBox/MrProgIssues/issues",
   "logChannelColors": {
     "memberBan": "#CC0000",
     "memberJoin": "#CCCCFF",
@@ -24,6 +25,7 @@
   },
   "n1gpLink": "https://discord.gg/f73hz2C",
   "prefix": "!",
+  "publicRepoLink": "https://github.com/AllusiveBox/discordBot",
   "questionChannelColor": "#FF9999",
   "returnsChannel": "This command will generate a reply back in the **__channel__** that it was used in.",
   "returnsDM": "This command will generate a reply back to the **__user__** that used it.",
