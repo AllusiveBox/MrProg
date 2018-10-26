@@ -164,9 +164,10 @@ bot.on("message", async message => {
         setTimeout(() => {
             falseCommandUsedRecently.delete(message.author.id);
         }, 300000) // Remove After 5 Minutes
-
+        /*
         return message.channel.send(`This is where I'd put a ${command}...\n`
             + `***IF I HAD ONE.*** (╯°□°）╯︵ ┻━┻`);
+        */
     }
 
     // Log Commands
