@@ -4,7 +4,7 @@
     Clearance: Owner Only
   	Default Enabled: Cannot be Disabled
     Date Created: 12/03/17
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -18,7 +18,7 @@ const channels = require(`../files/channels.json`);
 const userids = require(`../files/userids.json`);
 const roles = require(`../files/roles.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 try {
@@ -129,7 +129,7 @@ module.exports.run = async (bot, message) => {
             + ` and add a role for the "alertMe" entry. For a template, please check `
             + `in the templates directory.`);
         debug(reply);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(reply);
     }
 
@@ -139,7 +139,7 @@ module.exports.run = async (bot, message) => {
             + `files/channels.json and add a role for the "announceChat" entry. For a `
             + `tmplate, please check in the templates directory.`);
         debug(reply);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(reply);
     }
 
@@ -149,22 +149,20 @@ module.exports.run = async (bot, message) => {
             + `Please ensure that there is a files/announcement.txt file and that it `
             + `is in the right directory.`);
         debug(reply);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(reply);
     }
 
     bot.channels.get(command.announceChat).send(`<@&${command.alertMe.ID}>: The bot has recently `
-        + `been updated! Below is a list of changes.\n`
-        + `If you have any command suggestions, send a DM to <@${userids.ownerID}>.`
-        + ` It's easier to keep up with them that way.\n\n`);
+        + `been updated! Below is a list of changes.`);
     bot.channels.get(command.announceChat).send(command.announcement).catch(error => {
         errorLog(error);
-        message.react(config.fail);
+        react(message, false);
         return message.channel.send(`*${error.toString()}*`);
     });
-    await message.react(config.success);
+    await react(message);
     return bot.channels.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
-        + `https://github.com/AllusiveBox/discordBot/issues`);
+        + `https://github.com/AllusiveBox/MrProgIssues/issues`);
 }
 
 module.exports.help = command;

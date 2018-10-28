@@ -10,13 +10,13 @@
 
 // Load in Required Files
 const Discord = require(`discord.js`);
-const config = require(`../files/config.json`);
+const fs = require(`fs`);
 const betterSql = require(`../classes/betterSql.js`);
+const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
-const roles = require(`../files/roles.json`);
-const fs = require(`fs`);
+const { run: react } = require(`../functions/react.js`);
 
 
 //command stuff
@@ -52,7 +52,12 @@ module.exports.run = async (client, message, args, sql) => {
 
     if (navi === undefined) {
         debug(`No Name Given`);
-        return message.channel.send(`Cannot have an empty string.`);
+        await react(message, false);
+        // Build the Reply
+        let reply = `Cannot have an empty string.`;
+        return message.author.send(reply).catch(error => {
+            disabledDMs(message, reply);
+        });
     }
 
     navi = navi.toLowerCase();
@@ -61,6 +66,7 @@ module.exports.run = async (client, message, args, sql) => {
     let row = await sql.getUserRow(message.author.id);
     if (!row) {
         debug(`Unable to locate data on ${message.author.username}`);
+        await react(message, false);
         return message.channel.send(`I am unable to locate any data on you, please try again`);
     }
     debug(`Attempting to update ${message.author.username}'s Navi Symbol`);
@@ -72,19 +78,17 @@ module.exports.run = async (client, message, args, sql) => {
         navi_sym = (`./img/navi_symbols/${row.navi}.png`);
         sql.setNavi(message.author.id, row.navi);
         let reply = `${message.author} invalid navi symbol file. Setting default value.`
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
     }
 
-    //else it does exist
-
     debug(`Valid Navi Symbol File: ${row.navi}`);
     sql.setNavi(message.author.id, row.navi);
-    let reply = "Navi Symbol Updated";
-    return message.author.send(reply).catch(error => {
-        disabledDMs(message, reply);
-    });
+
+    await react(message);
+
 }
 
 module.exports.help = command;

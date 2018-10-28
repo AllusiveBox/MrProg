@@ -11,12 +11,13 @@
 
 // Load in Required Files
 const Discord = require(`discord.js`);
+const betterSql = require(`../classes/betterSql.js`);
 const config = require(`../files/config.json`);
 const channels = require(`../files/channels.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
-const betterSql = require(`../classes/betterSql.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const announceChat = channels.announceChat;
@@ -45,7 +46,7 @@ module.exports.run = async (bot, message, args, sql) => {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
-    if (! await hasElevatedPermissions(bot, message, adminOnly, sql)) return;
+    if (! await hasElevatedPermissions(bot, message, command.adminOnly, sql)) return;
 
     let isStreaming = config.isStreaming;
 
@@ -54,6 +55,7 @@ module.exports.run = async (bot, message, args, sql) => {
         let success = bot.commands.get("setstatus").updateStatus(bot, oldStatus, "PLAYING");
         if (!success) {
             let reply = `${message.author}, I was unable to leave streaming mode. Please wait a few seconds and try again.`;
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
@@ -71,16 +73,22 @@ module.exports.run = async (bot, message, args, sql) => {
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);
             debug(reply);
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
         }
 
-        reply = ("@everyone: We have finished streaming. Thanks for watching!");
+        reply = ("everyone: We have finished streaming. Thanks for watching!");
 
-        return bot.channels.get(announceChat).send(reply).catch(error => {
+        
+
+        return bot.channels.get(announceChat).send(reply).then(function () {
+            return react(message);
+        }).catch(error => {
             errorLog(error);
-            return message.author.send(`ERROR! Please check error.txt!`);
+            message.author.send(`*${error.toString()}*`);
+            return react(message, false);
         });
     } else { // Stream is Currently Off...
         debug(`isStreaming is set to: ${isStreaming}.`);
@@ -94,6 +102,7 @@ module.exports.run = async (bot, message, args, sql) => {
         let success = bot.commands.get("setstatus").updateStatus(bot, newStatus, method, streamURL);
         if (!success) {
             let reply = `${message.author}, I was unable to switch to streaming mode. Please wait a few seconds and try again.`;
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
@@ -111,17 +120,21 @@ module.exports.run = async (bot, message, args, sql) => {
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);
             debug(reply);
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
         }
 
-        reply = ("@everyone: We have entered **Streaming Mode**\n"
+        reply = ("everyone: We have entered **Streaming Mode**\n"
             + `The ${config.prefix}question command is now enabled!`);
 
-        return bot.channels.get(announceChat).send(reply).catch(error => {
+        return bot.channels.get(announceChat).send(reply).then(function () {
+            return react(message);
+        }).catch(error => {
             errorLog(error);
-            return message.author.send(`ERROR! Please check error.txt!`);
+            message.author.send(`*${error.toString()}*`);
+            return react(message, false);
         });
     }
 }

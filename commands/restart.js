@@ -4,8 +4,8 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 07/18/18
-    Last Updated: 10/19/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -13,7 +13,8 @@
 const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const userids = require(`../files/userids.json`);
-const { debug, error: errorLog } = require(`../functions/log.js`);
+const { debug } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -50,13 +51,12 @@ module.exports.run = async (bot, message, args, sql) => {
 
     if (inUserList) { // If Member is In the User ID List...
         debug(`Shutting Down...`);
-        sql.close();
+        await sql.close();
         debug(`Database conection closed.`);
         debug(`Alerting Owner...`);
         if (!config.debug) message.author.send(`Restarting Now...`);
-        setTimeout(() => {
-            process.exit(0);
-        }, 500)
+        await react(message);
+        process.exit(0);
     }
 }
 

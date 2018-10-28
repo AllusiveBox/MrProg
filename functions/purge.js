@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 10/07/18
+    Date Last Updated: 10/27/18
     Last Updated By: AllusiveBox
 
 **/
@@ -15,6 +15,7 @@ const config = require(`../files/config.json`);
 const channels = require(`../files/channels.json`);
 const userids = require(`../files/userids.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 /**
  * 
@@ -23,6 +24,8 @@ const { debug, error: errorLog } = require(`../functions/log.js`);
 
 function recordMessages(messages) {
     let stream = fs.createWriteStream("purgedMessages.txt");
+
+    let messageCount = 0;
 
     messages.forEach(function (message) {
         // Build the Message Content
@@ -39,8 +42,11 @@ function recordMessages(messages) {
         content = `${content}\tMessage Sent: ${new Date(message.createdTimestamp)}\n`;
         content = `${content}},\n`;
         stream.write(content.substring(0, content.length));
+        messageCount++;
     });
     stream.end();
+
+    return messageCount;
 }
 
 /**
@@ -64,11 +70,12 @@ module.exports.run = async (bot, message, amount, user = null) => {
             messages = messages.filter(message => message.author.id === filterBy).array().slice(0, amount);
         }
 
-        recordMessages(messages);
+        let messageCount = recordMessages(messages);
 
         message.channel.bulkDelete(messages).catch(error => {
             errorLog(error);
-            return message.channel.send(error);
+            message.channel.send(error);
+            return react(message, false);
         });
 
         // Load in Log Channel ID
@@ -95,8 +102,10 @@ module.exports.run = async (bot, message, amount, user = null) => {
             .setDescription("Messages Purged!")
             .setColor(logChannelColor)
             .addField("Targeted Purge", user === null ? "N/A" : user)
-            .addField("Number of Messages Deleted", amount)
+            .addField("Number of Messages Deleted", messageCount)
             .addField("Purged On", new Date());
+
+        react(message);
 
         // Check if there is an ID Now...
         if (!logID) { // If no Log ID...

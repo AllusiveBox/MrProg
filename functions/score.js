@@ -4,8 +4,8 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 10/07/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 **/
 
@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, sql) => {
                 message.channel.send(`Congratulations, ${name}, you've just reached `
                     + `level **${curLevel}**!`);
                 // TODO When finished, Enable changeRole call here
-                changeRole(bot, message, curLevel);
+                await changeRole(bot, message, curLevel);
             }
 
             debug(`Updating userinfo file.`);

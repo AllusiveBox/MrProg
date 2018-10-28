@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/29/18
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -16,6 +16,7 @@ const roles = require(`../files/roles.json`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 const validate = require(`../functions/validate.js`);
 
 
@@ -72,7 +73,7 @@ module.exports.run = async (bot, message) => {
             await toUpdate.removeRole(role);
         } catch (error) {
             errorLog(error);
-            await message.react(config.fail);
+            await react(message, false);
             return message.channel.send(`*${error.toString()}*`);
         }
 
@@ -80,7 +81,10 @@ module.exports.run = async (bot, message) => {
             + `${command.alertMe.name} role.\n`
             + `If you wish to be added back to this role later, please use the `
             + `${prefix}alertMe command in the ${message.guild.name} server.`);
+
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else {
@@ -92,17 +96,18 @@ module.exports.run = async (bot, message) => {
             await toUpdate.addRole(role);
         } catch (error) {
             errorLog(error);
-            await message.react(config.fail);
+            await react(message, false);
             return message.channel.send(`*${error.toString()}*`);
         }
-
-        await message.react(config.success);
 
         let reply = (`${message.author}, you have been added to the `
             + `${command.alertMe.name} role.\n`
             + `If you wish to be removed from this role later, pleas use the `
             + `${prefix}alertMe command in the ${message.guild.name} server.`);
+
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     }
