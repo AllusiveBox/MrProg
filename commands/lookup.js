@@ -4,19 +4,19 @@
     Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 07/19/18
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
 */
 
 // Load in Required Files
 const Discord = require(`discord.js`);
+const betterSql = require(`../classes/betterSql.js`);
 const config = require(`../files/config.json`);
 const userIDs = require(`../files/userids.json`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
-const betterSql = require(`../classes/betterSql.js`);
-
+const { run: react } = require(`../functions/react.js`);
 
 
 const command = {
@@ -69,7 +69,12 @@ module.exports.run = async (client, message, args, sql) => {
     }
 
     if ((params.indexOf('-')) || (params.length === 0) || (args[1] === undefined)) {
-        return message.channel.send(`Either no params were passed, or you did not format your params correctly.`);
+        await react(message, false);
+        let reply = (`Either no params were passed, or you did not format your params correctly.`);
+        return message.author.send(reply).catch(error => {
+            errorLog(error);
+            return disabledDMs(message, reply);
+        });
     }
 
     if (params.includes('F')) { //Format User Reply
@@ -133,9 +138,14 @@ module.exports.run = async (client, message, args, sql) => {
     try {
         let row = await sql.userLookup(toCheck);
         if (!row) { // Cannot Find Row
-            return message.channel.send(`I am sorry, ${message.author}, I am unable to locate any data on ${toCheck}.\n`
+            await react(message, false);
+            let reply = (`I am sorry, ${message.author}, I am unable to locate any data on ${toCheck}.\n`
                 + `Please verify that what you are searching by is correct and try again. If this issue continues, please reach out to `
                 + `<@${userIDs.ownerID}> and let him know.`);
+            return message.channel.send(reply).catch(error => {
+                errorLog(error);
+                return disabledDMs(message, reply);
+            });
         }
         else {
             // Build String
@@ -194,17 +204,23 @@ module.exports.run = async (client, message, args, sql) => {
                 }
             }
             if (publicMessage) {
+                await message.react(config.sucess);
                 return message.channel.send(reply);
             }
             else {
-                return message.author.send(reply).catch(error => {
-                    return disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                return message.author.send(reply).then(function () {
+                    return react(message);
+                }).catch(error => {
+                    disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                         + `Please check your privacy settings and try again.`);
+                    return react(message, false);
                 });
             }
         }
     } catch (error) {
         errorLog(error);
+        await react(message, false);
+        message.channel.send(`*${error.toString()}*`);
     }
 
 }

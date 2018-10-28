@@ -4,8 +4,9 @@
     Clearance: Admin
 	Default Enabled: Yes
     Date Created: 10/18/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
+
 */
 
 // Load in Required Files
@@ -24,7 +25,8 @@ const modRole = roles.modRole;
 const shadowModRole = roles.sModRole;
 const command = {
     bigDescription: ("This command is used to promote users, giving them both a role, and updating them in the SQL database.\n"
-        + "Required arguments: @{user} -> The user you wish to promote.\n"
+        + "Arguments:\n\t"
+        + "@{user} -> The user you wish to promote.\n"
         + "Returns:\n\t"
         + config.returnsChannel),
     description: "Promote a user.",

@@ -4,23 +4,26 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/18/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
 
 */
 
 // Load in Required Files
-const config = require(`../files/config.json`);
 const Discord = require(`discord.js`);
+const betterSql = require(`../classes/betterSql.js`);
+const config = require(`../files/config.json`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-const betterSql = require(`../classes/betterSql.js`);
+const { run: react } = require(`../functions/react.js`);
 
 
 // Command Required Files
 const command = {
     bigDescription: ("Returns what permissions the mentioned user has, or for the user if nobody was mentioned\n"
+        + "Arguments:\n\t"
+        + "@{user} -> The user you wish to look up permissions for (Optional).\n"
         + "Returns:\n\t" + config.returnsDM),
     description: "Returns a user's permissions",
     enabled: true,
@@ -64,6 +67,7 @@ module.exports.run = async (client, message, args, sql) => {
 
     if (!row) {
         debug(`${user} does not exist in database`);
+        await react(message, false);
         return message.channel.send(`I am unable to locate data on ${user}.`);
     }
 
@@ -73,6 +77,7 @@ module.exports.run = async (client, message, args, sql) => {
         clearanceLevel = "none";
     }
     let reply = `The Permissions level for ${toCheck} is: **${clearanceLevel}**`;
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

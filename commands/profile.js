@@ -4,16 +4,18 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/22/18
-    Last Updated: 10/03/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
+
 */
 
 // Load in Required Files
-const config = require(`../files/config.json`);
 const Discord = require(`discord.js`);
+const betterSql = require(`../classes/betterSql.js`);
+const config = require(`../files/config.json`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { debug } = require(`../functions/log.js`);
-const betterSql = require(`../classes/betterSql.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -72,12 +74,16 @@ module.exports.run = async (client, message, args, sql) => {
     + `To have me delete all the data I have on you, use the ${config.prefix}deleteMe command. (**Note: This won't change your opt-out status**)\n`
     + `**WARNING:** Use of the ${config.prefix}deleteMe command will _permanently_ delete all data recorded on you, with no way to restore it.`;
 
-    if(config.debug) {
+    if (config.debug) {
+        await react(message);
         return message.channel.send(userProfile);
     } else {
-        return message.author.send(userProfile).catch(error => {
-            return disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
-            + `Please check your privacy settings and try again.`);
+        return message.author.send(userProfile).then(function () {
+            return react(message);
+        }).catch(error => {
+            disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                + `Please check your privacy settings and try again.`);
+            return react(message, false);
         });
     }
 }

@@ -4,7 +4,7 @@
     Clearance: Mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 08/31/18
-    Last Updated: 10/13/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -20,15 +20,14 @@ const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
 const { run: kick } = require(`../functions/kick.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
-const adminRole = roles.adminRole;
-const modRole = roles.modRole;
-const shadowModRole = roles.sModRole;
-const invalidPermission = config.invalidPermission;
-
 const command = {
     adminOnly: false,
+    adminRole: roles.adminRole,
+    modRole: roles.modRole,
+    shadowModRole: roles.sModRole,
     bigDescription: ("Use this command to kick someone from a server \n"
         + "Arguments:\n\t"
         + "@{user} -> The user to ban.\n\t"
@@ -66,6 +65,7 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`A valid member of the server was not provided.`);
         let reply = (`Please mention a valid member on the server, `
             + `${message.author}.`);
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
@@ -73,11 +73,13 @@ module.exports.run = async (bot, message, args, sql) => {
 
     // Validate the kick Target
     if (toKick.user.id == userids.ownerID) { // If Attempt to Kick Owner...
+        await react(message, false);
         return debug(`${message.author.username} attempted to kick owner.`);
-    } else if (toKick.roles.some(r => [adminRole.ID, modRole.ID,
-    shadowModRole.ID].includes(r.id))) { // If Attempt to kick Admin/Mod/SMod
+    } else if (toKick.roles.some(r => [command.adminRole.ID, command.modRole.ID,
+    command.shadowModRole.ID].includes(r.id))) { // If Attempt to kick Admin/Mod/SMod
         debug(`${message.author.username} attempted to kick `
             + `${toKick.user.username}.`);
+        await react(message, false);
         return message.channel.send(`I am sorry, ${message.author}, I am `
             + `unable to kick ${toKick.user.username} due to the role(s) `
             + `they have.`);
@@ -89,6 +91,7 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`No valid reason was provided.`);
         let reply = (`Please indicate a valid reason for kicking `
             + `${toKick.user.username}.`);
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             debug(`${message.author.username} has DMs disabled.`);
             disabledDMs(message, reply);

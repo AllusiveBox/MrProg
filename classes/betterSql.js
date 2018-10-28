@@ -4,8 +4,9 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 09/08/18
-    Date Last Updated: 10/07/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/27/18
+    Last Update By: AllusiveBox
+
 **/
 
 const Discord = require(`discord.js`);
@@ -25,8 +26,8 @@ const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?"; //do
 const getUserString = "SELECT * FROM userinfo WHERE userId = ?";
 const userLeftString = "DELETE FROM userinfo WHERE userId = ?";
 const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, "
-    + "favechip = null, navi = null, points = null, "
-    + "level = null WHERE userId = ?";
+    + "favechip = null, navi = null, points = 0, "
+    + "level = 0 WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
 const optOutString = "UPDATE userinfo SET optOut = 1 WHERE userId = ?";

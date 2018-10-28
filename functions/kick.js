@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 10/13/18
+    Date Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 **/
@@ -15,6 +15,7 @@ const roles = require(`../files/roles.json`);
 const betterSql = require(`../classes/betterSql.js`);
 const channels = require(`../files/channels.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 /**
  * 
@@ -46,6 +47,18 @@ module.exports.run = async (bot, message, member, reason, sql) => {
         }
     }
 
+    debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
+        + `for ${reason}.`);
+    try {
+        await member.kick(reason);
+    } catch (error) {
+        errorLog(error);
+        await react(message, false);
+        return message.channel.send(`Sorry, ${message.author}, I could not kick `
+            + `${member.user.username}.\n`
+            + `*${error.toString()}*`);
+    }
+
     // Get Avatar
     let avatar = member.user.avatarURL;
 
@@ -66,15 +79,8 @@ module.exports.run = async (bot, message, member, reason, sql) => {
         bot.channels.get(logID).send(kickedEmbed);
     }
 
-    debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
-        + `for ${reason}.`);
-    await member.kick(reason).catch(error => {
-        errorLog(error);
-        return message.channel.send(`Sorry, ${message.author}, I could not kick `
-            + `${member.user.username} because of ${error}.`);
-    });
+    await react(message);
 
-    // Set isKicking flag to false
     return debug(`Kick Successful.`);
 }
 

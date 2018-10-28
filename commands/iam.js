@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 10/13/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -18,6 +18,7 @@ const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: dmCheck } = require(`../functions/dmCheck.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
 var usedRecently = new Set();
@@ -25,6 +26,8 @@ var usedRecently = new Set();
 const command = {
     bigDescription: ("Changes your nickname in the server, "
         + "limited to once every seven days.\n"
+        + "Arguments:\n\t"
+        + "{nickname} -> The nickname you wish to change to (limit of 32 characters).\n"
         + "Returns:\n\t" + config.returnsDM),
     description: "Allows a user to update their username in the server",
     enabled: true,
@@ -49,11 +52,14 @@ module.exports.run = async (bot, message, args) => {
         return disabledCommand(command.name, message);
     }
 
-    if (await dmCheck(message, command.name)) return; // Return on DM channel
+    if (await dmCheck(message, command.name)) {
+        return react(message, false); // Return on DM channel
+    }
 
     if (usedRecently.has(message.author.id)) {
         debug(`${message.author.username} has used the ${command.fullName} command recently.`);
         let reply = `I am sorry, ${message.author}, you cannot use this command agian so soon.`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
@@ -62,7 +68,10 @@ module.exports.run = async (bot, message, args) => {
     // Get Nickname to Change to
     let nickName = args.slice(0).join(" ");
 	
-    if (nickName.length > 32) return message.channel.send(`I am sorry, ${message.author}, that username is too long. Discord only allows names up to 32 characters!`);
+    if (nickName.length > 32) { // If Nickname is too long...
+        await react(message, false);
+        return message.channel.send(`I am sorry, ${message.author}, that username is too long. Discord only allows names up to 32 characters!`);
+    }
 
     // Test if they want to Reset Nickname
     if (!nickName) {
@@ -71,6 +80,7 @@ module.exports.run = async (bot, message, args) => {
         debug(`Unable to update username for ${message.author.username} as they attempted to update to their current name already.`);
         // Build Reply
         let reply = `I am sorry, ${message.author}, I can't update your username to what it already is!`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         })
@@ -79,6 +89,7 @@ module.exports.run = async (bot, message, args) => {
     if (!(message.guild.members.get(message.author.id).nickname) && (nickName === "")) { // If User Has yet to Set Nickname and they didn't Provide a Nickname...
         debug(`User does not have a nickname, nor did they provide a nickname to change to...`);
         let reply = `${message.author}, you haven't set a nickname yet, so I am unable to reset your nickname...`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });
@@ -91,7 +102,8 @@ module.exports.run = async (bot, message, args) => {
         errorLog(error);
         let reply = (`I am sorry, ${message.author}, I am unable to update your username due to the following error:\n`
             + `*${error.toString()}*`);
-        return message.channel.send(reply);
+        message.channel.send(reply);
+        return react(message, false);
     }
 
     // Update the Set of Users that have Used the Command
@@ -151,11 +163,8 @@ module.exports.run = async (bot, message, args) => {
         });
     }
     debug("Username Updated.");
-    // Build Reply
-    let reply = `${message.author}, your username has been updated.`;
-    return message.author.send(reply).catch(error => {
-        disabledDMs(message, reply);
-    })
+
+    return react(message);
 }
 
 module.exports.help = command;

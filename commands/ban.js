@@ -4,7 +4,7 @@
     Clearance: Mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 12/02/17
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -20,6 +20,7 @@ const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
 const { debug } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -63,7 +64,7 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`A valid member of the server was not provided.`);
         let reply = (`Please mention a valid member on the server, `
             + `${message.author}.`);
-        await message.react(config.fail);
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
@@ -71,13 +72,13 @@ module.exports.run = async (bot, message, args, sql) => {
 
     // Validate the Ban Target
     if (toBan.user.id == userids.ownerID) { // If Attempt to Ban Owner...
-        await message.react(config.fail);
+        await react(message, false);
         return debug(`${message.author.username} attempted to ban owner.`);
     } else if (toBan.roles.some(r => [command.adminRole.ID, command.modRole.ID,
     command.shadowModRole.ID].includes(r.id))) { // If Attempt to Ban Admin/Mod/SMod
         debug(`${message.author.username} attempted to ban `
             + `${toBan.user.username}.`);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(`I am sorry, ${message.author}, I am `
             + `unable to ban ${toBan.user.username} due to the role(s) `
             + `they have.`);
@@ -89,7 +90,7 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`No valid reason was provided.`);
         let reply = (`Please indicate a valid reason for banning `
             + `${toBan.user.username}.`);
-        await message.react(config.fail);
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             debug(`${message.author.username} has DMs disabled.`);
             disabledDMs(message, reply);
