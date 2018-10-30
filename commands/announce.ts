@@ -4,8 +4,8 @@
     Clearance: Owner Only
   	Default Enabled: Cannot be Disabled
     Date Created: 12/03/17
-    Last Updated: 10/13/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -132,6 +132,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + ` and add a role for the "alertMe" entry. For a template, please check `
             + `in the templates directory.`);
         debug(reply);
+        await message.react(config.fail);
         return message.channel.send(reply);
     }
 
@@ -141,6 +142,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + `files/channels.json and add a role for the "announceChat" entry. For a `
             + `tmplate, please check in the templates directory.`);
         debug(reply);
+        await message.react(config.fail);
         return message.channel.send(reply);
     }
 
@@ -150,6 +152,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + `Please ensure that there is a files/announcement.txt file and that it `
             + `is in the right directory.`);
         debug(reply);
+        await message.react(config.fail);
         return message.channel.send(reply);
     }
     let announceChannel = <Discord.TextChannel> bot.channels.get(announceChat);
@@ -159,9 +162,11 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         + ` It's easier to keep up with them that way.\n\n`);
     ( <Discord.TextChannel>bot.channels.get(command.announceChat)).send(command.announcement).catch(error => {
         errorLog(error);
+        message.react(config.fail);
         return message.channel.send(`*${error.toString()}*`);
     });
-    return ( <Discord.TextChannel> bot.channels.get(command.announceChat)).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
+    await message.react(config.success);
+    return bot.channels.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
         + `https://github.com/AllusiveBox/discordBot/issues`);
 }
 

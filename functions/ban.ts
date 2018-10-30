@@ -4,8 +4,8 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 **/
 
@@ -55,6 +55,7 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         await member.ban(reason);
     } catch (error) {
         errorLog(error);
+        await message.react(config.fail);
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
             + `${member.user.username} because of ${error}.`);
     }
@@ -79,6 +80,8 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         let Channel = <Discord.TextChannel>bot.channels.get(logID);
         Channel.send(bannedEmbed);
     }
-    sql.deleteUser(member.id);
+
+    await message.react(config.success);
+
     return debug(`Ban Successful.`);
 }

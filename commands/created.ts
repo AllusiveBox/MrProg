@@ -4,8 +4,8 @@
     Clearance: none
     Default Enabled: Cannot be disabled.
     Date Created: 05/23/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -40,6 +40,7 @@ export async function run(bot : Discord.Client, message : Discord.Message) : Pro
     message.channel.send(`Account created on: **${createdOn}**`)
         .catch(error => {
             errorLog(error);
+            return message.channel.send(`*${error.toString()}*`);
         });
 }
 

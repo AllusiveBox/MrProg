@@ -1,11 +1,11 @@
-/*
+﻿/*
     Command Name: debug.js
     Function: Sets Debug Flag for Testing
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -47,6 +47,7 @@ export async function run(bot: Discord.Client, message: Discord.Message): Promis
 
     // Switch the Debug Value
     config.debug = !config.debug;
+    await message.react(config.success);
     return debug(`Setting debug value to: ${config.debug}.`);
 }
 
