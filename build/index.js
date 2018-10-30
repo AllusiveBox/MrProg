@@ -137,10 +137,10 @@ bot.on("message", async (message) => {
     // Check if Command or Not
     if (!message.content.startsWith(prefix))
         return; // Return on Not Commands.
+    // Check for Valid Commands
     if (commandRegex.test(command)) {
         return log_js_1.debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }
-    // Check for Valid Commands
     /*if ((command.indexOf("/") > -1) || (command.indexOf(".") > -1) || (command.indexOf("\\") > -1)) {
         return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }*/
@@ -156,8 +156,10 @@ bot.on("message", async (message) => {
         setTimeout(() => {
             falseCommandUsedRecently.delete(message.author.id);
         }, 300000); // Remove After 5 Minutes
+        /*
         return message.channel.send(`This is where I'd put a ${command}...\n`
             + `***IF I HAD ONE.*** (╯°□°）╯︵ ┻━┻`);
+        */
     }
     // Log Commands
     await log_js_1.command(message.author, command, args);

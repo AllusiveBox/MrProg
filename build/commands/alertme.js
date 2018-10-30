@@ -5,8 +5,8 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 01/29/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -61,8 +61,8 @@ async function run(bot, message) {
         }
         catch (error) {
             log_js_1.error(error);
-            return message.channel.send(`I am sorry, ${message.author}, something `
-                + `went wrong and I was unable to update your roles.`);
+            await message.react(config.fail);
+            return message.channel.send(`*${error.toString()}*`);
         }
         let reply = (`${message.author}, you have been removed from the `
             + `${roles.alertMe.name} role.\n`
@@ -81,8 +81,10 @@ async function run(bot, message) {
         }
         catch (error) {
             log_js_1.error(error);
-            return message.channel.send(`I am sorry, ${message.author}, something went wrong and I was unable to update your roles.`);
+            await message.react(config.fail);
+            return message.channel.send(`*${error.toString()}*`);
         }
+        await message.react(config.success);
         let reply = (`${message.author}, you have been added to the `
             + `${roles.alertMe.name} role.\n`
             + `If you wish to be removed from this role later, pleas use the `

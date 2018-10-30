@@ -5,8 +5,8 @@
     Clearance: Owner Only
     Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -39,6 +39,7 @@ async function run(bot, message) {
     }
     // Switch the Debug Value
     config.debug = !config.debug;
+    await message.react(config.success);
     return log_js_1.debug(`Setting debug value to: ${config.debug}.`);
 }
 exports.run = run;

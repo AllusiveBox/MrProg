@@ -18,6 +18,7 @@ import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import channels = require('../files/channels.json');
 import userids = require('../files/userids.json');
 import roles = require('../files/roles.json');
+import config = require('../files/config.json');
 
 
 // Command Variables
@@ -166,7 +167,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         return message.channel.send(`*${error.toString()}*`);
     });
     await message.react(config.success);
-    return bot.channels.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
+    return (<Discord.TextChannel> bot.channels.get(command.announceChat)).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
         + `https://github.com/AllusiveBox/discordBot/issues`);
 }
 

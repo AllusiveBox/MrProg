@@ -15,7 +15,7 @@ import betterSql from '../classes/betterSql.js';
 import { run as dmCheck } from '../functions/dmCheck.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as deleteMemberInfo } from '../functions/deleteMemberInfo.js';
-import { debug, commandHelp } from '../functions/log.js';
+import { debug, commandHelp, error as errorLog } from '../functions/log.js';
 
 
 import config = require('../files/config.json');

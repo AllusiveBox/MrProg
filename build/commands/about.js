@@ -43,8 +43,10 @@ async function run(bot, message) {
         + `${config.about.author}!\n\n`
         + `I am version: **${config.about.verNum}**.\n\n`
         + `I was last updated on: **${config.about.lastUpdated}**.\n\n`
-        + `You can find my github repo here: <https://github.com/AllusiveBox/discordBot>`);
+        + `You can find my public github repo here: <${config.publicRepoLink}>\n\n`
+        + `To report issues, please use the public issue repo here: <${config.issueRepoLink}>`);
     // Send the Message
+    await message.react(config.success);
     return message.author.send(reply).catch(error => {
         return disabledDMs_1.run(message, reply);
     });

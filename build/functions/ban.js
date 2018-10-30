@@ -5,8 +5,8 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 10/20/18
+    Last Update By: AllusiveBox
 
 **/
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -49,6 +49,7 @@ async function run(bot, message, member, reason, sql) {
     }
     catch (error) {
         log_js_1.error(error);
+        await message.react(config.fail);
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
             + `${member.user.username} because of ${error}.`);
     }
@@ -71,7 +72,7 @@ async function run(bot, message, member, reason, sql) {
         let Channel = bot.channels.get(logID);
         Channel.send(bannedEmbed);
     }
-    sql.deleteUser(member.id);
+    await message.react(config.success);
     return log_js_1.debug(`Ban Successful.`);
 }
 exports.run = run;
