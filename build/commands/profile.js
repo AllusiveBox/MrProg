@@ -1,18 +1,8 @@
 "use strict";
-/*
-    Command Name: profile.js
-    Function: Returns all data the bot has on a user in a DM.
-    Clearance: none
-    Default Enabled: Cannot be Disabled
-    Date Created: 05/22/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const log_js_1 = require("../functions/log.js");
 const config = require("../files/config.json");
-// Command Variables
 const command = {
     bigDescription: ("Sends the user all data stored on them.\n"
         + "Returns:\n\t"
@@ -23,25 +13,16 @@ const command = {
     name: "profile",
     permissionLevel: "normal"
 };
-/**
- *
- * @param {Discord.Client} client
- * @param {Discord.Message} message
- * @param {?string[]} [args]
- * @param {betterSql} sql
- */
 async function run(client, message, args, sql) {
-    // Debug to Console Log
     log_js_1.debug(`I am inside the ${command.fullName} Command.`);
     let row = await sql.getUserRow(message.author.id);
-    if (!row) { // Cannot Find Row
+    if (!row) {
         log_js_1.debug(`Unable to locate any data for ${message.author.username}.`);
         let reply = `I am unable to locate any data on you. Please try again.`;
         return message.author.send(reply).catch(error => {
             return disabledDMs_js_1.run(message, reply);
         });
     }
-    //else found row
     if (row.optOut === 1) {
         log_js_1.debug(`${message.author.username} does not wish for data to be collected.`);
         let reply = `I am sorry, ${message.author}, I do not have any information on you due to your configurations.\n`

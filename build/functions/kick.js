@@ -1,50 +1,26 @@
 "use strict";
-/**
-
-    cxBot.js Mr. Prog Kick Scripts
-    Version: 4
-    Author: AllusiveBox
-    Date Created: 08/08/18
-    Date Last Updated: 10/19/18
-    Last Update By: Th3_M4j0r
-
-**/
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const log_js_1 = require("./log.js");
 const config = require("../files/config.json");
 const channels = require("../files/channels.json");
 const userids = require("../files/userids.json");
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {Discord.GuildMember} member
- * @param {string} reason
- * @param {betterSql} sql
- */
 async function run(bot, message, member, reason, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the kick function.`);
     let logchannelColor = config.logChannelColors.memberKick;
-    // Load in the Log Channel ID
     let logID = channels.log;
-    // Check if there was an ID Provided
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         log_js_1.debug(`Unable to find the log ID in channels.json.`
             + `Looking for another log channel.`);
-        // Look for Log Channel in Server
         let logChannel = message.member.guild.channels.find(val => val.name === "log");
-        if (!logChannel) { // If Unable to Find Log Channel...
+        if (!logChannel) {
             log_js_1.debug(`Unable to find any kind of log channel.`);
         }
         else {
             logID = logChannel.id;
         }
     }
-    // Get Avatar
     let avatar = member.user.avatarURL;
-    // Build the Embed
     let kickedEmbed = new Discord.RichEmbed()
         .setDescription(`Member Kicked!`)
         .setColor(logchannelColor)
@@ -53,8 +29,7 @@ async function run(bot, message, member, reason, sql) {
         .addField("Member ID", member.user.id)
         .addField("Kicked On", new Date())
         .addField("Reason", reason);
-    // Check if there is an ID Now
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         bot.users.get(userids.ownerID).send(kickedEmbed);
     }
     else {
@@ -72,7 +47,6 @@ async function run(bot, message, member, reason, sql) {
             + `${member.user.username} because of ${error}.`);
     }
     sql.deleteUser(member.id);
-    // Set isKicking flag to false
     return log_js_1.debug(`Kick Successful.`);
 }
 exports.run = run;

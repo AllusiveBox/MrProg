@@ -1,19 +1,8 @@
 "use strict";
-/*
-    Command Name: eval
-    Function: Allows code to be run through the bot
-    Clearance: Owner Only
-    Default Enabled: Disabled
-    Date Created: 10/17/17
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
-
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const log_js_1 = require("../functions/log.js");
 const userids = require("../files/userids.json");
-// Command Variables
 const ownerID = userids.ownerID;
 const command = {
     bigDescription: ("OWNER ONLY. ALL ACCESS COMMAND."),
@@ -23,10 +12,6 @@ const command = {
     name: "eval",
     permissionLevel: "owner"
 };
-/**
- *
- * @param {string|any} text
- */
 function clean(text) {
     if (typeof (text) === "string")
         return text.replace(/`/g, "`"
@@ -36,17 +21,8 @@ function clean(text) {
         return text;
     }
 }
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} [args]
- * @param {betterSql} sql
- */
 async function run(bot, message, args, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ${command.fullName} command.`);
-    // Owner ID Check
     if (message.author.id !== userids.ownerID) {
         let reply = (`WARNING. ATTEMPTED USE OF EVAL COMMAND BY `
             + `**${message.author.username}**`);
@@ -58,7 +34,6 @@ async function run(bot, message, args, sql) {
         });
     }
     else {
-        // Enabled Command Test
         if (!command.enabled) {
             return disabledCommand_js_1.run(command.fullName, message);
         }
@@ -84,7 +59,6 @@ async function run(bot, message, args, sql) {
             }
         }
     }
-    // ALWAYS MAKE IT RESET OWNER ID.
     return userids.ownerID = ownerID;
 }
 exports.run = run;

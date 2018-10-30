@@ -10,7 +10,8 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "noUnusedParameters": false,
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "removeComments": true
   },
     "exclude": [
         "node_modules",

@@ -1,19 +1,8 @@
 "use strict";
-/*
-    Command Name: setpoints.js
-    Function: Allows for manual setting of points for testing purposes.
-    Clearance: Owner Only
-    Default Enabled: cannot be disabled
-    Date Created: 11/03/17
-    Last Updated: 10/11/18
-    Last Updated By: Th3_M4j0r
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
-// Load in Required Files
 const log_js_1 = require("../functions/log.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const userids = require("../files/userids.json");
-// Command Stuff
 const command = {
     bigDescription: ("Use this command to set the points of a user to something else.\n"
         + "Required arguments: @{user} -> The user to change the points for.\n"
@@ -26,27 +15,15 @@ const command = {
     name: "setpoints",
     permissionLevel: "owner"
 };
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(bot, message, args, sql) {
-    // Debug to Console Log
     log_js_1.debug(`I am inside the ${command.fullName} Command.`);
     if (dmCheck_js_1.run(message, command.name))
         return;
-    // Owner ID Check
-    if (message.author.id !== userids.ownerID) { // If not Owner ID
+    if (message.author.id !== userids.ownerID) {
         return log_js_1.debug(`Attempted use of ${command.name} by ${message.author.username}.\n`);
     }
-    // Get the name of the Member to Change Points
     var toChange = message.mentions.members.first();
-    // Get the amount of points to set
     var amount = !!parseInt(message.content.split(" ")[1]) ? parseInt(message.content.split(" ")[1]) : parseInt(message.content.split(" ")[2]);
-    // Validation Check
     if (!toChange) {
         message.channel.send("You must mention someone to update their points");
         return log_js_1.debug("No member was given.\n");

@@ -1,20 +1,10 @@
 "use strict";
-/*
-    Command Name setnavi.js
-    Function: Set's a User's Navi Symbol in the userinfo file
-    Clearance: none
-    Default Enabled: True
-    Date Created: 03/03/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const fs_1 = require("fs");
 const config = require("../files/config.json");
-//command stuff
 const command = {
     bigDescription: ("Use this command to change your navi symbol to something different\n"
         + "Returns:\n\t"
@@ -25,15 +15,7 @@ const command = {
     name: "setnavi",
     permissionLevel: "normal"
 };
-/**
- *
- * @param {Discord.Client} client
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(client, message, args, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ${command.fullName} Command.`);
     if (!command.enabled) {
         return disabledCommand_js_1.run(command.name, message);
@@ -52,7 +34,7 @@ async function run(client, message, args, sql) {
     log_js_1.debug(`Attempting to update ${message.author.username}'s Navi Symbol`);
     row.navi = navi;
     let navi_sym = (`./img/navi_symbols/${row.navi}.png`);
-    if (!fs_1.existsSync(navi_sym)) { // If file doesn't exist
+    if (!fs_1.existsSync(navi_sym)) {
         log_js_1.debug(`Invalid Navi Symbol File: ${row.navi}. Setting to Default.`);
         row.navi = "megaman";
         navi_sym = (`./img/navi_symbols/${row.navi}.png`);
@@ -62,7 +44,6 @@ async function run(client, message, args, sql) {
             disabledDMs_js_1.run(message, reply);
         });
     }
-    //else it does exist
     log_js_1.debug(`Valid Navi Symbol File: ${row.navi}`);
     sql.setNavi(message.author.id, row.navi);
     let reply = "Navi Symbol Updated";

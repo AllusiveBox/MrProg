@@ -1,21 +1,10 @@
 "use strict";
-/*
-    Command Name: stream.js
-    Function: Marks the Bot's Stream Status
-    Clearance: Admin+
-    Default Enabled: Cannot be Disabled
-    Date Created: 12/02/17
-    Last Updated: 10/11/18
-    Last Updated By: Th3_M4j0r
-
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const config = require("../files/config.json");
 const channels = require("../files/channels.json");
-// Command Variables
 const announceChat = channels.announceChat;
 var oldStatus = config.defaultStatus;
 const command = {
@@ -29,22 +18,13 @@ const command = {
     adminOnly: true,
     permissionLevel: "admin"
 };
-/**
- *
- * @param {commandBot} bot
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(bot, message, args, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ${command.fullName} command.`);
     if (!await hasElevatedPermissions_js_1.run(bot, message, command.adminOnly, sql))
         return;
     let isStreaming = config.isStreaming;
-    if (isStreaming) { // If Currently Streaming...
+    if (isStreaming) {
         log_js_1.debug(`isStreaming is set to: ${isStreaming}.`);
-        //@ts-ignore
         let success = bot.commands.get("setstatus").updateStatus(bot, oldStatus, "PLAYING");
         if (!success) {
             let reply = `${message.author}, I was unable to leave streaming mode. Please wait a few seconds and try again.`;
@@ -58,8 +38,7 @@ async function run(bot, message, args, sql) {
         message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
-        // Find the Announcement Channel
-        if (!announceChat) { // If Annoucement Channel Not Defined...
+        if (!announceChat) {
             reply = (`No channel set for ${command.name} command. Please update `
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);
@@ -74,16 +53,15 @@ async function run(bot, message, args, sql) {
             return message.author.send(`ERROR! Please check error.txt!`);
         });
     }
-    else { // Stream is Currently Off...
+    else {
         log_js_1.debug(`isStreaming is set to: ${isStreaming}.`);
         oldStatus = bot.user.presence.game.name;
         let newStatus = "We are Streaming!";
         let method = "STREAMING";
         let streamURL = args.join(" ");
-        if ((!streamURL) || (!streamURL.includes("www."))) { // If Invalid Stream URL...
+        if ((!streamURL) || (!streamURL.includes("www."))) {
             streamURL = "https://www.twitch.tv/mmbnchronox";
         }
-        //@ts-ignore
         let success = bot.commands.get("setstatus").updateStatus(bot, newStatus, method, streamURL);
         if (!success) {
             let reply = `${message.author}, I was unable to switch to streaming mode. Please wait a few seconds and try again.`;
@@ -97,8 +75,7 @@ async function run(bot, message, args, sql) {
         message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
-        // Find the Announcement Channel
-        if (!announceChat) { // If Annoucement Channel Not Defined...
+        if (!announceChat) {
             reply = (`No channel set for ${command.name} command. Please update `
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);

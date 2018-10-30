@@ -1,14 +1,4 @@
 "use strict";
-/*
-    Command Name: deleteme.js
-    Function: Deletes a User's Data from the SQL database
-    Clearance: none
-    Default Enabled: Cannot be Disabled
-    Date Created: 05/22/18
-    Last Updated: 10/20/18
-    Last Update By: AllusiveBox
-
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
@@ -16,7 +6,6 @@ const deleteMemberInfo_js_1 = require("../functions/deleteMemberInfo.js");
 const log_js_1 = require("../functions/log.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
-// Command Variables
 const commandUsed = new Set();
 const command = {
     bigDescription: ("Deletes the user's data from the user database."
@@ -28,22 +17,12 @@ const command = {
     name: "deleteme",
     permissionLevel: "normal"
 };
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} [args]
- * @param {betterSql} sql
- */
 async function run(bot, message, args, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ${command.fullName} command.`);
-    // DM Check
     if (await dmCheck_js_1.run(message, command.fullName))
-        return; // Return on DM channel
-    //SQL Stuff
+        return;
     let row = await sql.getUserRow(message.author.id);
-    if (!row) { //if row not found
+    if (!row) {
         let reply = (`I am unable to locate any data on you.\n`
             + `Please either try again, or alert <@${userids.ownerID}>.`);
         await message.react(config.fail);
@@ -52,7 +31,7 @@ async function run(bot, message, args, sql) {
             disabledDMs_js_1.run(message, reply);
         });
     }
-    if (!commandUsed.has(message.author.id)) { // If User Hasn't Used Command
+    if (!commandUsed.has(message.author.id)) {
         let reply = (`**__WARNING!!!__**\n\n`
             + `Using the ${config.prefix}deleteMe command deletes ***all*** of `
             + `your non-public data stored in the user information database.\n\n`
@@ -64,13 +43,12 @@ async function run(bot, message, args, sql) {
         });
         commandUsed.add(message.author.id);
         setTimeout(() => {
-            // Remove User from the set after 60000 Seconds (1 Minute)
             commandUsed.delete(message.author.id);
         }, 60000);
         return;
     }
     let hasClearance = !(row.clearance == null || row.clearance === "none");
-    if (row.optOut === 1) { //if User Opted Out...
+    if (row.optOut === 1) {
         log_js_1.debug(`${message.author.username} does not wish for data to be `
             + `collected on them. Preserving this preference.`);
         await sql.deleteUser(message.author.id);

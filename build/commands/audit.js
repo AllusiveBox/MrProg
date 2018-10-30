@@ -1,23 +1,10 @@
 "use strict";
-/**
-
-    cxBot.js Mr. Prog audit log command
-    Version: 1
-    Author: Th3_M4j0r
-    clearance: Mod+
-    Default Enabled: Cannot be Disabled
-    Date Started: 09/16/18
-    Date Last Updated: 10/20/18
-    Last Update By: AllusiveBox
-
-**/
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
 const config = require("../files/config.json");
-//command Stuff
 const command = {
     adminOnly: false,
     bigDescription: ("Use this command to see a page of the audit log, "
@@ -29,10 +16,6 @@ const command = {
     permissionLevel: "mod"
 };
 exports.help = command;
-/**
- *
- * @param {Discord.GuildAuditLogsEntry} entry
- */
 function format(entry) {
     if (entry.actionType == "DELETE") {
         return `\tTimestamp:${entry.createdAt.toString()}\n\tAction:${entry.action}`
@@ -43,21 +26,15 @@ function format(entry) {
             + `\n\tExecutor:${entry.executor.username}\n\tChanges:${JSON.stringify(entry.changes)}`;
     }
 }
-/**
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} [args]
- * @param {betterSql} sql
- * */
 async function run(bot, message, args, sql) {
     log_js_1.debug(`I am inside the ${command.fullName} command`);
     if (dmCheck_js_1.run(message, command.fullName))
-        return; //returns on DM channel 
+        return;
     if (!await hasElevatedPermissions_js_1.run(bot, message, command.adminOnly, sql))
         return;
     let startPos = 0;
     let page = 1;
-    if (args[0] && !isNaN(Number(args[0])) && Number(args[0]) > 0) { //valid page number?
+    if (args[0] && !isNaN(Number(args[0])) && Number(args[0]) > 0) {
         startPos = (Number.parseInt(args[0]) - 1) * 5;
         page = Number(args[0]);
     }

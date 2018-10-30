@@ -1,41 +1,19 @@
 "use strict";
-/**
-
-    cxBot.js Mr. Prog Ban Scripts
-    Version: 3
-    Author: AllusiveBox
-    Date Started: 02/28/18
-    Date Last Updated: 10/20/18
-    Last Update By: AllusiveBox
-
-**/
 Object.defineProperty(exports, "__esModule", { value: true });
-// Load in Required Libraries and Files
 const Discord = require("discord.js");
 const log_js_1 = require("./log.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 const channels = require("../files/channels.json");
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {Discord.GuildMember} member
- * @param {string} reason
- */
 async function run(bot, message, member, reason, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ban function.`);
     let logchannelColor = config.logChannelColors.memberBan;
-    // Load in the Log Channel ID
     let logID = channels.log;
-    // Check if there was an ID Provided
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         log_js_1.debug(`Unable to find the log ID in channels.json.`
             + `Looking for another log channel.`);
-        // Look for Log Channel in Server
         let logChannel = message.member.guild.channels.find(val => val.name === "log");
-        if (!logChannel) { // If Unable to Find Log Channel...
+        if (!logChannel) {
             log_js_1.debug(`Unable to find any kind of log channel.`);
         }
         else {
@@ -53,9 +31,7 @@ async function run(bot, message, member, reason, sql) {
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
             + `${member.user.username} because of ${error}.`);
     }
-    // Get Avatar
     let avatar = member.user.avatarURL;
-    // Build the Embed
     let bannedEmbed = new Discord.RichEmbed()
         .setDescription(`Member Banned!`)
         .setColor(logchannelColor)
@@ -64,8 +40,7 @@ async function run(bot, message, member, reason, sql) {
         .addField("Member ID", member.user.id)
         .addField("Banned On", new Date())
         .addField("Reason", reason);
-    // Check if there is an ID Now
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         bot.users.get(userids.ownerID).send(bannedEmbed);
     }
     else {

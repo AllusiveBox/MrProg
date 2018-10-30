@@ -1,18 +1,8 @@
 "use strict";
-/*
-    Command Name: setlevel.js
-    Function: Allows for manual setting of level for testing puposes.
-    Clearance: Owner Only
-    Default Enabled: Cannot be Disabled
-    Date Created: 11/03/17
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const log_js_1 = require("../functions/log.js");
 const userids = require("../files/userids.json");
-// Command Stuff
 const command = {
     bigDescription: ("Use this command to set the level of a user to something else.\n"
         + "Required arguments: @{user} -> The user to change the points for.\n"
@@ -25,27 +15,15 @@ const command = {
     name: "setlevel",
     permissionLevel: "owner"
 };
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(client, message, args, sql) {
-    // Debug to Console Log
     log_js_1.debug(`I am inside the ${command.fullName} Command.`);
     if (dmCheck_js_1.run(message, command.name))
         return;
-    // Owner ID Check
-    if (message.author.id !== userids.ownerID) { // If not Owner ID
+    if (message.author.id !== userids.ownerID) {
         return log_js_1.debug(`Attempted use of ${command.fullName} by ${message.author.username}.\n`);
     }
-    // Get the name of the Member to Change Level
     let toChange = message.mentions.members.first();
-    // Get the new level to set
     let newLevel = !!parseInt(message.content.split(" ")[1]) ? parseInt(message.content.split(" ")[1]) : parseInt(message.content.split(" ")[2]);
-    // Validation Check
     if (!toChange) {
         message.channel.send("You must mention someone to update their level");
         return log_js_1.debug("No member was given.\n");

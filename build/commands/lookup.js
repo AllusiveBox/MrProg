@@ -1,13 +1,4 @@
 "use strict";
-/*
-    Command Name: lookup.js
-    Function: Looks up a User's Data in the Database
-    Clearance: mod+
-    Default Enabled: Cannot be Disabled
-    Date Created: 07/19/18
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const log_js_1 = require("../functions/log.js");
@@ -25,85 +16,75 @@ const command = {
     enabled: null,
     permissionLevel: "mod"
 };
-/**
- *
- * @param {Discord.Client} client
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(client, message, args, sql) {
-    // Debug to Console Log
     log_js_1.debug(`I am inside the ${command.name} Command.`);
     let params = "";
-    // Param Options
-    let formattedMessage = false; //F
-    let publicMessage = false; //P
-    let multipleUsers = false; //M
-    let includeAll = false; //A
-    let includeUserID = false; //i
-    let includeUserName = false; //n
-    let includeBattlecode = false; //b
-    let includeFavChip = false; //f
-    let includeNaviSym = false; //s
-    let includeClearance = false; //c
-    let includePoints = false; //p
-    let includeLevel = false; //l
+    let formattedMessage = false;
+    let publicMessage = false;
+    let multipleUsers = false;
+    let includeAll = false;
+    let includeUserID = false;
+    let includeUserName = false;
+    let includeBattlecode = false;
+    let includeFavChip = false;
+    let includeNaviSym = false;
+    let includeClearance = false;
+    let includePoints = false;
+    let includeLevel = false;
     if (!await hasElevatedPermissions_js_1.run(client, message, command.adminOnly, sql))
         return;
-    // Grab Options
     if (args[0] !== undefined) {
         params = args[0];
     }
     if ((params.indexOf('-')) || (params.length === 0) || (args[1] === undefined)) {
         return message.channel.send(`Either no params were passed, or you did not format your params correctly.`);
     }
-    if (params.includes('F')) { //Format User Reply
+    if (params.includes('F')) {
         log_js_1.debug(`Setting Formatted Message Flag.`);
         formattedMessage = true;
     }
-    if (params.includes('P')) { // Public Message Back
+    if (params.includes('P')) {
         log_js_1.debug(`Setting Public Message Flag.`);
         publicMessage = true;
     }
-    if (params.includes('M')) { // Multiple User Lookup
+    if (params.includes('M')) {
         log_js_1.debug(`Setting Mutliple Users Flag.`);
         multipleUsers = true;
     }
-    if (params.includes('A')) { // Include all Data
+    if (params.includes('A')) {
         log_js_1.debug(`Setting Include All Data Flag.`);
         includeAll = true;
     }
     else {
-        if (params.includes('i')) { // Include UserID
+        if (params.includes('i')) {
             log_js_1.debug(`Setting Include UserID Flag.`);
             includeUserID = true;
         }
-        if (params.includes('n')) { // Include UserName
+        if (params.includes('n')) {
             log_js_1.debug(`Setting Include Username Flag.`);
             includeUserName = true;
         }
-        if (params.includes('b')) { // Include Battlecode
+        if (params.includes('b')) {
             log_js_1.debug(`Setting Include Battle Code Flag.`);
             includeBattlecode = true;
         }
-        if (params.includes('f')) { // Include FavChip
+        if (params.includes('f')) {
             log_js_1.debug(`Setting Include FavChip Flag.`);
             includeFavChip = true;
         }
-        if (params.includes('s')) { // Include Navi Symbol
+        if (params.includes('s')) {
             log_js_1.debug(`Setting Include Navi Symbol Flag.`);
             includeNaviSym = true;
         }
-        if (params.includes('c')) { // Include Clearance Level
+        if (params.includes('c')) {
             log_js_1.debug(`Setting Include Clearance Level Flag.`);
             includeClearance = true;
         }
-        if (params.includes('p')) { // Include Points
+        if (params.includes('p')) {
             log_js_1.debug(`Setting Include Points Flag.`);
             includePoints = true;
         }
-        if (params.includes('l')) { // Include Level
+        if (params.includes('l')) {
             log_js_1.debug(`Setting Include Level Flag.`);
             includeLevel = true;
         }
@@ -117,13 +98,12 @@ async function run(client, message, args, sql) {
     }
     try {
         let row = await sql.userLookup(toCheck);
-        if (!row) { // Cannot Find Row
+        if (!row) {
             return message.channel.send(`I am sorry, ${message.author}, I am unable to locate any data on ${toCheck}.\n`
                 + `Please verify that what you are searching by is correct and try again. If this issue continues, please reach out to `
                 + `<@${userIDs.ownerID}> and let him know.`);
         }
         else {
-            // Build String
             let reply = `SQL Data on: ${toCheck}\n`;
             if (formattedMessage) {
                 if (includeAll || includeUserID) {

@@ -1,43 +1,19 @@
 "use strict";
-/**
-
-    cxBot.js Mr. Prog Member Leaving Scripts
-    Version: 4
-    Author: AllusiveBox
-    Date Started: 08/09/18
-    Date Last Updated: 10/15/18
-    Last Update By: AllusiveBox
-
-**/
 Object.defineProperty(exports, "__esModule", { value: true });
-// Load in Required Libraries and Files
 const Discord = require("discord.js");
 const deleteMemberInfo_js_1 = require("./deleteMemberInfo.js");
 const log_js_1 = require("./log.js");
 const channels = require("../files/channels.json");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.GuildMember} member
- * @param {betterSql} sql
- *
- * @returns {Promise<void>}
- */
 async function run(bot, member, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the memberLeave Function.`);
-    // Get Log Channel Color
     let logchannelColor = config.logChannelColors.memberLeave;
-    // Load in the Log Channel ID
     let logID = channels.log;
-    // Check if there was an ID Provided
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         log_js_1.debug(`Unable to find the log ID in channels.json.`
             + `Looking for another log channel.`);
-        // Look for Log Channel in the Server
-        let logChannel = member.guild.channels.find(val => val.name === 'log'); //changed to function, since other way is deprecated
+        let logChannel = member.guild.channels.find(val => val.name === 'log');
         if (!logChannel) {
             log_js_1.debug(`Unable to find any kind of log channel.`);
         }
@@ -45,9 +21,7 @@ async function run(bot, member, sql) {
             logID = logChannel.id;
         }
     }
-    // Get the Member's Avatar
     let avatar = member.user.avatarURL;
-    // Build the Embed
     let leaveEmbed = new Discord.RichEmbed()
         .setDescription(`Member Left`)
         .setColor(logchannelColor)
@@ -57,8 +31,7 @@ async function run(bot, member, sql) {
         .addField("Account Created", member.user.createdAt)
         .addField("Joined On", member.joinedAt)
         .addField("Left On", new Date());
-    // Check if there is an ID Now
-    if (!logID) { // If no Log ID...
+    if (!logID) {
         bot.users.get(userids.ownerID).send(leaveEmbed);
     }
     else {

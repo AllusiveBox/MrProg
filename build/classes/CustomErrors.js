@@ -1,20 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/**
- *
- * Mr. Prog Custom Error Classes
- * Version: 1
- * Date Started: 09/21/18
- * Last Updated: 10/11/18
- * Last Updated By: Th3_M4j0r
- *
- */
 class UnsupportedMethodType extends Error {
-    /**
-     * UnsupportedMethodType is Thrown When an Invalid Method Type is Provided
-     * @param {string} cause
-     * @param {?string} [message=null]
-     */
     constructor(cause, message = null) {
         if (message === null) {
             message = (`Unsupported MethodType: ${cause} was passed.\n`
@@ -27,10 +13,6 @@ class UnsupportedMethodType extends Error {
 }
 exports.UnsupportedMethodType = UnsupportedMethodType;
 class NotConnectedError extends Error {
-    /**
-     * NotConnectedError is Thrown When the SQLDatabase is Not Connected...
-     * @param {?string} [message=null]
-     */
     constructor(message = null) {
         if (message === null) {
             message = (`Not connected to a database. Make sure to use the 'open' function first.`);
@@ -41,11 +23,6 @@ class NotConnectedError extends Error {
 }
 exports.NotConnectedError = NotConnectedError;
 class NoDefinedRole extends Error {
-    /**
-     * NoDefinedRole is Thrown When A Role is Called but it is not Defined.
-     * @param {string} commandName
-     * @param {?string} [message=null]
-     */
     constructor(commandName, message = null) {
         if (message === null) {
             message = (`No role set for ${commandName}. Please update files/roles.json and add a role for the ${commandName} entry.\n`

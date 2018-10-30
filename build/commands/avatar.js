@@ -1,14 +1,4 @@
 "use strict";
-/*
-    Command Name: avatar.js
-    Function: Returns a User's Avatar
-    Clearance: Mod+
-    Default Enabled: Cannot be disabled
-    Date Created: 04/14/18
-    Last Updated: 10/20/18
-    Last Update By: AllusiveBox
-
-*/
 Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
@@ -16,7 +6,6 @@ const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions
 const log_js_1 = require("../functions/log.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
-//command variables
 const command = {
     adminOnly: false,
     bigDescription: ("Returns the target's avatar as a DM to the user, "
@@ -30,24 +19,14 @@ const command = {
     permissionLevel: "mod"
 };
 exports.help = command;
-/**
- *
- * @param {Discord.Client} bot
- * @param {Discord.Message} message
- * @param {string[]} args
- * @param {betterSql} sql
- */
 async function run(bot, message, args, sql) {
-    // Debug to Console
     log_js_1.debug(`I am inside the ${command.fullName} command.`);
-    // DM Check
     if (dmCheck_js_1.run(message, command.fullName))
-        return; // Return on DM channel
+        return;
     if (!await hasElevatedPermissions_js_1.run(bot, message, command.adminOnly, sql))
         return;
-    // Find out Who to Get Avatar of
     let member = message.mentions.members.first();
-    if (!member) { // If No Member is Mentioned, or API Returns null...
+    if (!member) {
         log_js_1.debug(`No member mentioned trying by ID...`);
         let toCheck = args.slice(0).join(' ');
         if (message.guild.members.has(toCheck)) {
@@ -63,7 +42,7 @@ async function run(bot, message, args, sql) {
                 return disabledDMs_js_1.run(message, reply);
             });
         }
-    } // Valid Member was found
+    }
     log_js_1.debug(`Generating Avatar URL for ${member.user.username} and sending `
         + `it to ${message.author.username}.`);
     await message.author.send(bot.users.get(member.id).avatarURL)
