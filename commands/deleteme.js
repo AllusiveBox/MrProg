@@ -4,7 +4,7 @@
     Clearance: none
   	Default Enabled: Cannot be Disabled
     Date Created: 05/22/18
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -17,7 +17,8 @@ const betterSql = require(`../classes/betterSql.js`);
 const { run: dmCheck }= require(`../functions/dmCheck.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: deleteMemberInfo } = require(`../functions/deleteMemberInfo`);
-const { debug } = require(`../functions/log.js`);
+const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const commandUsed = new Set();
@@ -52,10 +53,11 @@ module.exports.run = async (bot, message, args, sql) => {
     if (!row) { //if row not found
         let reply = (`I am unable to locate any data on you.\n`
             + `Please either try again, or alert <@${userids.ownerID}>.`);
-        await message.react(config.fail);
+        await react(message, false);
         return message.author.send(reply)
             .catch(error => {
-                disabledDMs(message, reply)
+                errorLog(error);
+                return disabledDMs(message, reply);
             });
     }
     if (!commandUsed.has(message.author.id)) { // If User Hasn't Used Command
@@ -66,6 +68,7 @@ module.exports.run = async (bot, message, args, sql) => {
             + `If you are sure you want to delete this data, use this command `
             + `again.`);
         message.author.send(reply).catch(error => {
+            errorLog(error);
             disabledDMs(message, reply);
         });
         commandUsed.add(message.author.id);
@@ -90,32 +93,35 @@ module.exports.run = async (bot, message, args, sql) => {
                 + `clearance and preference to have your data collection prevented has been `
                 + `preserved, however.`);
         }
-        await message.react(config.success);
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else if (hasClearance) {
         await sql.deleteUser(message.author.id);
-        await message.react(config.success);
+        await react(message);
         let reply = (`Data on you has been deleted, ${message.author}. Your `
             + `clearance and preference to have your data collection prevented has been `
             + `preserved, however.`);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else {
         deleteMemberInfo(bot, message.member, sql).catch(error => {
             errorLog(error);
-            message.react(config.fail);
+            react(message, false);
             return message.channel.send(`*${error.toString()}*`);
         });
-        await message.react(config.success);
+        await react(message);
         let reply = (`Data on you has been deleted, ${message.author}.`);
         if (hasClearance) {
             reply = (`Data on you has been deleted, ${message.author}. `
                 + `However, your clearance has been preserved`);
         }
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     }

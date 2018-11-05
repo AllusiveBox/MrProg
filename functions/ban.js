@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/20/18
+    Date Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 **/
@@ -14,7 +14,7 @@ const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const channels = require(`../files/channels.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-
+const { run: react } = require(`../functions/react.js`);
 
 /**
  * 
@@ -51,9 +51,10 @@ module.exports.run = async (bot, message, member, reason) => {
         await member.ban(reason);
     } catch (error) {
         errorLog(error);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
-            + `${member.user.username} because of ${error}.`);
+            + `${member.user.username}.`
+            + `*${error.toString()}*`);
     }
 
     // Get Avatar
@@ -76,7 +77,7 @@ module.exports.run = async (bot, message, member, reason) => {
         bot.channels.get(logID).send(bannedEmbed);
     }
 
-    await message.react(config.success);
+    await react(message);
 
     return debug(`Ban Successful.`);
 }

@@ -4,7 +4,7 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -14,6 +14,7 @@ const Discord = require(`discord.js`);
 const userids = require(`../files/userids.json`);
 const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -44,7 +45,7 @@ module.exports.run = async (bot, message) => {
 
     // Switch the Debug Value
     config.debug = !config.debug;
-    await message.react(config.success);
+    await react(message);
     return debug(`Setting debug value to: ${config.debug}.`);
 }
 

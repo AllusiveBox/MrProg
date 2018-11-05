@@ -4,8 +4,8 @@
     Clearance: none
   	Default Enabled: true
     Date Created: 11/04/17
-    Last Updated: 10/06/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -16,6 +16,7 @@ const { debug, error:errorLog } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const validate = require(`../functions/validate.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 /**
@@ -72,6 +73,9 @@ module.exports.run = async (bot, message, args, sql) => {
         let reply = (`I am sorry, ${message.author}, that is an invalid code `
             + `format.\n`
             + `Valid characters are the numbers 0 - 9, and the characters A - E`);
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
@@ -92,6 +96,8 @@ module.exports.run = async (bot, message, args, sql) => {
             + `and then try again.\n`
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
+
+        await react(message, false);
 
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
@@ -134,18 +140,14 @@ module.exports.run = async (bot, message, args, sql) => {
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
 
-        return message.author.send(reply).catch(error => {
+        message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
+
+        return react(message, false);
     }
 
-    // Build the Reply Message
-    let reply = (`${message.author}, your battlecode has been `
-        + `updated to: ${battleCode}`);
-
-    message.author.send(reply).catch(error => {
-        disabledDMs(message, reply);
-    });
+    await react(message);
 
     return debug(`Battlecode successfully updated.`);
 }

@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 05/19/18
-    Last Updated: 10/06/18
+    Last Updated: 10/27/18
     Last Updated By: Th3_M4j0r
 
 */
@@ -15,6 +15,7 @@ const config = require(`../files/config.json`);
 const { debug } = require(`../functions/log.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
 inviteLink = config.n1gpLink;
@@ -45,6 +46,7 @@ module.exports.run = async (bot, message) => {
         return disabledCommand(command.name, message);
     }
 
+    await react(message);
     return message.author.send(inviteLink).catch(error => {
         disabledDMs(message, inviteLink);
     });

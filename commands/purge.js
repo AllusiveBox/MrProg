@@ -4,7 +4,7 @@
     Clearance: admin
 	Default Enabled: Yes
     Date Created: 10/25/17
-    Last Updated: 10/07/18
+    Last Updated: 10/27/18
     Last Updated By: AllusiveBox
 
 */
@@ -17,6 +17,7 @@ const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: purge } = require(`../functions/purge.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -50,7 +51,9 @@ module.exports.run = async (bot, message, args, sql) => {
     }
 
     // DM Check
-    if (dmCheck(message, command.fullName)) return; // Return on DM channel
+    if (dmCheck(message, command.fullName)) { // Return on DM channel
+        return react(message, false);
+    }
 
     // Permissions Check
     if (! await hasElevatedPermissions(bot, message, command.adminOnly, sql, true)) return;
@@ -65,16 +68,22 @@ module.exports.run = async (bot, message, args, sql) => {
 
         // Build Reply
         let reply = `${message.author}, you need to indicate a number of messages to purge!`
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
-            disabledDMs(message, reply);
+            return disabledDMs(message, reply);
         });
     } else if ((amount < 2) || (amount > 100)) {
         debug(`Amount range is invalid.`);
 
         // Build Reply
         let reply = `${message.author}, you please use a valid range. The allowed range is between 2 and 100.`;
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
-            disabledDMs(message, reply);
+            return disabledDMs(message, reply);
         });
     }
 

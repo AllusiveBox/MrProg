@@ -14,7 +14,9 @@ const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const channels = require(`../files/channels.json`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
+const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -82,13 +84,19 @@ module.exports.run = async (bot, message, args, sql) => {
 
     if ((message.channel.id === channels.bot) || config.debug) {
         // Return Message in Channel
-        message.channel.send(statsEmbed).catch(error => {
-            console.log(error);
+        return message.channel.send(statsEmbed).then(function () {
+            return react(message);
+        }).catch(error => {
+            errorLog(error);
+            return react(message, false);
         });
     } else {
-        message.author.send(statsEmbed).catch(error => {
+        return message.author.send(statsEmbed).then(function () {
+            return react(message);
+        }).catch (error => {
             disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`)
+            return react(message, false);
         });
     }
 }

@@ -4,7 +4,7 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 10/15/17
-    Last Updated: 10/13/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -15,6 +15,7 @@ const config = require(`../files/config.json`);
 const { debug } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
@@ -52,7 +53,7 @@ module.exports.run = async (bot, message) => {
         + `To report issues, please use the public issue repo here: <${config.issueRepoLink}>`);
 
     // Send the Message
-    await message.react(config.success);
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

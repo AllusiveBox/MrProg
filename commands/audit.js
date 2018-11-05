@@ -6,7 +6,7 @@
     clearance: Mod+
     Default Enabled: Cannot be Disabled
     Date Started: 09/16/18
-    Date Last Updated: 10/20/18
+    Date Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 **/
@@ -19,7 +19,7 @@ const config = require(`../files/config.json`);
 const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-
+const { run: react } = require(`../functions/react.js`);
 
 //command Stuff
 const command = {
@@ -82,17 +82,17 @@ module.exports.run = async (bot, message, args, sql) => {
             .addField(`Log#${startPos + 4}`, format(entries[startPos + 3]))
             .addField(`Log#${startPos + 5}`, format(entries[startPos + 4]));
         await message.author.send({ embed }).then(function () {
-            return message.react(config.success);
+            return react(message);
         }).catch(error => {
             errorLog(error);
-            message.react(config.fail);
+            react(message, false);
             return message.channel.send(`I was unable to send the log to you, if this persists, inform ${config.about.author}\n`
                 + `error type: *${error.toString()}*`);
         });
     }
     catch (error) {
         errorLog(error);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(`*${error.toString()}*`);
     }
 };

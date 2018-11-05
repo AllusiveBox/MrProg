@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 04/24/18
-    Last Updated: 10/06/18
+    Last Updated: 10/27/18
     Last Updated By: Th3_M4j0r
 */
 
@@ -14,6 +14,7 @@ const config = require(`../files/config.json`);
 const { debug } = require(`../functions/log.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: dmCheck } = require(`../functions/dmCheck.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
 const command = {
@@ -42,6 +43,7 @@ module.exports.run = async (bot, message) => {
     // Build the Reply
     let reply = (`You joined the server on: **${message.member.joinedAt}**.`);
 
+    await react(message);
     return message.author.send(reply).catch(error => {
         disabledDMs(message, reply);
     });

@@ -4,8 +4,8 @@
     Clearance: Owner and Temp Owner Only.
 	Default Enabled: Yes
     Date Created: 11/10/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
 
 */
 
@@ -14,7 +14,7 @@ const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const userids = require(`../files/userids.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
 const command = {
@@ -38,7 +38,10 @@ module.exports.run = async (bot, message) => {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
-    if (config.isOn) return; // Ignore if the Bot is Already Accepting Commands
+    if (config.isOn) { // Ignore if the Bot is Already Accepting Commands
+        await react(message, false);
+        return message.channel.send(`Unable to turn the bot on when it's already on.`);
+    }
 
     // Check if User is in the User ID List
     let validUser = false;
@@ -52,15 +55,14 @@ module.exports.run = async (bot, message) => {
         debug(`${message.author.username} is switching the bot to 'on' state.`);
         bot.user.setStatus("online").catch(error => {
             errorLog(error);
-            return message.author.send(`An unexpected error prevented me from updating my status...`
+            message.author.send(`An unexpected error prevented me from updating my status...`
                 + `Please try again in a few minutes.`);
+            return react(message, false);
         });
         config.isOn = true;
-        // Build the Reply
-        let reply = `Bot Status has been set to Online and the isOn flag has been enabled.`;
-        message.author.send(reply).catch(error => {
-            return disabledDMs(message, reply);
-        });
+
+        // React to Message
+        react(message);
     }
 }
 

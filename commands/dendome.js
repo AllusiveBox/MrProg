@@ -4,8 +4,8 @@
     Clearance: none
   	Default Enabled: Yes
     Date Created: 05/19/18
-    Last Updated: 09/30/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -17,7 +17,8 @@ const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-const validate = require(`../functions/validate.js`);
+const { run: react } = require(`../functions/react.js`);
+const { role: validate } = require(`../functions/validate.js`);
 
 // Command Variables
 const command = {
@@ -50,18 +51,7 @@ module.exports.run = async (bot, message) => {
     if (await dmCheck(message, command.fullName)) return; // Return on DM channel
 
     // Check to see if Role has been Defined or Not
-    validate.role(command.tournyRole, command.fullName);
-    /*
-    if (tournyRole.ID == "") {
-        debug(`No role set for ${name}. Please update files/roles.json and `
-            + `add a role for the "alertMe" entry. For a template, please check `
-            + `in the templates directory.`);
-        let reply = (`I am sorry, ${message.author}, ${config.about.author} has not `
-            + `yet added a role entry for this command.`);
-        return message.author.send(reply).catch(error => {
-            return disabledDMs(message, reply);
-        });
-    }*/
+    validate(command.tournyRole, command.fullName);
 
     // Find out the User to Update
     var toUpdate = message.member;
@@ -82,8 +72,10 @@ module.exports.run = async (bot, message) => {
             await toUpdate.removeRole(role);
         } catch (error) {
             errorLog(error);
+            await react(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something`
-                + ` went wrong and I was unable to update your roles.`);
+                + ` went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
 
         let reply = (`${message.author}, you have been removed from the `
@@ -91,7 +83,9 @@ module.exports.run = async (bot, message) => {
             + `If you wish to be added back to this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
 
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else {
@@ -103,8 +97,10 @@ module.exports.run = async (bot, message) => {
             await toUpdate.addRole(role);
         } catch (error) {
             errorLog(error);
+            await react(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something `
-                + `went wrong and I was unable to update your roles.`);
+                + `went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
 
         let reply = (`${message.author}, you have been added to the `
@@ -112,6 +108,7 @@ module.exports.run = async (bot, message) => {
             + `If you wish to be removed from this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
 
+        await react(message);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });
