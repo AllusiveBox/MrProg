@@ -1,4 +1,4 @@
-Updated: 10/27/18
+Updated: 11/04/18
 
 	* Some commands have had reacts added to them, so that at a glance it's easier to tell if they were successful or not. 
 	* Commands that DM'd successful completion of their task, but offered no real information, have had their DMs removed and instead will only react to your message.
