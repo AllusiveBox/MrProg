@@ -152,7 +152,7 @@ module.exports.run = async (client, message, args, sql) => {
             let reply = `SQL Data on: ${toCheck}\n`;
             if (formattedMessage) {
                 if (includeAll || includeUserID) {
-                    reply = `${reply}Discord User ID:\n\t ${row.userId}\n`;
+                    reply = `${reply}Discord User ID:\n\t ${row.userID}\n`;
                 }
                 if (includeAll || includeUserName) {
                     reply = `${reply}Current Server Username:\n\t ${row.userName}\n`;
@@ -204,7 +204,7 @@ module.exports.run = async (client, message, args, sql) => {
                 }
             }
             if (publicMessage) {
-                await message.react(config.sucess);
+                await react(message);
                 return message.channel.send(reply);
             }
             else {

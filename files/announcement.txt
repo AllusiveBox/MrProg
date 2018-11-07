@@ -1,11 +1,4 @@
-Updated: 11/04/18
+Updated: 11/06/18
 
-	* Some commands have had reacts added to them, so that at a glance it's easier to tell if they were successful or not. 
-	* Commands that DM'd successful completion of their task, but offered no real information, have had their DMs removed and instead will only react to your message.
-	* A few commands have had their detailed help text updated.
-	* A bug with deleteMe always deleting admins and mods, and not saving their clearance permissions has been resolved.
-	* A bug with the n1 command always failing has been resolved. The bot will now once again send out the invite link.
-	* The kick function has been updated to be in-line with the ban function.
-	* A bug with roles not being assigned to users on leveling up has been resolved.
-	* License Level Ups now have spiffy animations to go with them
-	* The purge command will now correctly tally purges that target users.
+	* The lookup command will now have valid userIDs.
+	* The change role function SHOULD once again work correctly...
