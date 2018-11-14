@@ -1,10 +1,10 @@
 ﻿/*
     Command Name: purge.js
     Function: Deletes messages from a channel
-    Clearance: admin
+    Clearance: mod
 	Default Enabled: Yes
     Date Created: 10/25/17
-    Last Updated: 10/27/18
+    Last Updated: 11/14/18
     Last Updated By: AllusiveBox
 
 */
@@ -21,7 +21,7 @@ const { run: react } = require(`../functions/react.js`);
 
 // Command Variables
 const command = {
-    adminOnly: true,
+    adminOnly: false,
     bigDescription: ("This command bulk deletes messages from a channel.\n"
         + "Arguments:\n\t"
         + "@{user} (optional) -> The user to bulk delete messages of.\n\t"
@@ -32,7 +32,7 @@ const command = {
     enabled: true,
     fullName: "Purge",
     name: "purge",
-    permissionLevel: "admin"
+    permissionLevel: "mod"
 }
 
 /**

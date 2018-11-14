@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 11/14/18
     Last Updated By: AllusiveBox
 
 **/
@@ -28,21 +28,27 @@ function recordMessages(messages) {
     let messageCount = 0;
 
     messages.forEach(function (message) {
-        // Build the Message Content
-        let content = `{\tMessage Posted in: ${message.channel.name}\n`;
-        content = `${content}\tMessage Author: ${message.author.username}\n`;
-        content = `${content}\tMessage Author ID: ${message.author.id}\n`;
-        content = `${content}\tMessage Content: ${message.content}\n`;
-        content = `${content}\tMessage ID: ${message.id}\n`;
-        if (message.attachments) { // If Attachments
-            message.attachments.forEach(function (attachment) {
-                content = `${content}\tAttachment: ${attachment}\n`
-            });
+        try {
+            // Build the Message Content
+            let content = `{\tMessage Posted in: ${message.channel.name}\n`;
+            content = `${content}\tMessage Author: ${message.author.username}\n`;
+            content = `${content}\tMessage Author ID: ${message.author.id}\n`;
+            content = `${content}\tMessage Content: ${message.content}\n`;
+            content = `${content}\tMessage ID: ${message.id}\n`;
+            if (message.attachments) { // If Attachments
+                message.attachments.forEach(function (attachment) {
+                    content = `${content}\tAttachment: ${attachment.filename}\n`;
+                    content = `${content}\t ${attachment.proxyURL}\n`;
+                });
+            }
+            content = `${content}\tMessage Sent: ${new Date(message.createdTimestamp)}\n`;
+            content = `${content}},\n`;
+            stream.write(content.substring(0, content.length));
+            messageCount++;
+        } catch (error) {
+            errorLog(error);
+            message.channel.send(`Error in functions/purge.recordMessages\n*${error.toString}*`);
         }
-        content = `${content}\tMessage Sent: ${new Date(message.createdTimestamp)}\n`;
-        content = `${content}},\n`;
-        stream.write(content.substring(0, content.length));
-        messageCount++;
     });
     stream.end();
 
@@ -72,11 +78,13 @@ module.exports.run = async (bot, message, amount, user = null) => {
 
         let messageCount = recordMessages(messages);
 
-        message.channel.bulkDelete(messages).catch(error => {
+        try {
+            message.channel.bulkDelete(messages);
+        } catch (error) {
             errorLog(error);
-            message.channel.send(error);
+            message.channel.send(`Error in functions/purge.js\n*${error.toString}*`);
             return react(message, false);
-        });
+        }
 
         // Load in Log Channel ID
         let logID = channels.log;

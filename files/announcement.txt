@@ -1,4 +1,6 @@
-Updated: 11/06/18
+Updated: 11/14/18
 
-	* The lookup command will now have valid userIDs.
-	* The change role function SHOULD once again work correctly...
+	* Purge command is now usable by mods, previously it was admins only which wasn't intended.
+	* Purge command now handles things a little better, so that if it does error it won't fail.
+		* Somewhere an invalid message object is being generated, though, it'll error on that, but should still be successful.
+	* The purgedMessages text file will now attach image links if any were provided, instead of just saying [object Object].
