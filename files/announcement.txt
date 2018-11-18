@@ -1,6 +1,6 @@
-Updated: 11/14/18
+Updated: 11/18/18
 
-	* Purge command is now usable by mods, previously it was admins only which wasn't intended.
-	* Purge command now handles things a little better, so that if it does error it won't fail.
-		* Somewhere an invalid message object is being generated, though, it'll error on that, but should still be successful.
-	* The purgedMessages text file will now attach image links if any were provided, instead of just saying [object Object].
+	* Roles should now successfully be assigned per level up. If this is not the case, I give up and points / levels will be discontinued because why is this so hard for me to resolve.
+	* Images should now display for all the Licenses, bar the CX License (although no one is close to that yet...). So enjoy some level up gifs for when you hit key levels!
+	* Something something last update until December. What happened to doing these once a month...
+	* Oh, also updated the version number correctly, as we hit version 4.1 in November but I didn't update the version number to reflect that. That's been resolved.
