@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 11/18/18
     Last Update By: AllusiveBox
 
 **/
@@ -36,11 +36,11 @@ module.exports.run = async (bot, message, level) => {
     }
     
     // Get The Role
-    let role = serverRoles.get(roles.levelUp[level]);
-    if (role === undefined || role === null) {
+    let role = "";
+    if ((roles.levelUp[level].ID === "") || (roles.levelUp[level] === null)) {
         return debug(`Role has not been defined for level ${level}...`);
     } else {
-        role = role.ID
+        role = serverRoles.get(roles.levelUp[level].ID);
     }
 
     try {
