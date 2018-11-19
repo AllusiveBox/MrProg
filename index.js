@@ -3,14 +3,15 @@
  * Version 4.1.0
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/19/18
- * Last Updated By: Th3_M4j0r
+ * Last Updated: 11/17/18
+ * Last Updated By: AllusiveBox
  * 
  */
 
 process.chdir(__dirname); // Ensure Working Directory is Same as Current File
 
 // Load in Required Libraries and Files
+const readline = require(`readline`);
 const Discord = require(`discord.js`);
 const fs = require(`fs`);
 const betterSql = require(`./classes/betterSql.js`);
@@ -20,11 +21,12 @@ const includedCommands = require(`./files/includedCommands.json`);
 const userids = require(`./files/userids.json`);
 
 // Load in Required Functions
+const { run: dmLog } = require(`./functions/dmLog.js`)
 const { run: memberJoin } = require(`./functions/memberJoin.js`);
 const { run: memberLeave } = require(`./functions/memberLeave.js`);
 const { run: onStartup } = require(`./functions/onStartup.js`);
 const { run: score } = require(`./functions/score.js`);
-const { command: commandLog, debug, error: errorLog } = require(`./functions/log.js`);
+const { command: commandLog, debug, error: errorLog} = require(`./functions/log.js`);
 
 // Declare the Bot Stuff
 const bot = new Discord.Client();
@@ -33,6 +35,12 @@ bot.commands = new Discord.Collection();
 // Open SQ Database
 const sql = new betterSql();
 sql.open(`./files/userinfo.sqlite`);
+
+// readline Stuff
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
 // Misc.
 falseCommandUsedRecently = new Set();
@@ -115,6 +123,39 @@ bot.on("guildMemberRemove", async member => {
 
 bot.on("guildBanAdd", async member => {
     debug("Member was Banned...");
+});
+
+rl.on(`line`, async (input) => {
+    // Convert to Lowercase
+    input = input.toLowerCase();
+
+    // Check the Cases
+    switch (input) {
+        case 'd':
+            config.debug = !config.debug;
+            console.log(`Debug flag set to: ${config.debug}`);
+            break;
+        case 'off':
+            await bot.commands.get("off").silent(bot);
+            break;
+        case 'on':
+            await bot.commands.get("on").silent(bot);
+            break;
+        case 'q':
+            console.log("Shutting down...");
+            process.exit(88); // Non-restart Exit Code
+            break;
+        case 'r':
+            console.log("Restarting...");
+            process.exit(0); // Restart Exit Code
+            break;
+        case 'u':
+            console.log("Restarting and checking for Bot Updates...");
+            process.exit(99); // Restart and Update Exit Code
+            break;
+        default:
+            break;
+    }
 })
 
 // Message Handler
@@ -140,7 +181,11 @@ bot.on("message", async message => {
     }
 
     // Check if DM
-    if (message.channel.type !== "dm") await score(bot, message, sql);
+    if (message.channel.type !== "dm") { // If Message is Not a DM...
+        await score(bot, message, sql);
+    } else { // If Message is a DM...
+        await dmLog(bot, message);
+    }
 
     // Check if Command or Not
     if (!message.content.startsWith(prefix)) return; // Return on Not Commands.
