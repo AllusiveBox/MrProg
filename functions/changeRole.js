@@ -37,9 +37,11 @@ module.exports.run = async (bot, message, level) => {
     
     // Get The Role
     let role = "";
-    if ((roles.levelUp[level].ID === "") || (roles.levelUp[level] === null)) {
+    if (roles.levelUp[level] === null) {
         return debug(`Role has not been defined for level ${level}...`);
-    } else {
+    } else if (roles.levelUp[level].ID === "") // If ID Does not Exist...
+		return debug(`Unable to locate ID for level ${level}...`);
+	} else {
         role = serverRoles.get(roles.levelUp[level].ID);
     }
 
