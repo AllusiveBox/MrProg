@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/13/18
+    Date Last Updated: 11/24/18
     Last Update By: AllusiveBox
 **/
 
@@ -34,7 +34,7 @@ module.exports.run = async (bot, member, sql) => {
     });
 
     // Delete User Information on Member
-    debug(`Deleting userinfo on ${member.user.username}.`);
+    debug(`Setting the User's leaveDate Field...`);
     sql.userLeft(member.id);
-    return debug(`Delete Successful.`);
+    return debug(`Update Successful.`);
 }

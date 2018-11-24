@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 07/19/18
-    Last Updated: 11/23/18
+    Last Updated: 11/24/18
     Last Updated By: AllusiveBox
 */
 
@@ -39,6 +39,8 @@ const command = {
         + "\t l => Includes the User's Level\n"
         + "\t o => Includes the User's OptOut Settings\n"
         + "\t j => Includes the User's Join Date\n"
+        + "\t b => Includes the User's Leave Date\n"
+        + "\t g => Includes the User's First Join Date\n"
         + "Returns:\n\t"
         + "DM reply unless public flag is set"),
     description: "looks for a particular user in the database",
@@ -76,6 +78,8 @@ module.exports.run = async (client, message, args, sql) => {
     let includeLevel = false; //l
     let includeOptIn = false; //o
     let includeJoinDate = false; //j
+    let includeLeaveDate = false; //b
+    let includeFirstJoinDate = false; //g
 
 
     if (! await hasElevatedPermissions(client, message, command.adminOnly, sql)) return;
@@ -150,6 +154,14 @@ module.exports.run = async (client, message, args, sql) => {
             debug(`Setting Join Date Flag.`);
             includeJoinDate = true;
         }
+        if (params.includes('b')) { // Include Leave Date
+            debug(`Setting Leave Date Flag.`);
+            includeLeaveDate = true;
+        }
+        if (params.includes('g')) { // Include First Join Date
+            debug(`Setting First Join Date Flag.`);
+            includeFirstJoinDate = true;
+        }
     }
 
     let toCheck = '';
@@ -217,8 +229,16 @@ module.exports.run = async (client, message, args, sql) => {
                 userEmbed.addField("OptOut Status", row.optOut === 1 ? "Yes" : "No");
             }
             if (includeAll || includeJoinDate) {
-                reply += `Discord User Server Join Date:\n\t ${new Date(row.joinDate)}\n\n`;
-                userEmbed.addField("Server Join Date", new Date(row.joinDate));
+                reply += `User Server Join Date:\n\t ${row.joinDate !== null ? new Date(row.joinDate) : "N/A"}\n\n`;
+                userEmbed.addField("Server Join Date", row.joinDate !== null ? new Date(row.joinDate) : "Not in Server");
+            }
+            if (includeAll || includeLeaveDate) {
+                reply += `User Last Leave Date:\n\t ${row.leaveDate !== null ? new Date(row.leaveDate) : "N/A"}\n\n`;
+                userEmbed.addField("Date Left", row.leaveDate !== null ? new Date(row.leaveDate) : "N/A");
+            }
+            if (includeAll || includeFirstJoinDate) {
+                reply += `User Original Join Date:\n\t ${new Date(row.firstJoinDate)}\n\n`;
+                userEmbed.addField("Original Join Date", new Date(row.firstJoinDate));
             }
             reply = "```" + reply + "```"
             if (publicMessage) {

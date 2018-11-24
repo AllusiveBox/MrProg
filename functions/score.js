@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 11/23/18
+    Date Last Updated: 11/24/18
     Last Update By: AllusiveBox
 
 **/
@@ -57,6 +57,9 @@ module.exports.run = async (bot, message, sql) => {
             if (row.joinDate === null) { // If joinDate is null...
                 sql.setJoinDate(message.author.id, message.member.joinedAt);
             }
+            if (row.firstJoinDate === null) { // If firstJoinDate is null...
+                sql.setFirstJoinDate(message.author.id, message.member.joinedAt);
+            }
             if (row.optOut === 1) {
                 return debug(`User does not want data collected.`);
             }
@@ -91,10 +94,6 @@ module.exports.run = async (bot, message, sql) => {
         }
 
     } catch (error) {
-        await sql.run("CREATE TABLE IF NOT EXISTS userinfo (userId TEXT NOT NULL, "
-            + "userName TEXT, battlecode TEXT, favechip TEXT, navi TEXT, "
-            + "clearance TEXT, points INTEGER, level INTEGER, optOut INTEGER, "
-            + "PRIMARY KEY (userId))");
         message.channel.send(`ERROR CAUSED BY: ${message.author}.`
             + `Error: *${error.toString()}*`);
         return errorLog(error);

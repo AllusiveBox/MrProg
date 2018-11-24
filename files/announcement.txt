@@ -1,4 +1,4 @@
-Updated: 11/23/18
+Updated: 11/24/18
 
 	* Logging has been split between channels to prevent spam in any single channel.
 	* dmLogging has been updated slightly.
@@ -9,3 +9,4 @@ Updated: 11/23/18
 	* The lookup command has been reworked. Formatted messages will now be in the form of an embed, which is spiffy and looks nice. Non-formatted messages will now use the old formatted message formatting.
 		* The lookup command has been updated to include the optOut data for a user.
 	* It is now possible to get the log files from the bot, using the log command if you are a mod or higher.
+	* The optIn and optOut commands now react to commands as originally intended.
