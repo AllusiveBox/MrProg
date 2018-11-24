@@ -27,6 +27,7 @@
   "joindate": true,
   "kick": true,
   "leave": false,
+  "log": true,
   "lookup": true,
   "media": true,
   "mistake": true,

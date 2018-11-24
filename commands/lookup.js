@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 07/19/18
-    Last Updated: 10/27/18
+    Last Updated: 11/23/18
     Last Updated By: AllusiveBox
 */
 
@@ -25,6 +25,20 @@ const command = {
     adminOnly: false,
     bigDescription: ("Looks up and returns a particular user's data, "
         + "formats it using any given format flags.\n"
+        + "Arguments: (first argument begins with a dash '-' character)\n"
+        + "\t F => Formats the reply as an embed\n"
+        + "\t P => Makes the reply a public message\n"
+        + "\t A => The reply will include **all** userinfo data\n"
+        + "\t i => Includes the User's ID\n"
+        + "\t n => Includes the User's Nickname\n"
+        + "\t b => Includes the User's Battlecode\n"
+        + "\t f => Includes the User's Favorite Chip\n"
+        + "\t s => Includes the User's Navi Symbol\n"
+        + "\t c => Includes the User's Clearance Level\n"
+        + "\t p => Includes the User's Points\n"
+        + "\t l => Includes the User's Level\n"
+        + "\t o => Includes the User's OptOut Settings\n"
+        + "\t j => Includes the User's Join Date\n"
         + "Returns:\n\t"
         + "DM reply unless public flag is set"),
     description: "looks for a particular user in the database",
@@ -60,6 +74,8 @@ module.exports.run = async (client, message, args, sql) => {
     let includeClearance = false; //c
     let includePoints = false; //p
     let includeLevel = false; //l
+    let includeOptIn = false; //o
+    let includeJoinDate = false; //j
 
 
     if (! await hasElevatedPermissions(client, message, command.adminOnly, sql)) return;
@@ -126,6 +142,14 @@ module.exports.run = async (client, message, args, sql) => {
             debug(`Setting Include Level Flag.`);
             includeLevel = true;
         }
+        if (params.includes('o')) { // Include OptIn
+            debug(`Setting Include Opt In Flag.`);
+            includeOptIn = true;
+        }
+        if (params.includes('j')) { // Include Join Date
+            debug(`Setting Join Date Flag.`);
+            includeJoinDate = true;
+        }
     }
 
     let toCheck = '';
@@ -149,72 +173,99 @@ module.exports.run = async (client, message, args, sql) => {
         }
         else {
             // Build String
-            let reply = `SQL Data on: ${toCheck}\n`;
-            if (formattedMessage) {
-                if (includeAll || includeUserID) {
-                    reply = `${reply}Discord User ID:\n\t ${row.userID}\n`;
-                }
-                if (includeAll || includeUserName) {
-                    reply = `${reply}Current Server Username:\n\t ${row.userName}\n`;
-                }
-                if (includeAll || includeBattlecode) {
-                    reply = `${reply}Current Battlecode:\n\t ${row.battlecode}\n`;
-                }
-                if (includeAll || includeFavChip) {
-                    reply = `${reply}Current Favorite Chip:\n\t ${row.favechip}\n`;
-                }
-                if (includeAll || includeNaviSym) {
-                    reply = `${reply}Current Navi Symbol:\n\t ${row.navi}\n`;
-                }
-                if (includeAll || includeClearance) {
-                    reply = `${reply}Current Clearance:\n\t ${row.clearance}\n`;
-                }
-                if (includeAll || includePoints) {
-                    reply = `${reply}Current Points:\n\t ${row.points}\n`;
-                }
-                if (includeAll || includeLevel) {
-                    reply = `${reply}Current Level:\n\t ${row.level}`;
-                }
-                reply = "```" + reply + "```"
+            let reply = `SQL Data on: ${row.userName}\n`;
+            // Build the Embed
+            let lookupColor = config.logChannelColors.memberLookup;
+            let userEmbed = new Discord.RichEmbed()
+                .setDescription(`Data on ${toCheck}`)
+                .setColor(lookupColor);
+
+            if (includeAll || includeUserID) {
+                reply = `${reply}Discord User ID:\n\t ${row.userId}\n\n`;
+                userEmbed.addField("User ID", row.userId);
             }
-            else {
-                if (includeAll || includeUserID) {
-                    reply = `${reply} ${row.userId};`;
-                }
-                if (includeAll || includeUserName) {
-                    reply = `${reply} ${row.userName};`;
-                }
-                if (includeAll || includeBattlecode) {
-                    reply = `${reply} ${row.battlecode};`;
-                }
-                if (includeAll || includeFavChip) {
-                    reply = `${reply} ${row.favechip};`;
-                }
-                if (includeAll || includeNaviSym) {
-                    reply = `${reply} ${row.navi};`;
-                }
-                if (includeAll || includeClearance) {
-                    reply = `${reply} ${row.clearance};`;
-                }
-                if (includeAll || includePoints) {
-                    reply = `${reply} ${row.points};`;
-                }
-                if (includeAll || includeLevel) {
-                    reply = `${reply} ${row.level};`;
-                }
+            if (includeAll || includeUserName) {
+                reply = `${reply}Current Server Username:\n\t ${row.userName}\n\n`;
+                userEmbed.addField("Nickname", row.userName);
             }
+            if (includeAll || includeBattlecode) {
+                reply = `${reply}Current Battlecode:\n\t ${row.battlecode}\n\n`;
+                userEmbed.addField("Battlecode", row.battlecode);
+            }
+            if (includeAll || includeFavChip) {
+                reply = `${reply}Current Favorite Chip:\n\t ${row.favechip}\n\n`;
+                userEmbed.addField("Favorite Chip", row.favechip);
+            }
+            if (includeAll || includeNaviSym) {
+                reply = `${reply}Current Navi Symbol:\n\t ${row.navi}\n\n`;
+                userEmbed.addField("Navi Symbol", row.navi);
+            }
+            if (includeAll || includeClearance) {
+                reply = `${reply}Current Clearance:\n\t ${row.clearance}\n\n`;
+                userEmbed.addField("Clearance", row.clearance);
+            }
+            if (includeAll || includePoints) {
+                reply = `${reply}Current Points:\n\t ${row.points}\n\n`;
+                userEmbed.addField("Points", row.points);
+            }
+            if (includeAll || includeLevel) {
+                reply = `${reply}Current Level:\n\t ${row.level}\n\n`;
+                userEmbed.addField("Level", row.level);
+            }
+            if (includeAll || includeOptIn) {
+                reply += `Current OptIn Status:\n\t ${row.optOut}\n\n`;
+                userEmbed.addField("OptOut Status", row.optOut === 1 ? "Yes" : "No");
+            }
+            if (includeAll || includeJoinDate) {
+                reply += `Discord User Server Join Date:\n\t ${new Date(row.joinDate)}\n\n`;
+                userEmbed.addField("Server Join Date", new Date(row.joinDate));
+            }
+            reply = "```" + reply + "```"
             if (publicMessage) {
+                if (formattedMessage) { // If Formatted Message...
+                    try {
+                        message.channel.send(userEmbed);
+                        return react(message);
+                    } catch (error) {
+                        await react(message, false);
+                        return message.channel.send(`I am sorry, ${message.author}, something went wrong!`
+                            + `Error: *${error.toString()}*`);
+                    }
+                } else {
+                    try {
+                        message.channel.send(reply);
+                        return react(message);
+                    } catch (error) {
+                        await react(message, false);
+                        return message.channel.send(`I am sorry, ${message.author}, something went wrong!`
+                            + `Error: *${error.toString()}*`);
+                    }
+                }
+                /*
                 await react(message);
                 return message.channel.send(reply);
+                */
             }
             else {
-                return message.author.send(reply).then(function () {
-                    return react(message);
-                }).catch(error => {
-                    disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
-                        + `Please check your privacy settings and try again.`);
-                    return react(message, false);
-                });
+                if (formattedMessage) { // If Formatted Message...
+                    try {
+                        message.author.send(userEmbed);
+                        return react(message);
+                    } catch (error) {
+                        await react(message, false);
+                        return message.channel.send(`I am sorry, ${message.author}, something went wrong!`
+                            + `Error: *${error.toString()}*`);
+                    }
+                } else {
+                    try {
+                        message.author.send(reply);
+                        return react(message);
+                    } catch (error) {
+                        await react(message, false);
+                        return message.channel.send(`I am sorry, ${message.author}, something went wrong!`
+                            + `Error: *${error.toString()}*`);
+                    }
+                }
             }
         }
     } catch (error) {

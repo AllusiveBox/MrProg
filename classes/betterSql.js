@@ -4,7 +4,7 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 09/08/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 11/23/18
     Last Update By: AllusiveBox
 
 **/
@@ -18,8 +18,8 @@ const { NotConnectedError } = require(`../classes/CustomErrors.js`);
 //the strings for each statement to prepare after connecting
 //prepared statements are faster and also safer
 const insertUserString = "INSERT INTO userinfo (userId, userName, battlecode, favechip, "
-    + "navi, clearance, points, level, optOut) VALUES (?, ?, ?, ?, ?, ?, "
-    + "?, ?, ?)";
+    + "navi, clearance, points, level, optOut, joinDate) VALUES (?, ?, ?, ?, ?, ?, "
+    + "?, ?, ?, ?)";
 const setPointsString = "UPDATE userinfo SET points = ?, level = "
     + "?, userName = ? WHERE userId = ?";
 const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?"; //don't know how AllusiveBox does this yet
@@ -29,6 +29,7 @@ const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, 
     + "favechip = null, navi = null, points = 0, "
     + "level = 0 WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
+const setJoinDateString = "UPDATE userinfo SET joinDate = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
 const optOutString = "UPDATE userinfo SET optOut = 1 WHERE userId = ?";
 const optInString = "UPDATE userinfo SET optOut = 0 WHERE userId = ?";
@@ -61,6 +62,7 @@ module.exports = class betterSql {
         this._promoteStmt = await this._Database.prepare(promoteString);
         this._getUserStmt = await this._Database.prepare(getUserString);
         this._setBattleCodeStmt = await this._Database.prepare(setBattleCodeString);
+        this._setJoinDateStmt = await this._Database.prepare(setJoinDateString);
         this._setNaviStmt = await this._Database.prepare(setNaviString);
         this._userLeftStmt = await this._Database.prepare(userLeftString);
         this._deleteMeStmt = await this._Database.prepare(deleteMeString);
@@ -87,15 +89,16 @@ module.exports = class betterSql {
     /**
      * 
      * @param {Discord.Snowflake} userId 
-     * @param {string} username 
+     * @param {string} username
+     * @param {string} [joinDate=null]
      */
-    async insertUser(userId, username) {
+    async insertUser(userId, username, joinDate = null) {
         debug(`I am in the sql.insertUser function`);
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
         await this._userInsertStmt.run(
-            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0);
+            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0, null);
     }
 
     /**
@@ -111,6 +114,20 @@ module.exports = class betterSql {
             throw new NotConnectedError();
         }
         await this._setBattleCodeStmt.run(battleCode, userId);
+    }
+
+    /**
+     * 
+     * @param {Discord.Snowflake} userId
+     * @param {string} joinDate
+     */
+
+    async setJoinDate(userId, joinDate) {
+        debug(`I am in the sql.setJoinDate function`);
+        if (!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        await this._setJoinDateStmt.run(joinDate, userId);
     }
 
     /**
@@ -279,6 +296,8 @@ module.exports = class betterSql {
         this._getUserStmt = null;
         await this._setBattleCodeStmt.finalize();
         this._setBattleCodeStmt = null;
+        await this._setJoinDateStmt.finalize();
+        this._setJoinDateStmt = null;
         await this._setNaviStmt.finalize();
         this._setNaviStmt = null;
         await this._userLeftStmt.finalize();

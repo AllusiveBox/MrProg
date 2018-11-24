@@ -4,7 +4,7 @@
     Clearance: Owner and Temp Owner Only.
 	Default Enabled: Yes
     Date Created: 11/10/17
-    Last Updated: 10/27/18
+    Last Updated: 11/17/18
     Last Updated By: AllusiveBox
 
 */
@@ -64,6 +64,25 @@ module.exports.run = async (bot, message) => {
         // React to Message
         react(message);
     }
+}
+
+/**
+ * 
+ * @param {Discord.Client} bot
+ */
+
+module.exports.silent = async (bot) => {
+    if (config.isOn) { // Ignore if the Bot is Already Rejecting Commands...
+        return console.log(`Unable to turn the bot off when it's already on.`);
+    }
+
+    try {
+        bot.user.setStatus("online");
+    } catch (error) {
+        return errorLog(error);
+    }
+
+    config.isOn = true;
 }
 
 module.exports.help = command;
