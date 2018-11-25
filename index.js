@@ -1,9 +1,9 @@
 /**
  * Mr. Prog Bot Script
- * Version 4.1.0
+ * Version 4.2.1
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 11/23/18
+ * Last Updated: 11/24/18
  * Last Updated By: AllusiveBox
  * 
  */
@@ -17,6 +17,7 @@ const fs = require(`fs`);
 const betterSql = require(`./classes/betterSql.js`);
 const bottoken = require(`./files/bottoken.json`);
 const config = require(`./files/config.json`);
+const channels = require(`./files/channels.json`);
 const includedCommands = require(`./files/includedCommands.json`);
 const userids = require(`./files/userids.json`);
 
@@ -121,9 +122,93 @@ bot.on("guildMemberRemove", async member => {
     }
 });
 
-bot.on("guildBanAdd", async member => {
-    debug("Member was Banned...");
+bot.on("messageUpdate", async (oldMessage, newMessage) => {
+    debug(`In the messageUpdate event.`);
+
+    // Make sure Content exists...
+    if ((oldMessage.content === null) || (newMessage.content === null) ||
+        (oldMessage.content === undefined) || (newMessage.content === undefined) ||
+        (oldMessage.content === "") || (newMessage.content === "")) return;
+
+    // Load in Log Channel ID
+    let logID = channels.log;
+
+    if (!logID) { // If no Log ID...
+        debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+
+        // Look for Log Channel in Server
+        let logChannel = oldMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) { // If Unable to Find Log Channel...
+            return debug(`Unable to find any kind of log channel.`);
+        } else {
+            logID = logChannel.id;
+        }
+
+        // Load in Embed Message Color
+        let logChannelColor = config.logChannelColors.messageUpdated;
+
+        // Grab the User Information
+        let avatar = oldMessage.member.user.avatarURL;
+
+        // Build the Embed
+        let updatedMessage = new Discord.RichEmbed()
+            .setDescription("Message Updated!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Old Message", oldMessage.content)
+            .addField("New Message", newMessage.content)
+            .addField("Time", new Date());
+
+        try {
+            bot.channels.get(logID).send(updatedMessage);
+        } catch (error) {
+            errorLog(error);
+        }
+    }
 });
+
+bot.on("messageDelete", async (deletedMessage) => {
+    debug(`In the messageDelete event.`);
+
+    // Make sure Content exists...
+    if (deletedMessage.content === null || deletedMessage.content === undefined ||
+        deletedMessage.content === "") return;
+
+    // Load in Log Channel ID
+    let logID = channels.log;
+
+    if (!logID) { // If no Log ID...
+        debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+
+        // Look for Log Channel in Server
+        let logChannel = deletedMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) { // If Unable to Find Log Channel...
+            return debug(`Unable to find any kind of log channel.`);
+        } else {
+            logID = logChannel.id;
+        }
+
+        // Load in Embed Message Color
+        let logChannelColor = config.logChannelColors.messageUpdated;
+
+        // Grab the User Information
+        let avatar = deletedMessage.member.user.avatarURL;
+
+        // Build the Embed
+        let deletedMessageEmbed = new Discord.RichEmbed()
+            .setDescription("Message Deleted!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Deleted Message", deletedMessage.content)
+            .addField("Time", new Date());
+
+        try {
+            bot.channels.get(logID).send(deletedMessageEmbed);
+        } catch (error) {
+            errorLog(error);
+        }
+    }
+})
 
 rl.on(`line`, async (input) => {
     // Convert to Lowercase
