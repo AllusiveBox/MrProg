@@ -4,8 +4,8 @@
     Clearance: mod
 	Default Enabled: Yes
     Date Created: 10/25/17
-    Last Updated: 11/14/18
-    Last Updated By: AllusiveBox
+    Last Updated: 11/27/18
+    Last Updated By: Th3_M4j0r
 
 */
 
@@ -87,8 +87,8 @@ module.exports.run = async (bot, message, args, sql) => {
         });
     }
 
-    // Get the User, if Any Mentioned
-    user = message.mentions.members.first() !== undefined ? message.mentions.members.first() : null;
+    // Get the User, if Any Mentioned, disabled for now
+    //user = message.mentions.members.first() !== undefined ? message.mentions.members.first() : null;
 
     purge(bot, message, amount, user);
 }
