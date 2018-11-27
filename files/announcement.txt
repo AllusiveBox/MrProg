@@ -1,4 +1,4 @@
-Updated: 11/24/18
+Updated: 11/26/18
 
 	* Logging has been split between channels to prevent spam in any single channel.
 	* dmLogging has been updated slightly.
