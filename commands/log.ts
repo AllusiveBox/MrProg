@@ -16,6 +16,7 @@ import { ownerID } from '../files/userids.json';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { validatePath, validateFileName } from '../functions/validate.js';
+import betterSql from '../classes/betterSql.js';
 
 // Command Variables
 const command : commandHelp = {
@@ -36,7 +37,7 @@ const command : commandHelp = {
  * @param {Discord.Client} bot
  * @param {Discord.Message} message
  */
-export async function run(bot: Discord.Client, message: Discord.Message, args, sql) {
+export async function run(bot: Discord.Client, message: Discord.Message, args, sql: betterSql) {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
