@@ -3,7 +3,7 @@
  * Version 4.2.1
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 11/24/18
+ * Last Updated: 11/26/18
  * Last Updated By: AllusiveBox
  * 
  */
@@ -129,6 +129,8 @@ bot.on("messageUpdate", async (oldMessage, newMessage) => {
     if ((oldMessage.content === null) || (newMessage.content === null) ||
         (oldMessage.content === undefined) || (newMessage.content === undefined) ||
         (oldMessage.content === "") || (newMessage.content === "")) return;
+
+    if (oldMessage.content === newMessage.content) return debug("Messages are the same!");
 
     // Load in Log Channel ID
     let logID = channels.log;
