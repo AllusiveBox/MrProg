@@ -56,8 +56,34 @@ async function commandLogger(user: Discord.User, command: string, args: string[]
     commandLogger.log(`${logMessage}`);
 }
 
+
+async function dmLogger(message) {
+    let dmLogger = new Logger("DMLogger");
+
+    // Build the Log Message
+    let logMessage = `DM From:\n\t\t\t\t\t${message.author.username} (id: ${message.author.id})\n\t\t\t\t`;
+
+    try {
+        logMessage += `Message content:\n\t\t\t\t\t`;
+        logMessage += `${message.content}\n\t\t\t\t`;
+        if (message.attachments.size > 0) { // If an Attachment was Included...
+            logMessage += `The following attachment(s) were included:\n\t\t\t\t\t`
+            message.attachments.forEach(function (attachment) {
+                logMessage += `${attachment.filename}\n\t\t\t\t\t`;
+                logMessage += `${attachment.proxyURL}\n\t\t\t\t`;
+            });
+        }
+
+        dmLogger.log(logMessage);
+    } catch (error) {
+        return errorLogger(error);
+    }
+}
+
+
 export const debug = debugLogger;
 export const error = errorLogger;
+export const dmLog = dmLogger;
 export const command = commandLogger;
 
 //added here because every command imports this file already

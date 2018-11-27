@@ -22,6 +22,7 @@ async function run(bot, member, sql) {
         }
     }
     let avatar = member.user.avatarURL;
+    let joinDate = await sql.getJoinDate(member.user.id);
     let leaveEmbed = new Discord.RichEmbed()
         .setDescription(`Member Left`)
         .setColor(logchannelColor)
@@ -29,7 +30,7 @@ async function run(bot, member, sql) {
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
         .addField("Account Created", member.user.createdAt)
-        .addField("Joined On", member.joinedAt)
+        .addField("Joined On", new Date(joinDate))
         .addField("Left On", new Date());
     if (!logID) {
         bot.users.get(userids.ownerID).send(leaveEmbed);

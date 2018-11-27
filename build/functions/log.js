@@ -24,6 +24,26 @@ async function commandLogger(user, command, args) {
     }
     commandLogger.log(`${logMessage}`);
 }
+async function dmLogger(message) {
+    let dmLogger = new Logger_js_1.default("DMLogger");
+    let logMessage = `DM From:\n\t\t\t\t\t${message.author.username} (id: ${message.author.id})\n\t\t\t\t`;
+    try {
+        logMessage += `Message content:\n\t\t\t\t\t`;
+        logMessage += `${message.content}\n\t\t\t\t`;
+        if (message.attachments.size > 0) {
+            logMessage += `The following attachment(s) were included:\n\t\t\t\t\t`;
+            message.attachments.forEach(function (attachment) {
+                logMessage += `${attachment.filename}\n\t\t\t\t\t`;
+                logMessage += `${attachment.proxyURL}\n\t\t\t\t`;
+            });
+        }
+        dmLogger.log(logMessage);
+    }
+    catch (error) {
+        return errorLogger(error);
+    }
+}
 exports.debug = debugLogger;
 exports.error = errorLogger;
+exports.dmLog = dmLogger;
 exports.command = commandLogger;

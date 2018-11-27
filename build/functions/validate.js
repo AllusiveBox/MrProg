@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
+const path = require("path");
 const CustomErrors_js_1 = require("../classes/CustomErrors.js");
 const log_js_1 = require("./log.js");
 function validateBattleCode(battleCode) {
@@ -49,3 +51,39 @@ function methodType(method) {
     return true;
 }
 exports.methodType = methodType;
+function validatePath(filePath) {
+    log_js_1.debug(`I am inside the filePath validation System.`);
+    if (filePath == undefined) {
+        log_js_1.debug(`Path undefined...`);
+        return false;
+    }
+    if (!filePath.includes('./logs/')) {
+        filePath = `./logs/${filePath}`;
+    }
+    filePath = path.dirname(`${filePath}/temp.txt`);
+    if (fs.existsSync(filePath)) {
+        log_js_1.debug(`File Path is Valid!`);
+        return true;
+    }
+    else {
+        log_js_1.debug("Path does not exist...");
+        return false;
+    }
+    return false;
+}
+exports.validatePath = validatePath;
+function validateFileName(fileName) {
+    log_js_1.debug(`I am inside the fileName validation System`);
+    if (fileName == undefined) {
+        log_js_1.debug(`File undefined...`);
+    }
+    if (fileName.match(/(^[0-9]{4}[-][0-9]{2})/)) {
+        log_js_1.debug(`File Name is Valid!`);
+        return true;
+    }
+    else {
+        log_js_1.debug(`Invalid File Format...`);
+        return false;
+    }
+}
+exports.validateFileName = validateFileName;

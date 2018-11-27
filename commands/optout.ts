@@ -4,22 +4,22 @@
     Clearance: none
 	Default Enabled: Cannot be disabled 
     Date Created: 05/23/18
-    Last Updated: 10/12/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 11/24/18
+    Last Updated By: AllusiveBox
 
 */
-
 
 // Load in Required Files
 import * as Discord from 'discord.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { default as betterSql, optOutChoice } from '../classes/betterSql.js';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 
 // Command Required Files
-const command : commandHelp = {
+const command: commandHelp = {
     bigDescription: ("Allows a user to opt out of data collection.\n"
         + "Returns:\n\t" + config.returnsDM),
     description: "Opts out of data collection",
@@ -58,6 +58,7 @@ export async function run(bot, message: Discord.Message, args: string[] | null, 
         debug(`${message.author.username} attempted to opt-out while already opted out.`);
         let reply = `You are already opted out, ${message.author}. `
             + `To opt back in, use the ${config.prefix}optIn command.`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });
@@ -72,6 +73,7 @@ export async function run(bot, message: Discord.Message, args: string[] | null, 
         + `use the ${config.prefix}deleteMe command. If you `
         + `wish to have data collected again, use the `
         + `${config.prefix}optIn command`;
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

@@ -20,12 +20,17 @@ async function run(bot, message, sql) {
         if (!row) {
             log_js_1.debug(`Row was not found for ${message.author.username}. `
                 + `Generating data now...`);
-            sql.insertUser(message.author.id, message.author.username);
+            sql.insertUser(message.author.id, message.author.username, message.member.joinedAt);
         }
         else {
+            if (row.joinDate === null) {
+                sql.setJoinDate(message.author.id, message.member.joinedAt);
+            }
+            if (row.firstJoinDate === null) {
+                sql.setFirstJoinDate(message.author.id, message.member.joinedAt);
+            }
             if (row.optOut === 1) {
-                log_js_1.debug(`User does not want data collected.`);
-                return;
+                return log_js_1.debug(`User does not want data collected.`);
             }
             log_js_1.debug(`Row found for ${message.author.username}.`);
             let name = message.author.username;
@@ -54,11 +59,8 @@ async function run(bot, message, sql) {
         }
     }
     catch (error) {
-        await sql.run("CREATE TABLE IF NOT EXISTS userinfo (userId TEXT NOT NULL, "
-            + "userName TEXT, battlecode TEXT, favechip TEXT, navi TEXT, "
-            + "clearance TEXT, points INTEGER, level INTEGER, optOut INTEGER, "
-            + "PRIMARY KEY (userId))");
-        message.channel.send(`ERROR CAUSED BY: ${message.author}.`);
+        message.channel.send(`ERROR CAUSED BY: ${message.author}.`
+            + `Error: *${error.toString()}*`);
         return log_js_1.error(error);
     }
 }

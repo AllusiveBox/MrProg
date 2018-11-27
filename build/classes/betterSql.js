@@ -9,17 +9,22 @@ var optOutChoice;
     optOutChoice[optOutChoice["optedOut"] = 1] = "optedOut";
 })(optOutChoice = exports.optOutChoice || (exports.optOutChoice = {}));
 const insertUserString = "INSERT INTO userinfo (userId, userName, battlecode, favechip, "
-    + "navi, clearance, points, level, optOut) VALUES (?, ?, ?, ?, ?, ?, "
-    + "?, ?, ?)";
+    + "navi, clearance, points, level, optOut, joinDate, leaveDate, firstJoinDate) VALUES (?, ?, ?, ?, ?, ?, "
+    + "?, ?, ?, ?, ?, ?)";
 const setPointsString = "UPDATE userinfo SET points = ?, level = "
     + "?, userName = ? WHERE userId = ?";
 const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?";
 const getUserString = "SELECT * FROM userinfo WHERE userId = ?";
-const userLeftString = "DELETE FROM userinfo WHERE userId = ?";
+const getJoinDateString = "SELECT joinDate from userinfo WHERE userId = ?";
+const userLeftString = "UPDATE userinfo SET battlecode = null, navi = null, clearance = null, points = null, "
+    + "level = null, joinDate = null, leaveDate = ? WHERE userId = ?";
 const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, "
     + "favechip = null, navi = null, points = 0, "
     + "level = 0 WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
+const setFirstJoinDateString = "UPDATE userinfo SET firstJoinDate = ? WHERE userId = ?";
+const setJoinDateString = "UPDATE userinfo SET joinDate = ? WHERE userId = ?";
+const setLeaveDateString = "UPDATE userinfo SET leaveDate = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
 const changeOptString = "UPDATE userinfo SET optOut = ? WHERE userId = ?";
 const userLookupString = "SELECT * FROM userinfo WHERE userID = ? OR userID = ? "
@@ -43,7 +48,11 @@ class betterSql {
         this._setPointsStmt = await this._Database.prepare(setPointsString);
         this._promoteStmt = await this._Database.prepare(promoteString);
         this._getUserStmt = await this._Database.prepare(getUserString);
+        this._getJoinDateStmt = await this._Database.prepare(getJoinDateString);
         this._setBattleCodeStmt = await this._Database.prepare(setBattleCodeString);
+        this._setFirstJoinDateStmt = await this._Database.prepare(setFirstJoinDateString);
+        this._setJoinDateStmt = await this._Database.prepare(setJoinDateString);
+        this._setLeaveDateStmt = await this._Database.prepare(setLeaveDateString);
         this._setNaviStmt = await this._Database.prepare(setNaviString);
         this._userLeftStmt = await this._Database.prepare(userLeftString);
         this._deleteMeStmt = await this._Database.prepare(deleteMeString);
@@ -63,12 +72,20 @@ class betterSql {
         }
         return await this._getUserStmt.get(userId);
     }
-    async insertUser(userId, username) {
+    async getJoinDate(userId) {
+        log_js_1.debug(`I am in the sql.getJoinDate function`);
+        if (!this._dbOpen) {
+            throw new CustomErrors_js_1.NotConnectedError();
+        }
+        let row = await this._getJoinDateStmt.get(userId);
+        return row.joinDate;
+    }
+    async insertUser(userId, username, joinDate = null) {
         log_js_1.debug(`I am in the sql.insertUser function`);
         if (!this._dbOpen) {
             throw new CustomErrors_js_1.NotConnectedError();
         }
-        await this._userInsertStmt.run(userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0);
+        await this._userInsertStmt.run(userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0, joinDate, null, joinDate);
     }
     async setBattleCode(userId, battleCode) {
         log_js_1.debug(`I am in the sql.setBattleCode function`);
@@ -76,6 +93,27 @@ class betterSql {
             throw new CustomErrors_js_1.NotConnectedError();
         }
         await this._setBattleCodeStmt.run(battleCode, userId);
+    }
+    async setFirstJoinDate(userId, joinDate) {
+        log_js_1.debug(`I am in the sql.setFirstJoinDate function`);
+        if (!this._dbOpen) {
+            throw new CustomErrors_js_1.NotConnectedError();
+        }
+        await this._setFirstJoinDateStmt.run(joinDate, userId);
+    }
+    async setJoinDate(userId, joinDate) {
+        log_js_1.debug(`I am in the sql.setJoinDate function`);
+        if (!this._dbOpen) {
+            throw new CustomErrors_js_1.NotConnectedError();
+        }
+        await this._setJoinDateStmt.run(joinDate, userId);
+    }
+    async setLeaveDate(userId, leaveDate) {
+        log_js_1.debug(`I am in the sql.setLeaveDate function`);
+        if (!this._dbOpen) {
+            throw new CustomErrors_js_1.NotConnectedError();
+        }
+        await this._setLeaveDateStmt.run(leaveDate, userId);
     }
     async setPoints(userId, points, level, username) {
         log_js_1.debug(`I am in the sql.setPoints function`);
@@ -131,7 +169,7 @@ class betterSql {
         if (!this._dbOpen) {
             throw new CustomErrors_js_1.NotConnectedError();
         }
-        await this._userLeftStmt.run(userId);
+        await this._userLeftStmt.run(new Date(), userId);
     }
     async run(stmt) {
         log_js_1.debug(`I am in the sql.run function`);
@@ -160,8 +198,16 @@ class betterSql {
         this._promoteStmt = null;
         await this._getUserStmt.finalize();
         this._getUserStmt = null;
+        await this._getJoinDateStmt.finalize();
+        this._getJoinDateStmt = null;
         await this._setBattleCodeStmt.finalize();
         this._setBattleCodeStmt = null;
+        await this._setFirstJoinDateStmt.finalize();
+        this._setFirstJoinDateStmt = null;
+        await this._setJoinDateStmt.finalize();
+        this._setJoinDateStmt = null;
+        await this._setLeaveDateStmt.finalize();
+        this._setLeaveDateStmt = null;
         await this._setNaviStmt.finalize();
         this._setNaviStmt = null;
         await this._userLeftStmt.finalize();

@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 10/15/18
+    Date Last Updated: 11/23/18
     Last Update By: AllusiveBox
 
 **/
@@ -14,6 +14,7 @@ import * as Discord from 'discord.js';
 import { commandBot } from '../classes/commandBot.js';
 import { debug, error as errorLog } from '../functions/log.js';
 import { run as welcomeMessage } from '../functions/welcomeMessage.js';
+import betterSql from '../classes/betterSql.js';
 
 
 import channels = require('../files/channels.json');
@@ -26,7 +27,7 @@ import userIds = require('../files/userids.json');
  * @param {commandBot} bot
  * @param {Discord.Member} member
  */
-export async function run(bot : commandBot, member : Discord.GuildMember) {
+export async function run(bot : commandBot, member : Discord.GuildMember, sql: betterSql) {
     // Debug to Console
     debug(`I am inside the memberLeave Function.`);
 
@@ -81,4 +82,6 @@ export async function run(bot : commandBot, member : Discord.GuildMember) {
         let logChannel = <Discord.TextChannel> bot.channels.get(logID);
         logChannel.send(joinEmbed);
     }
+
+    return sql.insertUser(member.user.id, member.user.username, member.joinedAt);
 }

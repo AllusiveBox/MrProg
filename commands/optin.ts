@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/23/18
-    Last Updated: 10/12/18
+    Last Updated: 11/27/18
     Last Updated By: Th3_M4j0r
 */
 
@@ -13,6 +13,7 @@ import * as Discord from 'discord.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { default as betterSql, optOutChoice } from '../classes/betterSql.js';
+import {run as react} from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -56,6 +57,7 @@ export async function run(client: Discord.Client, message: Discord.Message, args
         debug(`${message.author.username} attempted to opt-in while already opted in.`);
         let reply = `You are already opted in, ${message.author}. `
             + `To opt out, use the ${config.prefix}optOut command.`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });
@@ -74,6 +76,7 @@ export async function run(client: Discord.Client, message: Discord.Message, args
     let reply = `I have updated your preferences, ${message.author}. `
         + `If you wish to opt-out of future data collection `
         + `please use the ${config.prefix}optOut command.`;
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

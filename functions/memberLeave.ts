@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/09/18
-    Date Last Updated: 10/15/18
+    Date Last Updated: 11/24/18
     Last Update By: AllusiveBox
 
 **/
@@ -53,6 +53,8 @@ export async function run(bot: Discord.Client, member: Discord.GuildMember, sql:
 
     // Get the Member's Avatar
     let avatar = member.user.avatarURL;
+    //let user = await sql.getJoinDate(member.user.id);
+    let joinDate = await sql.getJoinDate(member.user.id);
 
     // Build the Embed
     let leaveEmbed = new Discord.RichEmbed()
@@ -62,7 +64,7 @@ export async function run(bot: Discord.Client, member: Discord.GuildMember, sql:
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
         .addField("Account Created", member.user.createdAt)
-        .addField("Joined On", member.joinedAt)
+        .addField("Joined On", new Date(joinDate))
         .addField("Left On", new Date());
 
     // Check if there is an ID Now

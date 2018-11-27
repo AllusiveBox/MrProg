@@ -39,4 +39,17 @@ async function run(bot, message) {
     }
 }
 exports.run = run;
+async function silent(bot) {
+    if (config.isOn) {
+        return console.log(`Unable to turn the bot off when it's already on.`);
+    }
+    try {
+        bot.user.setStatus("online");
+    }
+    catch (error) {
+        return log_js_1.error(error);
+    }
+    config.isOn = true;
+}
+exports.silent = silent;
 exports.help = command;

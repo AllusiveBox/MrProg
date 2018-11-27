@@ -4,14 +4,16 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/26/18
-    Date Last Updated: 10/13/18
+    Date Last Updated: 11/23/18
     Last Update By: Th3_M4j0r
 
 **/
 
 // Load in Required Libraries and Files
+import * as fs from 'fs';
+import * as path from 'path';
 import { NoDefinedRole, UnsupportedMethodType } from '../classes/CustomErrors.js';
-import { debug } from './log.js';
+import { debug, error as errorLog } from './log.js';
 
 
 /**
@@ -86,4 +88,47 @@ export function methodType(method: string): boolean {
     }
 
     return true;
+}
+
+export function validatePath(filePath: string): boolean {
+    // Debug to Console
+    debug(`I am inside the filePath validation System.`);
+
+    if (filePath == undefined) { // If File Path is Undefined...
+        debug(`Path undefined...`);
+        return false;
+    }
+
+    if (!filePath.includes('./logs/')) { // If Not Correctly Formatted...
+        filePath = `./logs/${filePath}`;
+    }
+
+    filePath = path.dirname(`${filePath}/temp.txt`);
+
+    if (fs.existsSync(filePath)) { // If Path Exists...
+        debug(`File Path is Valid!`);
+        return true;
+    } else { // Else Path Does Not Exist...
+        debug("Path does not exist...");
+        return false;
+    }
+
+    return false;
+}
+
+export function validateFileName(fileName: string):boolean {
+    // Debug to Console
+    debug(`I am inside the fileName validation System`);
+
+    if (fileName == undefined) { // If File Name is Undefined...
+        debug(`File undefined...`);
+    }
+
+    if (fileName.match(/(^[0-9]{4}[-][0-9]{2})/)) { // If File Includes Regex...
+        debug(`File Name is Valid!`);
+        return true;
+    } else { // Else Invalid Format...
+        debug(`Invalid File Format...`);
+        return false;
+    }
 }

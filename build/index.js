@@ -1,24 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 process.chdir(__dirname);
+const Discord = require("discord.js");
 const fs = require("fs");
+const readline = require("readline");
 const commandBot_js_1 = require("./classes/commandBot.js");
 const betterSql_js_1 = require("./classes/betterSql.js");
 const memberJoin_js_1 = require("./functions/memberJoin.js");
 const memberLeave_js_1 = require("./functions/memberLeave.js");
 const onStartup_js_1 = require("./functions/onStartup.js");
 const score_js_1 = require("./functions/score.js");
+const dmLog_js_1 = require("./functions/dmLog.js");
 const log_js_1 = require("./functions/log.js");
 const bottoken = require("./files/bottoken.json");
 const config = require("./files/config.json");
 const includedCommands = require("./files/includedCommands.json");
 const userids = require("./files/userids.json");
+const channels = require("./files/channels.json");
 const botOptions = {
     disabledEvents: ["TYPING_START"]
 };
 const bot = new commandBot_js_1.commandBot(botOptions);
 const sql = new betterSql_js_1.default();
 sql.open(`./files/userinfo.sqlite`);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 var falseCommandUsedRecently = new Set();
 var commandRegex = new RegExp("[^A-Za-z0-9]");
 fs.readdir(`./commands/`, async (error, files) => {
@@ -65,7 +73,7 @@ process.on("unhandledRejection", async (reason, p) => {
 });
 bot.on("guildMemberAdd", async (member) => {
     try {
-        await memberJoin_js_1.run(bot, member);
+        await memberJoin_js_1.run(bot, member, sql);
     }
     catch (error) {
         log_js_1.error(error);
@@ -84,8 +92,98 @@ bot.on("guildMemberRemove", async (member) => {
         log_js_1.error(error);
     }
 });
-bot.on("guildBanAdd", async (guild, member) => {
-    log_js_1.debug("Member was Banned...");
+bot.on("messageUpdate", async (oldMessage, newMessage) => {
+    log_js_1.debug(`In the messageUpdate event.`);
+    if ((oldMessage.content === null) || (newMessage.content === null) ||
+        (oldMessage.content === undefined) || (newMessage.content === undefined) ||
+        (oldMessage.content === "") || (newMessage.content === ""))
+        return;
+    let logID = channels.log;
+    if (!logID) {
+        log_js_1.debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+        let logChannel = oldMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) {
+            return log_js_1.debug(`Unable to find any kind of log channel.`);
+        }
+        else {
+            logID = logChannel.id;
+        }
+        let logChannelColor = config.logChannelColors.messageUpdated;
+        let avatar = oldMessage.member.user.avatarURL;
+        let updatedMessage = new Discord.RichEmbed()
+            .setDescription("Message Updated!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Old Message", oldMessage.content)
+            .addField("New Message", newMessage.content)
+            .addField("Time", new Date());
+        try {
+            bot.channels.get(logID).send(updatedMessage);
+        }
+        catch (error) {
+            log_js_1.error(error);
+        }
+    }
+});
+bot.on("messageDelete", async (deletedMessage) => {
+    log_js_1.debug(`In the messageDelete event.`);
+    if (deletedMessage.content === null || deletedMessage.content === undefined ||
+        deletedMessage.content === "")
+        return;
+    let logID = channels.log;
+    if (!logID) {
+        log_js_1.debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+        let logChannel = deletedMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) {
+            return log_js_1.debug(`Unable to find any kind of log channel.`);
+        }
+        else {
+            logID = logChannel.id;
+        }
+        let logChannelColor = config.logChannelColors.messageUpdated;
+        let avatar = deletedMessage.member.user.avatarURL;
+        let deletedMessageEmbed = new Discord.RichEmbed()
+            .setDescription("Message Deleted!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Deleted Message", deletedMessage.content)
+            .addField("Time", new Date());
+        try {
+            bot.channels.get(logID).send(deletedMessageEmbed);
+        }
+        catch (error) {
+            log_js_1.error(error);
+        }
+    }
+});
+rl.on(`line`, async (input) => {
+    input = input.toLowerCase();
+    switch (input) {
+        case 'd':
+            config.debug = !config.debug;
+            console.log(`Debug flag set to: ${config.debug}`);
+            break;
+        case 'off':
+            await bot.commands.get("off").silent(bot);
+            break;
+        case 'on':
+            await bot.commands.get("on").silent(bot);
+            break;
+        case 'q':
+            console.log("Shutting down...");
+            process.exit(88);
+            break;
+        case 'r':
+            console.log("Restarting...");
+            process.exit(0);
+            break;
+        case 'u':
+            console.log("Restarting and checking for Bot Updates...");
+            process.exit(99);
+            break;
+        default:
+            break;
+    }
 });
 bot.on("message", async (message) => {
     let prefix = config.prefix;
@@ -103,8 +201,12 @@ bot.on("message", async (message) => {
         if (!validUser)
             return;
     }
-    if (message.channel.type !== "dm")
+    if (message.channel.type !== "dm") {
         await score_js_1.run(bot, message, sql);
+    }
+    else {
+        await dmLog_js_1.run(bot, message);
+    }
     if (!message.content.startsWith(prefix))
         return;
     if (commandRegex.test(command)) {

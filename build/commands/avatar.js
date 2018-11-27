@@ -5,14 +5,15 @@ const dmCheck_js_1 = require("../functions/dmCheck.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
 const react_js_1 = require("../functions/react.js");
-const config = require("../files/config.json");
 const userids = require("../files/userids.json");
+const channels = require("../files/channels.json");
 const command = {
     adminOnly: false,
     bigDescription: ("Returns the target's avatar as a DM to the user, "
         + "works with both a mention and their ID. Use only to "
         + "validate if it's safe for the server or not. **Do not abuse.**\n"
-        + "Returns:\n\n" + config.returnsDM),
+        + "Returns:\n\t"
+        + "This command logs to the log channel."),
     description: "DMs you with a user's avatar",
     enabled: null,
     fullName: "Avatar",
@@ -46,15 +47,41 @@ async function run(bot, message, args, sql) {
     }
     log_js_1.debug(`Generating Avatar URL for ${member.user.username} and sending `
         + `it to ${message.author.username}.`);
-    await message.author.send(bot.users.get(member.id).avatarURL)
-        .then(function () {
-        return react_js_1.run(message);
-    })
-        .catch(error => {
-        react_js_1.run(message, false);
-        let reply = (`I am sorry, ${message.author}, I am unable to DM you.\n`
-            + `Please check your privacy settings and try again.`);
-        return disabledDMs_js_1.run(message, reply);
-    });
+    let logID = channels.log;
+    if (!logID) {
+        log_js_1.debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+        let logChannel = message.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) {
+            log_js_1.debug(`Unable to find any kind of log channel.`);
+        }
+        else {
+            logID = logChannel.id;
+        }
+    }
+    if (!logID) {
+        await message.author.send(bot.users.get(member.id).avatarURL)
+            .then(function () {
+            return react_js_1.run(message);
+        })
+            .catch(error => {
+            react_js_1.run(message, false);
+            let reply = (`I am sorry, ${message.author}, I am unable to DM you.\n`
+                + `Please check your privacy settings and try again.`
+                + `Error: *${error.toString()}*`);
+            return disabledDMs_js_1.run(message, reply);
+        });
+    }
+    else {
+        bot.channels.get(logID).send(bot.users.get(member.id).avatarURL)
+            .then(function () {
+            return react_js_1.run(message);
+        })
+            .catch(error => {
+            react_js_1.run(message, false);
+            let reply = (`I am sorry, ${message.author}, I was unable to log the message.\n`
+                + `Error: *${error.toString()}*`);
+            return message.channel.send(reply);
+        });
+    }
 }
 exports.run = run;

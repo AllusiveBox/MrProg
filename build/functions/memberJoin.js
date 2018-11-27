@@ -6,7 +6,7 @@ const welcomeMessage_js_1 = require("../functions/welcomeMessage.js");
 const channels = require("../files/channels.json");
 const config = require("../files/config.json");
 const userIds = require("../files/userids.json");
-async function run(bot, member) {
+async function run(bot, member, sql) {
     log_js_1.debug(`I am inside the memberLeave Function.`);
     let logchannelColor = config.logChannelColors.memberJoin;
     let logID = channels.log;
@@ -45,5 +45,6 @@ async function run(bot, member) {
         let logChannel = bot.channels.get(logID);
         logChannel.send(joinEmbed);
     }
+    return sql.insertUser(member.user.id, member.user.username, member.joinedAt);
 }
 exports.run = run;

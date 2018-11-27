@@ -53,10 +53,11 @@ async function run(bot, message, amount, user = null) {
             message.channel.send(`Error in functions/purge.js\n*${error.toString}*`);
             return react_js_1.run(message, false);
         }
-        let logID = channels.log;
+        let logID = channels.purgeLog;
+        let logChannel;
         if (!logID) {
-            log_js_1.debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
-            let logChannel = message.member.guild.channels.find(val => val.name === "log");
+            log_js_1.debug(`Unable to find purgeLog ID in channels.json. Looking for another log channel.`);
+            logChannel = message.member.guild.channels.find(val => val.name === "purgeLog");
             if (!logChannel) {
                 log_js_1.debug(`Unable to find any kind of log channel.`);
             }

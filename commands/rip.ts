@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/17/17
-    Last Updated: 10/13/18
+    Last Updated: 11/17/18
     Last Updated By: AllusiveBox
 
 */
@@ -62,7 +62,8 @@ export function getCount(message: Discord.Message | null) {
     if (message) {
         return message.channel.send(reply);
     } else {
-        return debug(reply);
+        debug(reply);
+        return reply;
     }
 }
 
@@ -114,14 +115,20 @@ export function setCount(newCount: number | null = null, message: Discord.Messag
  * 
  * @param {Discord.Client} bot
  * @param {Discord.Message} message
+ * @param {String} [args=null]
  */
-export async function run(bot: Discord.Client, message: Discord.Message) {
+export async function run(bot: Discord.Client, message: Discord.Message, args: String[] = null) {
     // Debug to Console
     debug(`I am inside the ${command.name} command.`);
 
     // Enabled Command Test
     if (!command.enabled) {
         return disabledCommand(command.name, message);
+    }
+
+    if (args[0]) {
+        let respectTo = args.slice(0).join(" ");
+        return message.channel.send(`${message.author} has paid respect to ${respectTo}! RIP!`);
     }
 
     // Get Counter

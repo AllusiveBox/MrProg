@@ -32,7 +32,8 @@ function getCount(message) {
         return message.channel.send(reply);
     }
     else {
-        return log_js_1.debug(reply);
+        log_js_1.debug(reply);
+        return reply;
     }
 }
 exports.getCount = getCount;
@@ -61,10 +62,14 @@ function setCount(newCount = null, message = null) {
     return true;
 }
 exports.setCount = setCount;
-async function run(bot, message) {
+async function run(bot, message, args = null) {
     log_js_1.debug(`I am inside the ${command.name} command.`);
     if (!command.enabled) {
         return disabledCommand_js_1.run(command.name, message);
+    }
+    if (args[0]) {
+        let respectTo = args.slice(0).join(" ");
+        return message.channel.send(`${message.author} has paid respect to ${respectTo}! RIP!`);
     }
     let newCounter = counter;
     if (!newCounter)

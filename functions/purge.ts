@@ -4,8 +4,8 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 11/26/18
-    Last Updated By: Th3_M4j0r
+    Date Last Updated: 11/23/18
+    Last Updated By: AllusiveBox
 
 **/
 
@@ -91,13 +91,14 @@ export async function run(bot: Discord.Client, message: Discord.Message, amount:
         }
 
         // Load in Log Channel ID
-        let logID = channels.log;
+        let logID = channels.purgeLog;
+        let logChannel : Discord.TextChannel;
 
         if (!logID) { // If no Log ID...
-            debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+            debug(`Unable to find purgeLog ID in channels.json. Looking for another log channel.`);
 
             // Look for Log Channel in Server
-            let logChannel = message.member.guild.channels.find(val => val.name === "log");
+            logChannel = <Discord.TextChannel> message.member.guild.channels.find(val => val.name === "purgeLog");
             if (!logChannel) { // If Unable to Find Log Channel...
                 debug(`Unable to find any kind of log channel.`);
             } else {

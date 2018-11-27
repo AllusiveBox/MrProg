@@ -4,7 +4,7 @@
     Clearance: Onwers only
 	Default Enabled: Cannot be Disabled
     Date Created: 10/27/17
-    Last Updated: 10/27/18
+    Last Updated: 11/17/18
     Last Updated By: AllusiveBox
 
 */
@@ -66,6 +66,24 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         // React to Message
         return react(message);
     }
+}
+
+/**
+ * 
+ * @param {Discord.Client} bot
+ */
+ export async function silent(bot: Discord.Client) {
+    if (!config.isOn) { // Ignore if the Bot is Already Rejecting Commands...
+        return console.log(`Unable to turn the bot off when it's already off.`);
+    }
+
+    try {
+        bot.user.setStatus("invisible");
+    } catch (error) {
+        return errorLog(error);
+    }
+
+    config.isOn = false;
 }
 
 export const help = command;

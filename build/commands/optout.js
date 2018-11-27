@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const log_js_1 = require("../functions/log.js");
 const betterSql_js_1 = require("../classes/betterSql.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const command = {
     bigDescription: ("Allows a user to opt out of data collection.\n"
@@ -27,6 +28,7 @@ async function run(bot, message, args, sql) {
         log_js_1.debug(`${message.author.username} attempted to opt-out while already opted out.`);
         let reply = `You are already opted out, ${message.author}. `
             + `To opt back in, use the ${config.prefix}optIn command.`;
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs_js_1.run(message, reply);
         });
@@ -38,6 +40,7 @@ async function run(bot, message, args, sql) {
         + `use the ${config.prefix}deleteMe command. If you `
         + `wish to have data collected again, use the `
         + `${config.prefix}optIn command`;
+    await react_js_1.run(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs_js_1.run(message, reply);
     });

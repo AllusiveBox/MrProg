@@ -13,7 +13,7 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { dirname as _dirname } from 'path';
 import SpiffyDate from '../classes/SpiffyDate.js';
 
-export type logType = "DebugLogger" | "ErrorLogger" | "CommandLogger";
+export type logType = "DebugLogger" | "ErrorLogger" | "CommandLogger" | "DMLogger";
 
 class Logger {
     name: logType;

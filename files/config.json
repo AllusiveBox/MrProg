@@ -1,8 +1,8 @@
 ﻿{
   "about": {
     "author": "AllusiveBox",
-    "lastUpdated": "11/21/2018",
-    "verNum": "4.1.2"
+    "lastUpdated": "11/23/2018",
+    "verNum": "4.2.1"
   },
   "auditColor": "#800000",
   "debug": false,
@@ -16,12 +16,15 @@
   "isStreaming": false,
   "issueRepoLink": "https://github.com/AllusiveBox/MrProgIssues/issues",
   "logChannelColors": {
+    "dmLog": "#48c9b0",
     "memberBan": "#CC0000",
     "memberJoin": "#CCCCFF",
-    "memberKick": "#FF3333",
     "memberLeave": "#000066",
+    "memberLookup": "#FFCC66",
+    "memberKick": "#FF3333",
     "memberUpdate": "#CC9999",
-    "messagesPurged": "#CCCC00"
+    "messagesPurged": "#CCCC00",
+    "messageUpdated": "#FF66CC"
   },
   "n1gpLink": "https://discord.gg/f73hz2C",
   "prefix": "!",

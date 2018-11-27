@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 11/24/18
     Last Update By: AllusiveBox
 
 **/
@@ -54,11 +54,16 @@ export async function run(bot: Discord.Client, message: Discord.Message, sql: be
         if (!row) { // If Row Not Found...
             debug(`Row was not found for ${message.author.username}. `
                 + `Generating data now...`);
-            sql.insertUser(message.author.id, message.author.username);
+            sql.insertUser(message.author.id, message.author.username, message.member.joinedAt);
         } else { // If Row Was Found...
+            if (row.joinDate === null) { // If joinDate is null...
+                sql.setJoinDate(message.author.id, message.member.joinedAt);
+            }
+            if (row.firstJoinDate === null) { // If firstJoinDate is null...
+                sql.setFirstJoinDate(message.author.id, message.member.joinedAt);
+            }
             if (row.optOut === 1) {
-                debug(`User does not want data collected.`);
-                return;
+                return debug(`User does not want data collected.`);
             }
 
             debug(`Row found for ${message.author.username}.`);
@@ -91,11 +96,8 @@ export async function run(bot: Discord.Client, message: Discord.Message, sql: be
         }
 
     } catch (error) {
-        await sql.run("CREATE TABLE IF NOT EXISTS userinfo (userId TEXT NOT NULL, "
-            + "userName TEXT, battlecode TEXT, favechip TEXT, navi TEXT, "
-            + "clearance TEXT, points INTEGER, level INTEGER, optOut INTEGER, "
-            + "PRIMARY KEY (userId))");
-        message.channel.send(`ERROR CAUSED BY: ${message.author}.`);
+        message.channel.send(`ERROR CAUSED BY: ${message.author}.`
+            + `Error: *${error.toString()}*`);
         return errorLog(error);
     }
 }

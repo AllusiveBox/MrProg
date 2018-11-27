@@ -10,8 +10,8 @@ async function run(bot, member, sql) {
                 + `the userids list.`);
         }
     });
-    log_js_1.debug(`Deleting userinfo on ${member.user.username}.`);
+    log_js_1.debug(`Setting the User's leaveDate Field...`);
     sql.userLeft(member.id);
-    return log_js_1.debug(`Delete Successful.`);
+    return log_js_1.debug(`Update Successful.`);
 }
 exports.run = run;

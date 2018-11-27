@@ -1,10 +1,10 @@
 /**
  * Mr. Prog Bot Script
- * Version 4.1.0
+ * Version 4.2.1
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 10/19/18
- * Last Updated By: Th3_M4j0r
+ * Last Updated: 11/24/18
+ * Last Updated By: AllusiveBox
  * 
  */
 
@@ -13,6 +13,7 @@ process.chdir(__dirname); // Ensure Working Directory is Same as Current File
 // Load in Required Libraries and Files
 import * as Discord from 'discord.js';
 import * as fs from 'fs';
+import * as readline from 'readline';
 import { commandBot } from './classes/commandBot.js';
 import betterSql from './classes/betterSql.js';
 
@@ -21,6 +22,7 @@ import { run as memberJoin } from './functions/memberJoin.js';
 import { run as memberLeave } from './functions/memberLeave.js';
 import { run as onStartup } from './functions/onStartup.js';
 import { run as score } from './functions/score.js';
+import { run as dmLog } from './functions/dmLog.js';
 import { command as commandLog, debug, error as errorLog, commandHelp } from './functions/log.js';
 
 //import required jsons
@@ -28,9 +30,10 @@ import bottoken = require('./files/bottoken.json');
 import config = require('./files/config.json');
 import includedCommands = require('./files/includedCommands.json');
 import userids = require('./files/userids.json');
+import channels = require('./files/channels.json');
 
 
-const botOptions : Discord.ClientOptions = { //usually unnecessary and hurts performance
+const botOptions: Discord.ClientOptions = { //usually unnecessary and hurts performance
     disabledEvents: ["TYPING_START"]
 }
 // Declare the Bot Stuff
@@ -40,6 +43,12 @@ const bot = new commandBot(botOptions);
 // Open SQ Database
 const sql = new betterSql();
 sql.open(`./files/userinfo.sqlite`);
+
+// readline Stuff
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
 // Misc.
 var falseCommandUsedRecently: Set<Discord.Snowflake> = new Set();
@@ -106,7 +115,7 @@ process.on("unhandledRejection", async (reason, p) => {
 // Bot on Member Joining Server
 bot.on("guildMemberAdd", async member => {
     try {
-        await memberJoin(bot, member);
+        await memberJoin(bot, member, sql);
     } catch (error) {
         errorLog(error);
     }
@@ -126,9 +135,126 @@ bot.on("guildMemberRemove", async member => {
     }
 });
 
-bot.on("guildBanAdd", async (guild, member) => {
-    debug("Member was Banned...");
+bot.on("messageUpdate", async (oldMessage, newMessage) => {
+    debug(`In the messageUpdate event.`);
+
+    // Make sure Content exists...
+    if ((oldMessage.content === null) || (newMessage.content === null) ||
+        (oldMessage.content === undefined) || (newMessage.content === undefined) ||
+        (oldMessage.content === "") || (newMessage.content === "")) return;
+
+    // Load in Log Channel ID
+    let logID = channels.log;
+
+    if (!logID) { // If no Log ID...
+        debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+
+        // Look for Log Channel in Server
+        let logChannel = oldMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) { // If Unable to Find Log Channel...
+            return debug(`Unable to find any kind of log channel.`);
+        } else {
+            logID = logChannel.id;
+        }
+
+        // Load in Embed Message Color
+        let logChannelColor = config.logChannelColors.messageUpdated;
+
+        // Grab the User Information
+        let avatar = oldMessage.member.user.avatarURL;
+
+        // Build the Embed
+        let updatedMessage = new Discord.RichEmbed()
+            .setDescription("Message Updated!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Old Message", oldMessage.content)
+            .addField("New Message", newMessage.content)
+            .addField("Time", new Date());
+
+        try {
+            (<Discord.TextChannel>bot.channels.get(logID)).send(updatedMessage);
+        } catch (error) {
+            errorLog(error);
+        }
+    }
 });
+
+bot.on("messageDelete", async (deletedMessage) => {
+    debug(`In the messageDelete event.`);
+
+    // Make sure Content exists...
+    if (deletedMessage.content === null || deletedMessage.content === undefined ||
+        deletedMessage.content === "") return;
+
+    // Load in Log Channel ID
+    let logID = channels.log;
+
+    if (!logID) { // If no Log ID...
+        debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+
+        // Look for Log Channel in Server
+        let logChannel = deletedMessage.member.guild.channels.find(val => val.name === "log");
+        if (!logChannel) { // If Unable to Find Log Channel...
+            return debug(`Unable to find any kind of log channel.`);
+        } else {
+            logID = logChannel.id;
+        }
+
+        // Load in Embed Message Color
+        let logChannelColor = config.logChannelColors.messageUpdated;
+
+        // Grab the User Information
+        let avatar = deletedMessage.member.user.avatarURL;
+
+        // Build the Embed
+        let deletedMessageEmbed = new Discord.RichEmbed()
+            .setDescription("Message Deleted!")
+            .setColor(logChannelColor)
+            .setThumbnail(avatar)
+            .addField("Deleted Message", deletedMessage.content)
+            .addField("Time", new Date());
+
+        try {
+            (<Discord.TextChannel>bot.channels.get(logID)).send(deletedMessageEmbed);
+        } catch (error) {
+            errorLog(error);
+        }
+    }
+})
+
+rl.on(`line`, async (input) => {
+    // Convert to Lowercase
+    input = input.toLowerCase();
+
+    // Check the Cases
+    switch (input) {
+        case 'd':
+            config.debug = !config.debug;
+            console.log(`Debug flag set to: ${config.debug}`);
+            break;
+        case 'off':
+            await bot.commands.get("off").silent(bot);
+            break;
+        case 'on':
+            await bot.commands.get("on").silent(bot);
+            break;
+        case 'q':
+            console.log("Shutting down...");
+            process.exit(88); // Non-restart Exit Code
+            break;
+        case 'r':
+            console.log("Restarting...");
+            process.exit(0); // Restart Exit Code
+            break;
+        case 'u':
+            console.log("Restarting and checking for Bot Updates...");
+            process.exit(99); // Restart and Update Exit Code
+            break;
+        default:
+            break;
+    }
+})
 
 // Message Handler
 bot.on("message", async message => {
@@ -153,13 +279,17 @@ bot.on("message", async message => {
     }
 
     // Check if DM
-    if (message.channel.type !== "dm") await score(bot, message, sql);
+    if (message.channel.type !== "dm") { // If Message is Not a DM...
+        await score(bot, message, sql);
+    } else { // If Message is a DM...
+        await dmLog(bot, message);
+    }
 
     // Check if Command or Not
     if (!message.content.startsWith(prefix)) return; // Return on Not Commands.
 
     // Check for Valid Commands
-    if(commandRegex.test(command)) {
+    if (commandRegex.test(command)) {
         return debug(`Attempted use of Invalid Command Elements by ${message.author.username}.`);
     }
     /*if ((command.indexOf("/") > -1) || (command.indexOf(".") > -1) || (command.indexOf("\\") > -1)) {

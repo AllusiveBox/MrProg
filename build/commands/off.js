@@ -38,4 +38,17 @@ async function run(bot, message) {
     }
 }
 exports.run = run;
+async function silent(bot) {
+    if (!config.isOn) {
+        return console.log(`Unable to turn the bot off when it's already off.`);
+    }
+    try {
+        bot.user.setStatus("invisible");
+    }
+    catch (error) {
+        return log_js_1.error(error);
+    }
+    config.isOn = false;
+}
+exports.silent = silent;
 exports.help = command;
