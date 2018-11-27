@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
+const react_js_1 = require("../functions/react.js");
 const command = {
     adminOnly: false,
     bigDescription: ("This command allows an administrator to enable a command that is disabled.\n"
@@ -30,12 +31,22 @@ async function run(bot, message, args, sql) {
         var enabled = bot.commands.get(toEnable).help.enabled;
     }
     catch (error) {
-        return log_js_1.error(error);
+        log_js_1.error(error);
+        await react_js_1.run(message, false);
+        return message.channel.send(`*${error.toString()}*`);
     }
     if (enabled === null)
         return log_js_1.debug(`This command cannot be disabled.`);
     log_js_1.debug(`Setting ${toEnable} to true.`);
-    bot.commands.get(toEnable).help.enabled = true;
+    try {
+        bot.commands.get(toEnable).help.enabled = true;
+    }
+    catch (error) {
+        log_js_1.error(error);
+        await react_js_1.run(message, false);
+        return message.channel.send(`*${error.toString()}*`);
+    }
+    return react_js_1.run(message);
 }
 exports.run = run;
 exports.help = command;

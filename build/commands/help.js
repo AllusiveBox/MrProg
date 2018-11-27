@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const userIDs = require("../files/userids.json");
 const command = {
@@ -40,6 +41,7 @@ async function run(bot, message, args, sql) {
         });
     }
     let reply = "**__A list of My Commands__**\n\n";
+    let alreadyFailed = false;
     bot.commands.forEach(function (command) {
         if (command.help.enabled == false)
             return;
@@ -56,15 +58,26 @@ async function run(bot, message, args, sql) {
         }
         else {
             message.author.send(reply).catch(error => {
-                return disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
-                    + `Please check your privacy settings and try again.`);
+                if (!alreadyFailed) {
+                    disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                        + `Please check your privacy settings and try again.`);
+                    alreadyFailed = true;
+                    console.log(alreadyFailed);
+                    return react_js_1.run(message, false);
+                }
             });
             reply = nextCommand;
         }
     });
-    message.author.send(reply).catch(error => {
-        return disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+    return message.author.send(reply).then(function () {
+        react_js_1.run(message);
+    }).catch(error => {
+        if (alreadyFailed)
+            return;
+        disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
             + `Please check your privacy settings and try again.`);
+        console.log(alreadyFailed);
+        return react_js_1.run(message, false);
     });
 }
 exports.run = run;

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const log_js_1 = require("../functions/log.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
+const react_js_1 = require("../functions/react.js");
 const userIDs = require("../files/userids.json");
 const command = {
     fullName: "Lookup",
@@ -37,7 +38,12 @@ async function run(client, message, args, sql) {
         params = args[0];
     }
     if ((params.indexOf('-')) || (params.length === 0) || (args[1] === undefined)) {
-        return message.channel.send(`Either no params were passed, or you did not format your params correctly.`);
+        await react_js_1.run(message, false);
+        let reply = (`Either no params were passed, or you did not format your params correctly.`);
+        return message.author.send(reply).catch(error => {
+            log_js_1.error(error);
+            return disabledDMs_js_1.run(message, reply);
+        });
     }
     if (params.includes('F')) {
         log_js_1.debug(`Setting Formatted Message Flag.`);
@@ -99,9 +105,14 @@ async function run(client, message, args, sql) {
     try {
         let row = await sql.userLookup(toCheck);
         if (!row) {
-            return message.channel.send(`I am sorry, ${message.author}, I am unable to locate any data on ${toCheck}.\n`
+            await react_js_1.run(message, false);
+            let reply = (`I am sorry, ${message.author}, I am unable to locate any data on ${toCheck}.\n`
                 + `Please verify that what you are searching by is correct and try again. If this issue continues, please reach out to `
                 + `<@${userIDs.ownerID}> and let him know.`);
+            return message.channel.send(reply).catch(error => {
+                log_js_1.error(error);
+                return disabledDMs_js_1.run(message, reply);
+            });
         }
         else {
             let reply = `SQL Data on: ${toCheck}\n`;
@@ -159,18 +170,24 @@ async function run(client, message, args, sql) {
                 }
             }
             if (publicMessage) {
+                await react_js_1.run(message);
                 return message.channel.send(reply);
             }
             else {
-                return message.author.send(reply).catch(error => {
-                    return disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                return message.author.send(reply).then(function () {
+                    return react_js_1.run(message);
+                }).catch(error => {
+                    disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                         + `Please check your privacy settings and try again.`);
+                    return react_js_1.run(message, false);
                 });
             }
         }
     }
     catch (error) {
         log_js_1.error(error);
+        await react_js_1.run(message, false);
+        message.channel.send(`*${error.toString()}*`);
     }
 }
 exports.run = run;

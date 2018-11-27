@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const CustomErrors_js_1 = require("../classes/CustomErrors.js");
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const channels = require("../files/channels.json");
 const userids = require("../files/userids.json");
 const roles = require("../files/roles.json");
-const config = require("../files/config.json");
 try {
     var text = fs_1.readFileSync(`./files/announcement.txt`, `utf8`);
 }
@@ -82,7 +82,7 @@ async function run(bot, message) {
             + ` and add a role for the "alertMe" entry. For a template, please check `
             + `in the templates directory.`);
         log_js_1.debug(reply);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(reply);
     }
     if (!announceChat) {
@@ -90,7 +90,7 @@ async function run(bot, message) {
             + `files/channels.json and add a role for the "announceChat" entry. For a `
             + `tmplate, please check in the templates directory.`);
         log_js_1.debug(reply);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(reply);
     }
     if (!announcement) {
@@ -98,7 +98,7 @@ async function run(bot, message) {
             + `Please ensure that there is a files/announcement.txt file and that it `
             + `is in the right directory.`);
         log_js_1.debug(reply);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(reply);
     }
     let announceChannel = bot.channels.get(announceChat);
@@ -108,10 +108,10 @@ async function run(bot, message) {
         + ` It's easier to keep up with them that way.\n\n`);
     bot.channels.get(command.announceChat).send(command.announcement).catch(error => {
         log_js_1.error(error);
-        message.react(config.fail);
+        react_js_1.run(message, false);
         return message.channel.send(`*${error.toString()}*`);
     });
-    await message.react(config.success);
+    await react_js_1.run(message);
     return bot.channels.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
         + `https://github.com/AllusiveBox/discordBot/issues`);
 }

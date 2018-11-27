@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/20/18
+    Date Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 **/
@@ -13,12 +13,11 @@
 import * as Discord from 'discord.js';
 import { debug, error as errorLog } from './log.js';
 import betterSql from '../classes/betterSql.js';
-
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 import userids = require('../files/userids.json');
 import channels = require('../files/channels.json');
-
 
 /**
  * 
@@ -55,9 +54,10 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         await member.ban(reason);
     } catch (error) {
         errorLog(error);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
-            + `${member.user.username} because of ${error}.`);
+            + `${member.user.username}.`
+            + `*${error.toString()}*`);
     }
 
     // Get Avatar
@@ -81,7 +81,7 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         Channel.send(bannedEmbed);
     }
 
-    await message.react(config.success);
+    await react(message);
 
     return debug(`Ban Successful.`);
 }

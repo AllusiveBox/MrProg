@@ -11,7 +11,8 @@ const modRole = roles.modRole;
 const shadowModRole = roles.sModRole;
 const command = {
     bigDescription: ("This command is used to promote users, giving them both a role, and updating them in the SQL database.\n"
-        + "Required arguments: @{user} -> The user you wish to promote.\n"
+        + "Arguments:\n\t"
+        + "@{user} -> The user you wish to promote.\n"
         + "Returns:\n\t"
         + config.returnsChannel),
     description: "Promote a user.",

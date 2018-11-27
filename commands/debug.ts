@@ -4,7 +4,7 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -12,9 +12,11 @@
 // Load in Required Files
 import * as Discord from 'discord.js';
 import { debug, commandHelp } from '../functions/log.js';
+import { run as react } from '../functions/react.js';
 
 import userids = require('../files/userids.json');
 import config = require('../files/config.json');
+
 
 
 // Command Variables
@@ -47,7 +49,7 @@ export async function run(bot: Discord.Client, message: Discord.Message): Promis
 
     // Switch the Debug Value
     config.debug = !config.debug;
-    await message.react(config.success);
+    await react(message);
     return debug(`Setting debug value to: ${config.debug}.`);
 }
 

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 const command = {
@@ -23,14 +24,13 @@ async function run(bot, message, args, sql) {
     });
     if (inUserList) {
         log_js_1.debug(`Shutting Down...`);
-        sql.close();
+        await sql.close();
         log_js_1.debug(`Database conection closed.`);
         log_js_1.debug(`Alerting Owner...`);
         if (!config.debug)
             message.author.send(`Restarting Now...`);
-        setTimeout(() => {
-            process.exit(0);
-        }, 500);
+        await react_js_1.run(message);
+        process.exit(0);
     }
 }
 exports.run = run;

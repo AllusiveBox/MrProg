@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const command = {
     bigDescription: ("Sends the user all data stored on them.\n"
@@ -45,12 +46,16 @@ async function run(client, message, args, sql) {
         + `To have me delete all the data I have on you, use the ${config.prefix}deleteMe command. (**Note: This won't change your opt-out status**)\n`
         + `**WARNING:** Use of the ${config.prefix}deleteMe command will _permanently_ delete all data recorded on you, with no way to restore it.`;
     if (config.debug) {
+        await react_js_1.run(message);
         return message.channel.send(userProfile);
     }
     else {
-        return message.author.send(userProfile).catch(error => {
-            return disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+        return message.author.send(userProfile).then(function () {
+            return react_js_1.run(message);
+        }).catch(error => {
+            disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`);
+            return react_js_1.run(message, false);
         });
     }
 }

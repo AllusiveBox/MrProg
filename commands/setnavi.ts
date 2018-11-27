@@ -14,6 +14,7 @@ import betterSql from '../classes/betterSql.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { run as disabledCommand } from '../functions/disabledCommand.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
+import { run as react } from '../functions/react.js';
 import { existsSync } from 'fs';
 
 
@@ -54,7 +55,12 @@ export async function run(client: Discord.Client, message: Discord.Message, args
 
     if (navi === undefined) {
         debug(`No Name Given`);
-        return message.channel.send(`Cannot have an empty string.`);
+        await react(message, false);
+        // Build the Reply
+        let reply = `Cannot have an empty string.`;
+        return message.author.send(reply).catch(error => {
+            disabledDMs(message, reply);
+        });
     }
 
     navi = navi.toLowerCase();
@@ -63,6 +69,7 @@ export async function run(client: Discord.Client, message: Discord.Message, args
     let row = await sql.getUserRow(message.author.id);
     if (!row) {
         debug(`Unable to locate data on ${message.author.username}`);
+        await react(message, false);
         return message.channel.send(`I am unable to locate any data on you, please try again`);
     }
     debug(`Attempting to update ${message.author.username}'s Navi Symbol`);
@@ -74,19 +81,17 @@ export async function run(client: Discord.Client, message: Discord.Message, args
         navi_sym = (`./img/navi_symbols/${row.navi}.png`);
         sql.setNavi(message.author.id, row.navi);
         let reply = `${message.author} invalid navi symbol file. Setting default value.`
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
     }
 
-    //else it does exist
-
     debug(`Valid Navi Symbol File: ${row.navi}`);
     sql.setNavi(message.author.id, row.navi);
-    let reply = "Navi Symbol Updated";
-    return message.author.send(reply).catch(error => {
-        disabledDMs(message, reply);
-    });
+
+    await react(message);
+
 }
 
 export const help = command;

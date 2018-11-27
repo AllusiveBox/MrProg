@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/29/18
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -16,6 +16,7 @@ import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as dmCheck } from '../functions/dmCheck.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { role as ValidateRole } from '../functions/validate.js';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 import roles = require('../files/roles.json');
@@ -73,7 +74,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             await toUpdate.removeRole(role);
         } catch (error) {
             errorLog(error);
-            await message.react(config.fail);
+            await react(message, false);
             return message.channel.send(`*${error.toString()}*`);
         }
 
@@ -81,7 +82,10 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + `${roles.alertMe.name} role.\n`
             + `If you wish to be added back to this role later, please use the `
             + `${prefix}alertMe command in the ${message.guild.name} server.`);
+
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else {
@@ -93,17 +97,18 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             await toUpdate.addRole(role);
         } catch (error) {
             errorLog(error);
-            await message.react(config.fail);
+            await react(message, false);
             return message.channel.send(`*${error.toString()}*`);
         }
-
-        await message.react(config.success);
 
         let reply = (`${message.author}, you have been added to the `
             + `${roles.alertMe.name} role.\n`
             + `If you wish to be removed from this role later, pleas use the `
             + `${prefix}alertMe command in the ${message.guild.name} server.`);
+
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     }

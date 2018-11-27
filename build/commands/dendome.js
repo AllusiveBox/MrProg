@@ -4,7 +4,8 @@ const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const log_js_1 = require("../functions/log.js");
-const validate = require("../functions/validate.js");
+const validate_js_1 = require("../functions/validate.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const roles = require("../files/roles.json");
 const command = {
@@ -24,7 +25,7 @@ async function run(bot, message) {
     }
     if (await dmCheck_js_1.run(message, command.fullName))
         return;
-    validate.role(roles.tournyRole, command.fullName);
+    validate_js_1.role(command.tournyRole, command.fullName);
     var toUpdate = message.member;
     let serverRoles = message.guild.roles;
     let prefix = config.prefix;
@@ -37,14 +38,18 @@ async function run(bot, message) {
         }
         catch (error) {
             log_js_1.error(error);
+            await react_js_1.run(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something`
-                + ` went wrong and I was unable to update your roles.`);
+                + ` went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
         let reply = (`${message.author}, you have been removed from the `
             + `${roles.tournyRole.name} role.\n`
             + `If you wish to be added back to this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
+        await react_js_1.run(message);
         return message.author.send(reply).catch(error => {
+            log_js_1.error(error);
             return disabledDMs_js_1.run(message, reply);
         });
     }
@@ -57,13 +62,16 @@ async function run(bot, message) {
         }
         catch (error) {
             log_js_1.error(error);
+            await react_js_1.run(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something `
-                + `went wrong and I was unable to update your roles.`);
+                + `went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
         let reply = (`${message.author}, you have been added to the `
             + `${roles.tournyRole.name} role.\n`
             + `If you wish to be removed from this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
+        await react_js_1.run(message);
         return message.author.send(reply).catch(error => {
             return disabledDMs_js_1.run(message, reply);
         });

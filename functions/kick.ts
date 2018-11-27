@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 10/19/18
+    Date Last Updated: 11/26/18
     Last Update By: Th3_M4j0r
 
 **/
@@ -12,6 +12,7 @@
 import * as Discord from 'discord.js';
 import betterSql from '../classes/betterSql.js';
 import { debug, error as errorLog } from './log.js';
+import { run as react } from './react.js';
 
 
 import config = require('../files/config.json');
@@ -49,6 +50,18 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         }
     }
 
+    debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
+        + `for ${reason}.`);
+    try {
+        await member.kick(reason);
+    } catch (error) {
+        errorLog(error);
+        await react(message, false);
+        return message.channel.send(`Sorry, ${message.author}, I could not kick `
+            + `${member.user.username}.\n`
+            + `*${error.toString()}*`);
+    }
+
     // Get Avatar
     let avatar = member.user.avatarURL;
 
@@ -70,18 +83,8 @@ export async function run(bot: Discord.Client, message: Discord.Message, member:
         Channel.send(kickedEmbed);
     }
 
-    debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
-        + `for ${reason}.`);
-    try {
-        await member.kick(reason)
-    } catch (error) {
-        errorLog(error);
-        return message.channel.send(`Sorry, ${message.author}, I could not kick `
-            + `${member.user.username} because of ${error}.`);
-    }
-    sql.deleteUser(member.id);
+    await react(message);
 
-    // Set isKicking flag to false
     return debug(`Kick Successful.`);
 }
 

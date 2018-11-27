@@ -4,6 +4,7 @@ const log_js_1 = require("../functions/log.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const validate_js_1 = require("../functions/validate.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const commandUsed = new Set();
 const command = {
@@ -31,6 +32,7 @@ async function run(bot, message, args, sql) {
         let reply = (`I am sorry, ${message.author}, that is an invalid code `
             + `format.\n`
             + `Valid characters are the numbers 0 - 9, and the characters A - E`);
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
@@ -46,6 +48,7 @@ async function run(bot, message, args, sql) {
             + `and then try again.\n`
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
@@ -77,17 +80,12 @@ async function run(bot, message, args, sql) {
             + `then try again.\n`
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
-        return message.author.send(reply).catch(error => {
+        message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
+        return react_js_1.run(message, false);
     }
-    try {
-        await message.react('✅');
-    }
-    catch (error) {
-        message.channel.send("could not react with that emoji");
-        log_js_1.error(error);
-    }
+    await react_js_1.run(message);
     return log_js_1.debug(`Battlecode successfully updated.`);
 }
 exports.run = run;

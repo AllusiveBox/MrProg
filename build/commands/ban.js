@@ -5,7 +5,7 @@ const dmCheck_js_1 = require("../functions/dmCheck.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
-const config = require("../files/config.json");
+const react_js_1 = require("../functions/react.js");
 const roles = require("../files/roles.json");
 const userids = require("../files/userids.json");
 const command = {
@@ -33,20 +33,20 @@ async function run(bot, message, args, sql) {
         log_js_1.debug(`A valid member of the server was not provided.`);
         let reply = (`Please mention a valid member on the server, `
             + `${message.author}.`);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
     }
     if (toBan.user.id == userids.ownerID) {
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return log_js_1.debug(`${message.author.username} attempted to ban owner.`);
     }
     else if (toBan.roles.some(r => [roles.adminRole.ID, roles.modRole.ID,
         roles.sModRole.ID].includes(r.id))) {
         log_js_1.debug(`${message.author.username} attempted to ban `
             + `${toBan.user.username}.`);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(`I am sorry, ${message.author}, I am `
             + `unable to ban ${toBan.user.username} due to the role(s) `
             + `they have.`);
@@ -56,7 +56,7 @@ async function run(bot, message, args, sql) {
         log_js_1.debug(`No valid reason was provided.`);
         let reply = (`Please indicate a valid reason for banning `
             + `${toBan.user.username}.`);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             log_js_1.debug(`${message.author.username} has DMs disabled.`);
             disabledDMs_js_1.run(message, reply);

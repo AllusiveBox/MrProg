@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const log_js_1 = require("./log.js");
+const react_js_1 = require("./react.js");
 const config = require("../files/config.json");
 const channels = require("../files/channels.json");
 const userids = require("../files/userids.json");
@@ -20,6 +21,18 @@ async function run(bot, message, member, reason, sql) {
             logID = logChannel.id;
         }
     }
+    log_js_1.debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
+        + `for ${reason}.`);
+    try {
+        await member.kick(reason);
+    }
+    catch (error) {
+        log_js_1.error(error);
+        await react_js_1.run(message, false);
+        return message.channel.send(`Sorry, ${message.author}, I could not kick `
+            + `${member.user.username}.\n`
+            + `*${error.toString()}*`);
+    }
     let avatar = member.user.avatarURL;
     let kickedEmbed = new Discord.RichEmbed()
         .setDescription(`Member Kicked!`)
@@ -36,17 +49,7 @@ async function run(bot, message, member, reason, sql) {
         let Channel = bot.channels.get(logID);
         Channel.send(kickedEmbed);
     }
-    log_js_1.debug(`Kicking ${member.user.username} from ${message.member.guild.name} `
-        + `for ${reason}.`);
-    try {
-        await member.kick(reason);
-    }
-    catch (error) {
-        log_js_1.error(error);
-        return message.channel.send(`Sorry, ${message.author}, I could not kick `
-            + `${member.user.username} because of ${error}.`);
-    }
-    sql.deleteUser(member.id);
+    await react_js_1.run(message);
     return log_js_1.debug(`Kick Successful.`);
 }
 exports.run = run;

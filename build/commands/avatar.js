@@ -4,6 +4,7 @@ const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 const command = {
@@ -37,7 +38,7 @@ async function run(bot, message, args, sql) {
             let reply = (`I am sorry ${message.author}, either you did not mention a `
                 + `valid member, used an incorrect ID, or the API returned a null user.\n`
                 + `Please ask <@${userids.ownerID}> to investigate.`);
-            await message.react(config.fail);
+            await react_js_1.run(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs_js_1.run(message, reply);
             });
@@ -47,10 +48,10 @@ async function run(bot, message, args, sql) {
         + `it to ${message.author.username}.`);
     await message.author.send(bot.users.get(member.id).avatarURL)
         .then(function () {
-        return message.react(config.success);
+        return react_js_1.run(message);
     })
         .catch(error => {
-        message.react(config.fail);
+        react_js_1.run(message, false);
         let reply = (`I am sorry, ${message.author}, I am unable to DM you.\n`
             + `Please check your privacy settings and try again.`);
         return disabledDMs_js_1.run(message, reply);

@@ -15,6 +15,7 @@ import { run as disabledCommand } from '../functions/disabledCommand.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import {run as disabledDMs} from '../functions/disabledDMs.js';
 import betterSql from '../classes/betterSql.js';
+import { run as react } from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -85,13 +86,19 @@ export async function run(bot: Discord.Client, message: Discord.Message, args, s
 
     if ((message.channel.id === channels.bot) || config.debug) {
         // Return Message in Channel
-        message.channel.send(statsEmbed).catch(error => {
-            console.log(error);
+        return message.channel.send(statsEmbed).then(function () {
+            return react(message);
+        }).catch(error => {
+            errorLog(error);
+            return react(message, false);
         });
     } else {
-        message.author.send(statsEmbed).catch(error => {
+        return message.author.send(statsEmbed).then(function () {
+            return react(message);
+        }).catch (error => {
             disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`)
+            return react(message, false);
         });
     }
 }

@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
 
 */
 
@@ -16,6 +16,7 @@ import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissio
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { commandBot } from '../classes/commandBot.js';
 import betterSql from '../classes/betterSql.js';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 import userIDs = require('../files/userids.json');
@@ -79,9 +80,12 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
 
     let reply = "**__A list of My Commands__**\n\n";
 
+    let alreadyFailed = false;
+
     bot.commands.forEach(function (command) {
         // Don't Print Disabled Commands
         if (command.help.enabled == false) return;
+
         // Permission Checks
         if ((command.help.permissionLevel === "mod") && !(isMod || isAdmin || isOwner))
             return debug(`Not including ${command.help.name}`);
@@ -97,16 +101,26 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
             reply = (`${reply}${nextCommand}`);
         } else { // Reply is Near Character Limit...
             message.author.send(reply).catch(error => {
-                return disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
-                    + `Please check your privacy settings and try again.`);
+                if (!alreadyFailed) {
+                    disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                        + `Please check your privacy settings and try again.`);
+                    alreadyFailed = true;
+                    console.log(alreadyFailed);
+                    return react(message, false);
+                }
             });
             reply = nextCommand;
         }
     });
 
-    message.author.send(reply).catch(error => {
-        return disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+    return message.author.send(reply).then(function () {
+        react(message);
+    }).catch (error => {
+        if (alreadyFailed) return;
+        disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
             + `Please check your privacy settings and try again.`);
+        console.log(alreadyFailed);
+        return react(message, false);
     });
 }
 

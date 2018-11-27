@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
 const hasElevatedPermissions_js_1 = require("../functions/hasElevatedPermissions.js");
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const command = {
     adminOnly: false,
@@ -52,17 +53,17 @@ async function run(bot, message, args, sql) {
             .addField(`Log#${startPos + 4}`, format(entries[startPos + 3]))
             .addField(`Log#${startPos + 5}`, format(entries[startPos + 4]));
         await message.author.send({ embed }).then(function () {
-            return message.react(config.success);
+            return react_js_1.run(message);
         }).catch(error => {
             log_js_1.error(error);
-            message.react(config.fail);
+            react_js_1.run(message, false);
             return message.channel.send(`I was unable to send the log to you, if this persists, inform ${config.about.author}\n`
                 + `error type: *${error.toString()}*`);
         });
     }
     catch (error) {
         log_js_1.error(error);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(`*${error.toString()}*`);
     }
 }

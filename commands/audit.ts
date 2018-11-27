@@ -6,7 +6,7 @@
     clearance: Mod+
     Default Enabled: Cannot be Disabled
     Date Started: 09/16/18
-    Date Last Updated: 10/20/18
+    Date Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 **/
@@ -18,6 +18,7 @@ import betterSql from '../classes/betterSql.js';
 import { run as dmCheck } from '../functions/dmCheck.js';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 
@@ -83,17 +84,17 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
             .addField(`Log#${startPos + 4}`, format(entries[startPos + 3]))
             .addField(`Log#${startPos + 5}`, format(entries[startPos + 4]));
         await message.author.send({ embed }).then(function () {
-            return message.react(config.success);
+            return react(message);
         }).catch(error => {
             errorLog(error);
-            message.react(config.fail);
+            react(message, false);
             return message.channel.send(`I was unable to send the log to you, if this persists, inform ${config.about.author}\n`
                 + `error type: *${error.toString()}*`);
         });
     }
     catch (error) {
         errorLog(error);
-        await message.react(config.fail);
+        await react(message, false);
         return message.channel.send(`*${error.toString()}*`);
     }
 };

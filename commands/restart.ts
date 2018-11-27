@@ -4,19 +4,19 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 07/18/18
-    Last Updated: 10/19/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
 // Load in Require Files
 import * as Discord from 'discord.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
-
+import { run as react } from '../functions/react.js';
+import betterSql from '../classes/betterSql.js';
 
 import config = require('../files/config.json');
 import userids = require('../files/userids.json');
-import betterSql from '../classes/betterSql.js';
 
 // Command Variables
 const command : commandHelp = {
@@ -53,13 +53,12 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
 
     if (inUserList) { // If Member is In the User ID List...
         debug(`Shutting Down...`);
-        sql.close();
+        await sql.close();
         debug(`Database conection closed.`);
         debug(`Alerting Owner...`);
         if (!config.debug) message.author.send(`Restarting Now...`);
-        setTimeout(() => {
-            process.exit(0);
-        }, 500)
+        await react(message);
+        process.exit(0);
     }
 }
 

@@ -17,8 +17,8 @@ const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?";
 const getUserString = "SELECT * FROM userinfo WHERE userId = ?";
 const userLeftString = "DELETE FROM userinfo WHERE userId = ?";
 const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, "
-    + "favechip = null, navi = null, points = null, "
-    + "level = null WHERE userId = ?";
+    + "favechip = null, navi = null, points = 0, "
+    + "level = 0 WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
 const changeOptString = "UPDATE userinfo SET optOut = ? WHERE userId = ?";

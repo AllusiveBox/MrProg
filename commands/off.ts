@@ -4,15 +4,15 @@
     Clearance: Onwers only
 	Default Enabled: Cannot be Disabled
     Date Created: 10/27/17
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Updated By: AllusiveBox
 
 */
 
 // Load in Required Files
 import * as Discord from 'discord.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
-import { run as disabledDMs } from '../functions/disabledDMs';
+import { run as react } from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -41,7 +41,10 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
-    if (!config.isOn) return; // Ignore if the Bot is Already Rejecting Commands
+    if (!config.isOn) { // Ignore if the Bot is Already Rejecting Commands
+        await react(message, false);
+        return message.channel.send(`Unable to turn the bot off when it's already off.`);
+    }
 
     // Check if User is in the User ID List
     let validUser = false;
@@ -55,15 +58,13 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         debug(`${message.author.username} is switching the bot to 'off' state.`);
         bot.user.setStatus("invisible").catch(error => {
             errorLog(error);
-            return message.author.send(`An unexpected error prevented me `
-                + `from updating my status...Please try again in a few minutes.`);
+            message.author.send(`An unexpected error prevented me from updating my status...Please try again in a few minutes.`);
+            return react(message, false);
         });
         config.isOn = false;
-        // Build the Reply
-        let reply = `Bot Status has been set to Invisible and the isOn flag has been disabled.`
-        message.author.send(reply).catch(error => {
-            return disabledDMs(message, reply);
-        });
+
+        // React to Message
+        return react(message);
     }
 }
 

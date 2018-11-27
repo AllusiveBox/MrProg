@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Discord = require("discord.js");
 const log_js_1 = require("./log.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 const channels = require("../files/channels.json");
@@ -27,9 +28,10 @@ async function run(bot, message, member, reason, sql) {
     }
     catch (error) {
         log_js_1.error(error);
-        await message.react(config.fail);
+        await react_js_1.run(message, false);
         return message.channel.send(`Sorry, ${message.author}, I could not ban `
-            + `${member.user.username} because of ${error}.`);
+            + `${member.user.username}.`
+            + `*${error.toString()}*`);
     }
     let avatar = member.user.avatarURL;
     let bannedEmbed = new Discord.RichEmbed()
@@ -47,7 +49,7 @@ async function run(bot, message, member, reason, sql) {
         let Channel = bot.channels.get(logID);
         Channel.send(bannedEmbed);
     }
-    await message.react(config.success);
+    await react_js_1.run(message);
     return log_js_1.debug(`Ban Successful.`);
 }
 exports.run = run;

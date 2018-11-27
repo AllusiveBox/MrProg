@@ -16,7 +16,7 @@ import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import betterSql from '../classes/betterSql.js';
 import { commandBot } from '../classes/commandBot.js';
-
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 import channels = require('../files/channels.json');
@@ -57,6 +57,7 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
         let success = bot.commands.get("setstatus").updateStatus(bot, oldStatus, "PLAYING");
         if (!success) {
             let reply = `${message.author}, I was unable to leave streaming mode. Please wait a few seconds and try again.`;
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
@@ -74,16 +75,22 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);
             debug(reply);
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
         }
 
-        reply = ("@everyone: We have finished streaming. Thanks for watching!");
+        reply = ("everyone: We have finished streaming. Thanks for watching!");
 
-        return (<Discord.TextChannel>bot.channels.get(announceChat)).send(reply).catch(error => {
+
+
+        return (<Discord.TextChannel>bot.channels.get(announceChat)).send(reply).then(function () {
+            return react(message);
+        }).catch(error => {
             errorLog(error);
-            return message.author.send(`ERROR! Please check error.txt!`);
+            message.author.send(`*${error.toString()}*`);
+            return react(message, false);
         });
     } else { // Stream is Currently Off...
         debug(`isStreaming is set to: ${isStreaming}.`);
@@ -98,6 +105,7 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
         let success = bot.commands.get("setstatus").updateStatus(bot, newStatus, method, streamURL);
         if (!success) {
             let reply = `${message.author}, I was unable to switch to streaming mode. Please wait a few seconds and try again.`;
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
@@ -115,17 +123,21 @@ export async function run(bot: commandBot, message: Discord.Message, args: strin
                 + `files/channels.json and add a channel for the announceChat entry. For a `
                 + `template, please check in the templates directory.`);
             debug(reply);
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
         }
 
-        reply = ("@everyone: We have entered **Streaming Mode**\n"
+        reply = ("everyone: We have entered **Streaming Mode**\n"
             + `The ${config.prefix}question command is now enabled!`);
 
-        return (<Discord.TextChannel>bot.channels.get(announceChat)).send(reply).catch(error => {
+        return (<Discord.TextChannel>bot.channels.get(announceChat)).send(reply).then(function () {
+            return react(message);
+        }).catch(error => {
             errorLog(error);
-            return message.author.send(`ERROR! Please check error.txt!`);
+            message.author.send(`*${error.toString()}*`);
+            return react(message, false);
         });
     }
 }

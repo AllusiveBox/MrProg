@@ -96,8 +96,10 @@ files/counter.json
 files/bentcomments.txt
 files/textfaces.txt
 img/navi_symbols/*
+img/license/*
 log.txt
 error.txt
+purgedMessages.txt
 
 files/textfaces.txt
 .vscode/*

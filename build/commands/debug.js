@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
+const react_js_1 = require("../functions/react.js");
 const userids = require("../files/userids.json");
 const config = require("../files/config.json");
 const command = {
@@ -19,7 +20,7 @@ async function run(bot, message) {
         return log_js_1.debug(`Attempted use of ${command.fullName} by ${message.author.username}.`);
     }
     config.debug = !config.debug;
-    await message.react(config.success);
+    await react_js_1.run(message);
     return log_js_1.debug(`Setting debug value to: ${config.debug}.`);
 }
 exports.run = run;

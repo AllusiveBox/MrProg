@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 10/13/18
+    Date Last Updated: 11/18/18
     Last Update By: AllusiveBox
 
 **/
@@ -22,7 +22,7 @@ import roles = require('../files/roles.json');
  * @param {Discord.Message} message
  * @param {Number} level
  */
-export function run(bot: Discord.Client, message: Discord.Message, level: number) {
+export async function run(bot: Discord.Client, message: Discord.Message, level: number) {
     // Debug to Console
     debug(`I am in the changerole function.`);
 
@@ -36,18 +36,28 @@ export function run(bot: Discord.Client, message: Discord.Message, level: number
         return message.channel.send(`${message.author}, I am unable to update your `
             + `roles at this time.`);
     }
-    
+
     // Get The Role
-    let role : Discord.RoleResolvable = serverRoles.get(roles.levelUp[`${level}`]);
-    if (!role) {
+    let role: Discord.RoleResolvable = "";
+    if ((roles.levelUp[level] === null) || (roles.levelUp[level] === undefined)) {
         return debug(`Role has not been defined for level ${level}...`);
+    } else if (roles.levelUp[level].ID === "") { // If ID Does not Exist...
+        return debug(`Unable to locate ID for level ${level}...`);
     } else {
-        role = role.id;
+        role = serverRoles.get(roles.levelUp[level].ID);
     }
-    member.addRole(role).catch(error => {
-        return errorLog(error);
-    });
-    debug(`${message.author.username}${has}${roles.levelUp[`${level}`].name}`);
+
+    try {
+        await member.addRole(role);
+    } catch (error) {
+        errorLog(error);
+        return message.channel.send(`*${error.toString()}*`);
+    }
+
+    debug(`${message.author.username}${has}${roles.levelUp[level].name}`);
     message.channel.send(`You have been promoted to `
-        + `**__${roles.levelUp[`${level}`].name}!__**`);
+        + `**__${roles.levelUp[level].name}!__**`);
+    if (roles.levelUp[level].img) {
+        message.channel.send({ file: `./img/license/${roles.levelUp[level].img}` });
+    }
 }

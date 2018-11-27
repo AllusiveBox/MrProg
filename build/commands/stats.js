@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const log_js_1 = require("../functions/log.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const channels = require("../files/channels.json");
 const command = {
@@ -46,14 +47,20 @@ async function run(bot, message, args, sql) {
         .addField("Battle Code", user.battlecode)
         .setFooter("MegaMan \u00A9 Capcom Inc.", "https://orig00.deviantart.net/4b65/f/2018/062/a/c/capcom_by_forte_cross_exe-dc4v9vh.jpg");
     if ((message.channel.id === channels.bot) || config.debug) {
-        message.channel.send(statsEmbed).catch(error => {
-            console.log(error);
+        return message.channel.send(statsEmbed).then(function () {
+            return react_js_1.run(message);
+        }).catch(error => {
+            log_js_1.error(error);
+            return react_js_1.run(message, false);
         });
     }
     else {
-        message.author.send(statsEmbed).catch(error => {
+        return message.author.send(statsEmbed).then(function () {
+            return react_js_1.run(message);
+        }).catch(error => {
             disabledDMs_js_1.run(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`);
+            return react_js_1.run(message, false);
         });
     }
 }

@@ -4,8 +4,8 @@
     Clearance: none
   	Default Enabled: true
     Date Created: 11/04/17
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -16,7 +16,7 @@ import { run as disabledCommand } from '../functions/disabledCommand.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { validateBattleCode } from '../functions/validate.js';
 import betterSql from '../classes/betterSql.js';
-
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 
@@ -71,6 +71,9 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
         let reply = (`I am sorry, ${message.author}, that is an invalid code `
             + `format.\n`
             + `Valid characters are the numbers 0 - 9, and the characters A - E`);
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
@@ -91,6 +94,8 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
             + `and then try again.\n`
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
+
+        await react(message, false);
 
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
@@ -133,25 +138,15 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
             + `If you continue to see this message, please alert `
             + `${config.about.author}`);
 
-        return message.author.send(reply).catch(error => {
+        message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
         });
+
+        return react(message, false);
     }
 
-    // Build the Reply Message
-    /*let reply = (`${message.author}, your battlecode has been `
-        + `updated to: ${battleCode}`);
+    await react(message);
 
-    message.author.send(reply).catch(error => {
-        disabledDMs(message, reply);
-    });
-    */
-    try {
-        await message.react('✅');
-    } catch (error) {
-        message.channel.send("could not react with that emoji");
-        errorLog(error);
-    }
     return debug(`Battlecode successfully updated.`);
 }
 

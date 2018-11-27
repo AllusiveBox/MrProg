@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 05/19/18
-    Last Updated: 10/10/18
+    Last Updated: 10/27/18
     Last Updated By: Th3_M4j0r
 
 */
@@ -14,6 +14,7 @@ import * as Discord from 'discord.js';
 import { debug, commandHelp } from '../functions/log.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as disabledCommand } from '../functions/disabledCommand';
+import { run as react } from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -47,6 +48,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         return disabledCommand(command.name, message);
     }
 
+    await react(message);
     return message.author.send(inviteLink).catch(error => {
         disabledDMs(message, inviteLink);
     });

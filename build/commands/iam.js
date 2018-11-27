@@ -5,6 +5,7 @@ const log_js_1 = require("../functions/log.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const disabledDMs_js_1 = require("../functions/disabledDMs.js");
 const dmCheck_js_1 = require("../functions/dmCheck.js");
+const react_js_1 = require("../functions/react.js");
 const channels = require("../files/channels.json");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
@@ -12,6 +13,8 @@ var usedRecently = new Set();
 const command = {
     bigDescription: ("Changes your nickname in the server, "
         + "limited to once every seven days.\n"
+        + "Arguments:\n\t"
+        + "{nickname} -> The nickname you wish to change to (limit of 32 characters).\n"
         + "Returns:\n\t" + config.returnsDM),
     description: "Allows a user to update their username in the server",
     enabled: true,
@@ -24,24 +27,29 @@ async function run(bot, message, args) {
     if (!command.enabled) {
         return disabledCommand_js_1.run(command.name, message);
     }
-    if (await dmCheck_js_1.run(message, command.name))
-        return;
+    if (await dmCheck_js_1.run(message, command.name)) {
+        return react_js_1.run(message, false);
+    }
     if (usedRecently.has(message.author.id)) {
         log_js_1.debug(`${message.author.username} has used the ${command.fullName} command recently.`);
         let reply = `I am sorry, ${message.author}, you cannot use this command agian so soon.`;
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs_js_1.run(message, reply);
         });
     }
     let nickName = args.slice(0).join(" ");
-    if (nickName.length > 32)
+    if (nickName.length > 32) {
+        await react_js_1.run(message, false);
         return message.channel.send(`I am sorry, ${message.author}, that username is too long. Discord only allows names up to 32 characters!`);
+    }
     if (!nickName) {
         nickName = "";
     }
     else if ((message.guild.members.get(message.author.id).nickname === nickName) || (message.author.username === nickName)) {
         log_js_1.debug(`Unable to update username for ${message.author.username} as they attempted to update to their current name already.`);
         let reply = `I am sorry, ${message.author}, I can't update your username to what it already is!`;
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs_js_1.run(message, reply);
         });
@@ -49,6 +57,7 @@ async function run(bot, message, args) {
     if (!(message.guild.members.get(message.author.id).nickname) && (nickName === "")) {
         log_js_1.debug(`User does not have a nickname, nor did they provide a nickname to change to...`);
         let reply = `${message.author}, you haven't set a nickname yet, so I am unable to reset your nickname...`;
+        await react_js_1.run(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs_js_1.run(message, reply);
         });
@@ -60,7 +69,8 @@ async function run(bot, message, args) {
         log_js_1.error(error);
         let reply = (`I am sorry, ${message.author}, I am unable to update your username due to the following error:\n`
             + `*${error.toString()}*`);
-        return message.channel.send(reply);
+        message.channel.send(reply);
+        return react_js_1.run(message, false);
     }
     usedRecently.add(message.author.id);
     setTimeout(() => {
@@ -107,10 +117,7 @@ async function run(bot, message, args) {
         });
     }
     log_js_1.debug("Username Updated.");
-    let reply = `${message.author}, your username has been updated.`;
-    return message.author.send(reply).catch(error => {
-        disabledDMs_js_1.run(message, reply);
-    });
+    return react_js_1.run(message);
 }
 exports.run = run;
 exports.help = command;

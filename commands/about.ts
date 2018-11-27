@@ -4,7 +4,7 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 10/15/17
-    Last Updated: 10/13/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -14,6 +14,7 @@ import * as Discord from 'discord.js';
 import { debug, commandHelp } from '../functions/log.js';
 import { run as disabledCommand } from '../functions/disabledCommand.js';
 import { run as disabledDMs } from '../functions/disabledDMs';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 
@@ -53,7 +54,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
         + `To report issues, please use the public issue repo here: <${config.issueRepoLink}>`);
 
     // Send the Message
-    await message.react(config.success);
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

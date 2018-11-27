@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
-const disabledDMs_1 = require("../functions/disabledDMs");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const userids = require("../files/userids.json");
 const command = {
@@ -16,8 +16,10 @@ const command = {
 };
 async function run(bot, message) {
     log_js_1.debug(`I am inside the ${command.fullName} command.`);
-    if (!config.isOn)
-        return;
+    if (!config.isOn) {
+        await react_js_1.run(message, false);
+        return message.channel.send(`Unable to turn the bot off when it's already off.`);
+    }
     let validUser = false;
     Object.keys(userids).forEach(function (key) {
         if (userids[key] === message.author.id) {
@@ -28,14 +30,11 @@ async function run(bot, message) {
         log_js_1.debug(`${message.author.username} is switching the bot to 'off' state.`);
         bot.user.setStatus("invisible").catch(error => {
             log_js_1.error(error);
-            return message.author.send(`An unexpected error prevented me `
-                + `from updating my status...Please try again in a few minutes.`);
+            message.author.send(`An unexpected error prevented me from updating my status...Please try again in a few minutes.`);
+            return react_js_1.run(message, false);
         });
         config.isOn = false;
-        let reply = `Bot Status has been set to Invisible and the isOn flag has been disabled.`;
-        message.author.send(reply).catch(error => {
-            return disabledDMs_1.run(message, reply);
-        });
+        return react_js_1.run(message);
     }
 }
 exports.run = run;

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const log_js_1 = require("../functions/log.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const disabledDMs_1 = require("../functions/disabledDMs");
+const react_js_1 = require("../functions/react.js");
 const config = require("../files/config.json");
 const command = {
     bigDescription: ("Returns information about me!\n"
@@ -26,7 +27,7 @@ async function run(bot, message) {
         + `I was last updated on: **${config.about.lastUpdated}**.\n\n`
         + `You can find my public github repo here: <${config.publicRepoLink}>\n\n`
         + `To report issues, please use the public issue repo here: <${config.issueRepoLink}>`);
-    await message.react(config.success);
+    await react_js_1.run(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs_1.run(message, reply);
     });

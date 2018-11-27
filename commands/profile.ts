@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/22/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 */
 
 // Load in Required Files
@@ -13,6 +13,7 @@ import * as Discord from 'discord.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { debug, commandHelp } from '../functions/log.js';
 import betterSql from '../classes/betterSql.js';
+import { run as react } from '../functions/react.js';
 
 import config = require('../files/config.json');
 
@@ -73,12 +74,16 @@ export async function run(client: Discord.Client, message: Discord.Message, args
     + `To have me delete all the data I have on you, use the ${config.prefix}deleteMe command. (**Note: This won't change your opt-out status**)\n`
     + `**WARNING:** Use of the ${config.prefix}deleteMe command will _permanently_ delete all data recorded on you, with no way to restore it.`;
 
-    if(config.debug) {
+    if (config.debug) {
+        await react(message);
         return message.channel.send(userProfile);
     } else {
-        return message.author.send(userProfile).catch(error => {
-            return disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
-            + `Please check your privacy settings and try again.`);
+        return message.author.send(userProfile).then(function () {
+            return react(message);
+        }).catch(error => {
+            disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+                + `Please check your privacy settings and try again.`);
+            return react(message, false);
         });
     }
 }

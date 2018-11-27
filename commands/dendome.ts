@@ -4,8 +4,8 @@
     Clearance: none
   	Default Enabled: Yes
     Date Created: 05/19/18
-    Last Updated: 10/10/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 10/27/18
+    Last Update By: AllusiveBox
 
 */
 
@@ -15,7 +15,8 @@ import { run as disabledCommand } from '../functions/disabledCommand.js';
 import { run as disabledDMs } from '../functions/disabledDMs.js';
 import { run as dmCheck } from '../functions/dmCheck.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
-import * as validate from '../functions/validate.js';
+import { role as validate } from '../functions/validate.js';
+import { run as react } from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -51,7 +52,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
     if (await dmCheck(message, command.fullName)) return; // Return on DM channel
 
     // Check to see if Role has been Defined or Not
-    validate.role(roles.tournyRole, command.fullName);
+    validate(command.tournyRole, command.fullName);
 
     // Find out the User to Update
     var toUpdate = message.member;
@@ -72,8 +73,10 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             await toUpdate.removeRole(role);
         } catch (error) {
             errorLog(error);
+            await react(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something`
-                + ` went wrong and I was unable to update your roles.`);
+                + ` went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
 
         let reply = (`${message.author}, you have been removed from the `
@@ -81,7 +84,9 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + `If you wish to be added back to this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
 
+        await react(message);
         return message.author.send(reply).catch(error => {
+            errorLog(error);
             return disabledDMs(message, reply);
         });
     } else {
@@ -93,8 +98,10 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             await toUpdate.addRole(role);
         } catch (error) {
             errorLog(error);
+            await react(message, false);
             return message.channel.send(`I am sorry, ${message.author}, something `
-                + `went wrong and I was unable to update your roles.`);
+                + `went wrong and I was unable to update your roles.`
+                + `*${error.toString()}*`);
         }
 
         let reply = (`${message.author}, you have been added to the `
@@ -102,6 +109,7 @@ export async function run(bot: Discord.Client, message: Discord.Message) {
             + `If you wish to be removed from this role later, please use the `
             + `${prefix}${command.name} command in the ${message.guild.name} server.`);
 
+        await react(message);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });

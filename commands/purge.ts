@@ -1,11 +1,11 @@
 ﻿/*
     Command Name: purge.js
     Function: Deletes messages from a channel
-    Clearance: admin
+    Clearance: mod
 	Default Enabled: Yes
     Date Created: 10/25/17
-    Last Updated: 10/10/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 11/14/18
+    Last Updated By: AllusiveBox
 
 */
 
@@ -17,6 +17,7 @@ import { run as dmCheck } from '../functions/dmCheck.js';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import { debug, error as errorLog, commandHelp } from '../functions/log.js';
 import { run as purge } from '../functions/purge.js';
+import { run as react } from '../functions/react.js';
 
 // Command Variables
 const command : commandHelp = {
@@ -31,7 +32,7 @@ const command : commandHelp = {
     enabled: true,
     fullName: "Purge",
     name: "purge",
-    permissionLevel: "admin"
+    permissionLevel: "mod"
 }
 
 /**
@@ -49,7 +50,9 @@ export async function run(bot: Discord.Client, message: Discord.Message, args, s
     }
 
     // DM Check
-    if (dmCheck(message, command.fullName)) return; // Return on DM channel
+    if (dmCheck(message, command.fullName)) { // Return on DM channel
+        return react(message, false);
+    }
 
     // Permissions Check
     if (! await hasElevatedPermissions(bot, message, command.adminOnly, sql, true)) return;
@@ -64,16 +67,22 @@ export async function run(bot: Discord.Client, message: Discord.Message, args, s
 
         // Build Reply
         let reply = `${message.author}, you need to indicate a number of messages to purge!`
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
-            disabledDMs(message, reply);
+            return disabledDMs(message, reply);
         });
     } else if ((amount < 2) || (amount > 100)) {
         debug(`Amount range is invalid.`);
 
         // Build Reply
         let reply = `${message.author}, you please use a valid range. The allowed range is between 2 and 100.`;
+
+        await react(message, false);
+
         return message.author.send(reply).catch(error => {
-            disabledDMs(message, reply);
+            return disabledDMs(message, reply);
         });
     }
 

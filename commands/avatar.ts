@@ -4,7 +4,7 @@
     Clearance: Mod+
 	Default Enabled: Cannot be disabled
     Date Created: 04/14/18
-    Last Updated: 10/20/18
+    Last Updated: 10/27/18
     Last Update By: AllusiveBox
 
 */
@@ -16,6 +16,7 @@ import { run as dmCheck } from '../functions/dmCheck.js';
 import { run as hasElevatedPermissions } from '../functions/hasElevatedPermissions.js';
 import { debug, commandHelp } from '../functions/log.js';
 import betterSql from '../classes/betterSql.js';
+import { run as react } from '../functions/react.js';
 
 
 import config = require('../files/config.json');
@@ -65,7 +66,7 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
             let reply = (`I am sorry ${message.author}, either you did not mention a `
                 + `valid member, used an incorrect ID, or the API returned a null user.\n`
                 + `Please ask <@${userids.ownerID}> to investigate.`);
-            await message.react(config.fail);
+            await react(message, false);
             return message.author.send(reply).catch(error => {
                 return disabledDMs(message, reply);
             });
@@ -75,10 +76,10 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: s
         + `it to ${message.author.username}.`);
     await message.author.send(bot.users.get(member.id).avatarURL)
         .then(function () {
-            return message.react(config.success);
+            return react(message);
         })
         .catch(error => {
-            message.react(config.fail);
+            react(message, false);
             let reply = (`I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`);
             return disabledDMs(message, reply);

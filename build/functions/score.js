@@ -47,7 +47,7 @@ async function run(bot, message, sql) {
                     + `level up message.`);
                 message.channel.send(`Congratulations, ${name}, you've just reached `
                     + `level **${curLevel}**!`);
-                changeRole_js_1.run(bot, message, curLevel);
+                await changeRole_js_1.run(bot, message, curLevel);
             }
             log_js_1.debug(`Updating userinfo file.`);
             sql.setPoints(message.author.id, row.points + 1, row.level, name);
