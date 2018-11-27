@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 11/14/18
+    Date Last Updated: 11/23/18
     Last Updated By: AllusiveBox
 
 **/
@@ -87,13 +87,13 @@ module.exports.run = async (bot, message, amount, user = null) => {
         }
 
         // Load in Log Channel ID
-        let logID = channels.log;
+        let logID = channels.purgeLog;
 
         if (!logID) { // If no Log ID...
-            debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
+            debug(`Unable to find purgeLog ID in channels.json. Looking for another log channel.`);
 
             // Look for Log Channel in Server
-            logChannel = message.member.guild.channels.find(val => val.name === "log");
+            logChannel = message.member.guild.channels.find(val => val.name === "purgeLog");
             if (!logChannel) { // If Unable to Find Log Channel...
                 debug(`Unable to find any kind of log channel.`);
             } else {

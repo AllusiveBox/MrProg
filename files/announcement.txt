@@ -1,6 +1,12 @@
-Updated: 11/18/18
+Updated: 11/24/18
 
-	* Roles should now successfully be assigned per level up. If this is not the case, I give up and points / levels will be discontinued because why is this so hard for me to resolve.
-	* Images should now display for all the Licenses, bar the CX License (although no one is close to that yet...). So enjoy some level up gifs for when you hit key levels!
-	* Something something last update until December. What happened to doing these once a month...
-	* Oh, also updated the version number correctly, as we hit version 4.1 in November but I didn't update the version number to reflect that. That's been resolved.
+	* Logging has been split between channels to prevent spam in any single channel.
+	* dmLogging has been updated slightly.
+	* The rip command now has this nifty thing if you include a string along with the command, check it out...
+	* The Avatar command will now log user avatars instead of sending them as DMs. This will prevent everyone from using it in rapid succession.
+	* The user database now stores a user's joinDate. Users that have been in the member before this change will have this value set to `null` by default. This will be updated on first post after this update.
+	* Now that user's join dates are stored in the database, the joinDate value for each user can now be looked up with the lookup command.
+	* The lookup command has been reworked. Formatted messages will now be in the form of an embed, which is spiffy and looks nice. Non-formatted messages will now use the old formatted message formatting.
+		* The lookup command has been updated to include the optOut data for a user.
+	* It is now possible to get the log files from the bot, using the log command if you are a mod or higher.
+	* The optIn and optOut commands now react to commands as originally intended.

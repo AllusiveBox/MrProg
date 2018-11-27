@@ -4,31 +4,36 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 09/08/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 11/24/18
     Last Update By: AllusiveBox
 
 **/
 
 const Discord = require(`discord.js`);
 const sql = require(`sqlite`);
-const { debug } = require(`../functions/log.js`);
+const { debug, error: errorLog } = require(`../functions/log.js`);
 const { NotConnectedError } = require(`../classes/CustomErrors.js`);
 
 
 //the strings for each statement to prepare after connecting
 //prepared statements are faster and also safer
 const insertUserString = "INSERT INTO userinfo (userId, userName, battlecode, favechip, "
-    + "navi, clearance, points, level, optOut) VALUES (?, ?, ?, ?, ?, ?, "
-    + "?, ?, ?)";
+    + "navi, clearance, points, level, optOut, joinDate, leaveDate, firstJoinDate) VALUES (?, ?, ?, ?, ?, ?, "
+    + "?, ?, ?, ?, ?, ?)";
 const setPointsString = "UPDATE userinfo SET points = ?, level = "
     + "?, userName = ? WHERE userId = ?";
 const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?"; //don't know how AllusiveBox does this yet
 const getUserString = "SELECT * FROM userinfo WHERE userId = ?";
-const userLeftString = "DELETE FROM userinfo WHERE userId = ?";
+const getJoinDateString = "SELECT joinDate from userinfo WHERE userId = ?"
+const userLeftString = "UPDATE userinfo SET battlecode = null, navi = null, clearance = null, points = null, "
+    + "level = null, joinDate = null, leaveDate = ? WHERE userId = ?";
 const deleteMeString = "UPDATE userinfo SET userName = null, battlecode = null, "
     + "favechip = null, navi = null, points = 0, "
     + "level = 0 WHERE userId = ?";
 const setBattleCodeString = "UPDATE userinfo SET battlecode = ? WHERE userId = ?";
+const setFirstJoinDateString = "UPDATE userinfo SET firstJoinDate = ? WHERE userId = ?";
+const setJoinDateString = "UPDATE userinfo SET joinDate = ? WHERE userId = ?";
+const setLeaveDateString = "UPDATE userinfo SET leaveDate = ? WHERE userId = ?";
 const setNaviString = "UPDATE userinfo SET navi = ? WHERE userId = ?";
 const optOutString = "UPDATE userinfo SET optOut = 1 WHERE userId = ?";
 const optInString = "UPDATE userinfo SET optOut = 0 WHERE userId = ?";
@@ -60,7 +65,11 @@ module.exports = class betterSql {
         this._setPointsStmt = await this._Database.prepare(setPointsString);
         this._promoteStmt = await this._Database.prepare(promoteString);
         this._getUserStmt = await this._Database.prepare(getUserString);
+        this._getJoinDateStmt = await this._Database.prepare(getJoinDateString);
         this._setBattleCodeStmt = await this._Database.prepare(setBattleCodeString);
+        this._setFirstJoinDateStmt = await this._Database.prepare(setFirstJoinDateString);
+        this._setJoinDateStmt = await this._Database.prepare(setJoinDateString);
+        this._setLeaveDateStmt = await this._Database.prepare(setLeaveDateString);
         this._setNaviStmt = await this._Database.prepare(setNaviString);
         this._userLeftStmt = await this._Database.prepare(userLeftString);
         this._deleteMeStmt = await this._Database.prepare(deleteMeString);
@@ -86,16 +95,30 @@ module.exports = class betterSql {
 
     /**
      * 
-     * @param {Discord.Snowflake} userId 
-     * @param {string} username 
+     * @param {Discord.Snowflake} userId
      */
-    async insertUser(userId, username) {
+    async getJoinDate(userId) {
+        debug(`I am in the sql.getJoinDate function`);
+        if (!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        let row = await this._getJoinDateStmt.get(userId);
+        return row.joinDate;
+    }
+
+    /**
+     * 
+     * @param {Discord.Snowflake} userId 
+     * @param {string} username
+     * @param {string} [joinDate=null]
+     */
+    async insertUser(userId, username, joinDate = null) {
         debug(`I am in the sql.insertUser function`);
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
         await this._userInsertStmt.run(
-            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0);
+            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0, joinDate, null, joinDate);
     }
 
     /**
@@ -111,6 +134,41 @@ module.exports = class betterSql {
             throw new NotConnectedError();
         }
         await this._setBattleCodeStmt.run(battleCode, userId);
+    }
+
+    /**
+     * 
+     * @param {Discord.Snowflake} userId
+     * @param {string} joinDate
+     */
+    async setFirstJoinDate(userId, joinDate) {
+        debug(`I am in the sql.setFirstJoinDate function`);
+        if (!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        await this._setFirstJoinDateStmt.run(joinDate, userId);
+    }
+
+    /**
+     * 
+     * @param {Discord.Snowflake} userId
+     * @param {string} joinDate
+     */
+
+    async setJoinDate(userId, joinDate) {
+        debug(`I am in the sql.setJoinDate function`);
+        if (!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        await this._setJoinDateStmt.run(joinDate, userId);
+    }
+
+    async setLeaveDate(userId, leaveDate) {
+        debug(`I am in the sql.setLeaveDate function`);
+        if (!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        await this._setLeaveDateStmt.run(leaveDate, userId);
     }
 
     /**
@@ -227,7 +285,7 @@ module.exports = class betterSql {
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
-        await this._userLeftStmt.run(userId);
+        await this._userLeftStmt.run(new Date(), userId);
     }
 
 
@@ -277,8 +335,16 @@ module.exports = class betterSql {
         this._promoteStmt = null;
         await this._getUserStmt.finalize();
         this._getUserStmt = null;
+        await this._getJoinDateStmt.finalize();
+        this._getJoinDateStmt = null;
         await this._setBattleCodeStmt.finalize();
         this._setBattleCodeStmt = null;
+        await this._setFirstJoinDateStmt.finalize();
+        this._setFirstJoinDateStmt = null;
+        await this._setJoinDateStmt.finalize();
+        this._setJoinDateStmt = null;
+        await this._setLeaveDateStmt.finalize();
+        this._setLeaveDateStmt = null;
         await this._setNaviStmt.finalize();
         this._setNaviStmt = null;
         await this._userLeftStmt.finalize();

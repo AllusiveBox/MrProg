@@ -58,6 +58,35 @@ async function commandLogger(user, command, args) {
     commandLogger.log(`${logMessage}`);
 }
 
+/**
+ * 
+ * @param {Discord.Message} message
+ */
+
+async function dmLogger(message) {
+    let dmLogger = new Logger("DMLogger");
+
+    // Build the Log Message
+    let logMessage = `DM From:\n\t\t\t\t\t${message.author.username} (id: ${message.author.id})\n\t\t\t\t`;
+
+    try {
+        logMessage += `Message content:\n\t\t\t\t\t`;
+        logMessage += `${message.content}\n\t\t\t\t`;
+        if (message.attachments.size > 0) { // If an Attachment was Included...
+            logMessage += `The following attachment(s) were included:\n\t\t\t\t\t`
+            message.attachments.forEach(function (attachment) {
+                logMessage += `${attachment.filename}\n\t\t\t\t\t`;
+                logMessage += `${attachment.proxyURL}\n\t\t\t\t`;
+            });
+        }
+
+        dmLogger.log(logMessage);
+    } catch (error) {
+        return errorLogger(error);
+    }
+}
+
 module.exports.debug = debugLogger;
 module.exports.error = errorLogger;
 module.exports.command = commandLogger;
+module.exports.dmLog = dmLogger;

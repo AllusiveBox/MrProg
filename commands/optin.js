@@ -4,16 +4,18 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/23/18
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 11/24/18
+    Last Updated By: AllusiveBox
+
 */
 
 // Load in Required Files
-const config = require(`../files/config.json`);
 const Discord = require(`discord.js`);
+const betterSql = require(`../classes/betterSql.js`);
+const config = require(`../files/config.json`);
 const { run: disabledDMs } = require(`../functions/disabledDMs.js`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
-const betterSql = require(`../classes/betterSql.js`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Required Files
 const command = {
@@ -54,6 +56,7 @@ module.exports.run = async (client, message, args, sql) => {
         debug(`${message.author.username} attempted to opt-in while already opted in.`);
         let reply = `You are already opted in, ${message.author}. `
             + `To opt out, use the ${config.prefix}optOut command.`;
+        await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
         });
@@ -71,6 +74,7 @@ module.exports.run = async (client, message, args, sql) => {
 
     let reply = `I have updated your preferences, ${message.author}. If you wish to opt-out of future data collection `
         + `please use the ${config.prefix}optOut command.`;
+    await react(message);
     return message.author.send(reply).catch(error => {
         return disabledDMs(message, reply);
     });

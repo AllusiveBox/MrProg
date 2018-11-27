@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 10/15/18
+    Date Last Updated: 11/23/18
     Last Update By: AllusiveBox
 
 **/
@@ -23,7 +23,7 @@ const { run: welcomeMessage } = require(`../functions/welcomeMessage.js`);
  * @param {Discord.Client} bot
  * @param {Discord.Member} member
  */
-module.exports.run = async (bot, member) => {
+module.exports.run = async (bot, member, sql) => {
     // Debug to Console
     debug(`I am inside the memberLeave Function.`);
 
@@ -76,4 +76,6 @@ module.exports.run = async (bot, member) => {
     } else {
         bot.channels.get(logID).send(joinEmbed);
     }
+
+    return sql.insertUser(member.user.id, member.user.username, member.joinedAt);
 }
