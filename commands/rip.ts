@@ -17,7 +17,7 @@ import { run as disabledCommand } from '../functions/disabledCommand.js';
 
 
 import config = require('../files/config.json');
-
+import roles = require('../files/roles.json');
 
 var counter = getCounter(null);
 
@@ -124,6 +124,11 @@ export async function run(bot: Discord.Client, message: Discord.Message, args: S
     // Enabled Command Test
     if (!command.enabled) {
         return disabledCommand(command.name, message);
+    }
+
+    if(message.mentions.everyone) {
+        await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
+        return;
     }
 
     if (args[0]) {

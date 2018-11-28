@@ -49,7 +49,6 @@ async function run(bot, message, args, sql) {
             return disabledDMs_js_1.run(message, reply);
         });
     }
-    user = message.mentions.members.first() !== undefined ? message.mentions.members.first() : null;
     purge_js_1.run(bot, message, amount, user);
 }
 exports.run = run;

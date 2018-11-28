@@ -4,6 +4,7 @@ const fs = require("fs");
 const log_js_1 = require("../functions/log.js");
 const disabledCommand_js_1 = require("../functions/disabledCommand.js");
 const config = require("../files/config.json");
+const roles = require("../files/roles.json");
 var counter = getCounter(null);
 const command = {
     bigDescription: ("Use this command to increase the rip counter.\n"
@@ -66,6 +67,10 @@ async function run(bot, message, args = null) {
     log_js_1.debug(`I am inside the ${command.name} command.`);
     if (!command.enabled) {
         return disabledCommand_js_1.run(command.name, message);
+    }
+    if (message.mentions.everyone) {
+        await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
+        return;
     }
     if (args[0]) {
         let respectTo = args.slice(0).join(" ");

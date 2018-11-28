@@ -76,9 +76,13 @@
     "name": "",
     "ID": ""
   },
-  "sModRole"   : {
-    "name" : "",
-    "ID"   : ""
+  "sModRole": {
+    "name": "",
+    "ID": ""
+  },
+  "suspend": {
+    "name": "Suspended",
+    "ID": ""
   },
   "tournyRole": {
     "name": "",

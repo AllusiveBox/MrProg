@@ -98,6 +98,8 @@ bot.on("messageUpdate", async (oldMessage, newMessage) => {
         (oldMessage.content === undefined) || (newMessage.content === undefined) ||
         (oldMessage.content === "") || (newMessage.content === ""))
         return;
+    if (oldMessage.content === newMessage.content)
+        return log_js_1.debug("Messages are the same!");
     let logID = channels.log;
     if (!logID) {
         log_js_1.debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
@@ -108,21 +110,21 @@ bot.on("messageUpdate", async (oldMessage, newMessage) => {
         else {
             logID = logChannel.id;
         }
-        let logChannelColor = config.logChannelColors.messageUpdated;
-        let avatar = oldMessage.member.user.avatarURL;
-        let updatedMessage = new Discord.RichEmbed()
-            .setDescription("Message Updated!")
-            .setColor(logChannelColor)
-            .setThumbnail(avatar)
-            .addField("Old Message", oldMessage.content)
-            .addField("New Message", newMessage.content)
-            .addField("Time", new Date());
-        try {
-            bot.channels.get(logID).send(updatedMessage);
-        }
-        catch (error) {
-            log_js_1.error(error);
-        }
+    }
+    let logChannelColor = config.logChannelColors.messageUpdated;
+    let avatar = oldMessage.member.user.avatarURL;
+    let updatedMessage = new Discord.RichEmbed()
+        .setDescription("Message Updated!")
+        .setColor(logChannelColor)
+        .setThumbnail(avatar)
+        .addField("Old Message", oldMessage.content)
+        .addField("New Message", newMessage.content)
+        .addField("Time", new Date());
+    try {
+        bot.channels.get(logID).send(updatedMessage);
+    }
+    catch (error) {
+        log_js_1.error(error);
     }
 });
 bot.on("messageDelete", async (deletedMessage) => {
@@ -140,20 +142,20 @@ bot.on("messageDelete", async (deletedMessage) => {
         else {
             logID = logChannel.id;
         }
-        let logChannelColor = config.logChannelColors.messageUpdated;
-        let avatar = deletedMessage.member.user.avatarURL;
-        let deletedMessageEmbed = new Discord.RichEmbed()
-            .setDescription("Message Deleted!")
-            .setColor(logChannelColor)
-            .setThumbnail(avatar)
-            .addField("Deleted Message", deletedMessage.content)
-            .addField("Time", new Date());
-        try {
-            bot.channels.get(logID).send(deletedMessageEmbed);
-        }
-        catch (error) {
-            log_js_1.error(error);
-        }
+    }
+    let logChannelColor = config.logChannelColors.messageUpdated;
+    let avatar = deletedMessage.member.user.avatarURL;
+    let deletedMessageEmbed = new Discord.RichEmbed()
+        .setDescription("Message Deleted!")
+        .setColor(logChannelColor)
+        .setThumbnail(avatar)
+        .addField("Deleted Message", deletedMessage.content)
+        .addField("Time", new Date());
+    try {
+        bot.channels.get(logID).send(deletedMessageEmbed);
+    }
+    catch (error) {
+        log_js_1.error(error);
     }
 });
 rl.on(`line`, async (input) => {
