@@ -193,8 +193,8 @@ module.exports.run = async (client, message, args, sql) => {
                 .setColor(lookupColor);
 
             if (includeAll || includeUserID) {
-                reply = `${reply}Discord User ID:\n\t ${row.userId}\n\n`;
-                userEmbed.addField("User ID", row.userId);
+                reply = `${reply}Discord User ID:\n\t ${row.userId || row.userID}\n\n`;
+                userEmbed.addField("User ID", row.userId || row.userID);
             }
             if (includeAll || includeUserName) {
                 reply = `${reply}Current Server Username:\n\t ${row.userName}\n\n`;
