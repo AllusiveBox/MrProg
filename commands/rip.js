@@ -15,6 +15,7 @@ const fs = require(`fs`);
 const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
+const roles = require('../files/roles.json');
 
 // Command Stuff
 const command = {
@@ -70,7 +71,7 @@ function getCount(message) {
 
 /**
  * 
- * @param {int} [newCount]
+ * @param {Number} [newCount]
  * @param {Discord.Message} [message]
  */
 
@@ -120,6 +121,11 @@ module.exports.run = async (bot, message, args=null) => {
     // Enabled Command Test
     if (!command.enabled) {
         return disabledCommand(command.name, message);
+    }
+
+    if(message.mentions.everyone) {
+        await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
+        return;
     }
 
     if (args[0]) {
