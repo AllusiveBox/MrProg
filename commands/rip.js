@@ -124,6 +124,7 @@ module.exports.run = async (bot, message, args=null) => {
     }
 
     if(message.mentions.everyone) {
+	debug(`${message.author} tried to make the bot ping everyone`);
         await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
         return;
     }
