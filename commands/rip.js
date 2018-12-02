@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/17/17
-    Last Updated: 11/17/18
+    Last Updated: 12/02/18
     Last Updated By: AllusiveBox
 
 */
@@ -123,9 +123,15 @@ module.exports.run = async (bot, message, args=null) => {
         return disabledCommand(command.name, message);
     }
 
-    if(message.mentions.everyone) {
+    if(message.mentions.everyone || message.content.contains("everyone")) {
 	debug(`${message.author} tried to make the bot ping everyone`);
-        await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
+        if (message.channel.type !== "dm") {
+            try {
+                await message.member.addRole(roles.suspend.ID, "tried to get the bot to ping everyone");
+            } catch (error) {
+                errorLog(error);
+            }
+        }
         return;
     }
 
