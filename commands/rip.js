@@ -123,7 +123,7 @@ module.exports.run = async (bot, message, args=null) => {
         return disabledCommand(command.name, message);
     }
 
-    if(message.mentions.everyone || message.content.contains("everyone")) {
+    if(message.mentions.everyone || message.content.includes("everyone")) {
 	debug(`${message.author} tried to make the bot ping everyone`);
         if (message.channel.type !== "dm") {
             try {
