@@ -3,7 +3,7 @@
  * Version 4.2.1
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 11/26/18
+ * Last Updated: 12/02/18
  * Last Updated By: AllusiveBox
  * 
  */
@@ -30,7 +30,7 @@ const { run: score } = require(`./functions/score.js`);
 const { command: commandLog, debug, error: errorLog} = require(`./functions/log.js`);
 
 // Declare the Bot Stuff
-const bot = new Discord.Client();
+const bot = new Discord.Client({ disableEveryone: true });
 bot.commands = new Discord.Collection();
 
 // Open SQ Database
