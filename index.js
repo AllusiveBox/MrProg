@@ -157,9 +157,10 @@ bot.on("messageUpdate", async (oldMessage, newMessage) => {
     let updatedMessage = new Discord.RichEmbed()
         .setDescription("Message Updated!")
         .setColor(logChannelColor)
-        .setThumbnail(avatar)
+        .setAuthor(oldMessage.author.username, avatar)
         .addField("Old Message", oldMessage.content)
         .addField("New Message", newMessage.content)
+        .addField("Channel", oldMessage.channel.name)
         .addField("Time", new Date());
 
     try {
@@ -201,8 +202,9 @@ bot.on("messageDelete", async (deletedMessage) => {
     let deletedMessageEmbed = new Discord.RichEmbed()
         .setDescription("Message Deleted!")
         .setColor(logChannelColor)
-        .setThumbnail(avatar)
+        .setAuthor(deletedMessage.author.username, avatar)
         .addField("Deleted Message", deletedMessage.content)
+        .addField("Channel", deletedMessage.channel.name)
         .addField("Time", new Date());
 
     try {
