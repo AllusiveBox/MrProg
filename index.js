@@ -133,7 +133,7 @@ bot.on("messageUpdate", async (oldMessage, newMessage) => {
     if (oldMessage.content === newMessage.content) return debug("Messages are the same!");
 
     // Load in Log Channel ID
-    let logID = channels.log;
+    let logID = channels.messageLog;
 
     if (!logID) { // If no Log ID...
         debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
@@ -177,7 +177,7 @@ bot.on("messageDelete", async (deletedMessage) => {
         deletedMessage.content === "") return;
 
     // Load in Log Channel ID
-    let logID = channels.log;
+    let logID = channels.messageLog;
 
     if (!logID) { // If no Log ID...
         debug(`Unable to find log ID in channels.json. Looking for another log channel.`);

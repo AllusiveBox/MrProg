@@ -1,9 +1,10 @@
 {
   "announceChat": "",
   "bot": "",
-  "dmLogs": "",
+  "dmLog": "",
   "general": "",
   "log": "",
+  "messageLog": "",
   "purgeLog": "",
   "question": "",
   "rules": ""
