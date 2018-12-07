@@ -26,7 +26,7 @@ module.exports.run = async (bot, args) => {
             case null:
             case undefined:
             case '0':
-            case 99:
+            case '99':
                 break;
             default:
                 let message = (`Starting up...\n`
