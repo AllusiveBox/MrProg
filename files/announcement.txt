@@ -1,12 +1,9 @@
-Updated: 11/26/18
+Updated: 12/06/18
 
-	* Logging has been split between channels to prevent spam in any single channel.
-	* dmLogging has been updated slightly.
-	* The rip command now has this nifty thing if you include a string along with the command, check it out...
-	* The Avatar command will now log user avatars instead of sending them as DMs. This will prevent everyone from using it in rapid succession.
-	* The user database now stores a user's joinDate. Users that have been in the member before this change will have this value set to `null` by default. This will be updated on first post after this update.
-	* Now that user's join dates are stored in the database, the joinDate value for each user can now be looked up with the lookup command.
-	* The lookup command has been reworked. Formatted messages will now be in the form of an embed, which is spiffy and looks nice. Non-formatted messages will now use the old formatted message formatting.
-		* The lookup command has been updated to include the optOut data for a user.
-	* It is now possible to get the log files from the bot, using the log command if you are a mod or higher.
-	* The optIn and optOut commands now react to commands as originally intended.
+	* Score system now should ignore users with null member objects since this is *still* an issue.
+	* The rip command has been temporarily removed, until people can stop attempting to ruin good things.
+	* Message logging has been further split so that it doesn't clutter the same log channels.
+	* Targeted purging has temporarily been disabled due to a stubborn bug that doesn't seem to want to die.
+	* Logic has been updated in certain places where needed.
+	* Logging on edited / deleted messages now includes the author's name as well as the channel it was deleted in.
+	* That stupid error message that happens in score has been fixed so that it has a new line after the user that caused the error.

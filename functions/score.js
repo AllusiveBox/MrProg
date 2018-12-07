@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 11/24/18
+    Date Last Updated: 12/06/18
     Last Update By: AllusiveBox
 
 **/
@@ -35,6 +35,10 @@ module.exports.run = async (bot, message, sql) => {
     debug(`I am inside the Score System`);
 
     if (!config.score) return debug(`Score System Disabled.`);
+
+    if (message.member === null) { // if null member object
+        return debug(`Null user object at id ${message.author.id}`);
+    }
 
     if (talkedRecently.has(message.author.id)) return debug(`Throttled `
         + `${message.author.username}.`);
@@ -94,7 +98,7 @@ module.exports.run = async (bot, message, sql) => {
         }
 
     } catch (error) {
-        message.channel.send(`ERROR CAUSED BY: ${message.author}.`
+        message.channel.send(`ERROR CAUSED BY: ${message.author}.\n`
             + `Error: *${error.toString()}*`);
         return errorLog(error);
     }
