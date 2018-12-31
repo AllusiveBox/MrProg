@@ -1,9 +1,10 @@
-Updated: 12/06/18
+Updated: 12/31/18
 
-	* Score system now should ignore users with null member objects since this is *still* an issue.
-	* The rip command has been temporarily removed, until people can stop attempting to ruin good things.
-	* Message logging has been further split so that it doesn't clutter the same log channels.
-	* Targeted purging has temporarily been disabled due to a stubborn bug that doesn't seem to want to die.
-	* Logic has been updated in certain places where needed.
-	* Logging on edited / deleted messages now includes the author's name as well as the channel it was deleted in.
-	* That stupid error message that happens in score has been fixed so that it has a new line after the user that caused the error.
+	* messageUpdate and messageDelete events have had the core functionality of their code removed from the main script and moved into functions to minimalize the main script.
+	* The embed for deleted messages will now use a different color then the message updated embed.
+	* The purge function has been adjusted to correctly account for attachments.
+	* The messageUpdate and messageDelete functions have been adjusted to account for message lengths larger than the maximum embed field limit.
+	* The messageUpdate and messageDelete functions have been adjusted to correctly account for attachments.
+	* A bit of logic has been added to account for potential changes to the command prefix in certain areas.
+	* A command has been added that allows users to see the welcome message at will.
+	* The welcome message was updated slightly.

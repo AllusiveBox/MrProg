@@ -1,8 +1,8 @@
 ﻿{
   "about": {
     "author": "AllusiveBox",
-    "lastUpdated": "12/06/2018",
-    "verNum": "4.2.3"
+    "lastUpdated": "12/31/2018",
+    "verNum": "4.3.0"
   },
   "auditColor": "#800000",
   "debug": false,
@@ -23,6 +23,7 @@
     "memberLookup": "#FFCC66",
     "memberKick": "#FF3333",
     "memberUpdate": "#CC9999",
+    "messageDeleted": "#800000",
     "messagesPurged": "#CCCC00",
     "messageUpdated": "#FF66CC"
   },

@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 11/23/18
+    Date Last Updated: 12/30/18
     Last Updated By: AllusiveBox
 
 **/
@@ -35,7 +35,7 @@ function recordMessages(messages) {
             content = `${content}\tMessage Author ID: ${message.author.id}\n`;
             content = `${content}\tMessage Content: ${message.content}\n`;
             content = `${content}\tMessage ID: ${message.id}\n`;
-            if (message.attachments) { // If Attachments
+            if (message.attachments.size > 0) { // If Attachments
                 message.attachments.forEach(function (attachment) {
                     content = `${content}\tAttachment: ${attachment.filename}\n`;
                     content = `${content}\t ${attachment.proxyURL}\n`;

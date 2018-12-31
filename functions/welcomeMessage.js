@@ -50,10 +50,11 @@ module.exports.run = (member) => {
         + `Before you are able to post in the server, you will need to make sure `
         + `you have a verified e-mail linked to your Discord account.\n`
         + `Please note that by posting in ${serverName}, you are agreeing to the `
-        + `rules found in ${rulesChannel}.\n\n\n`
-        + `This bot will collect user data while you remain in ${serverName}, but `
-        + `you can opt out of this at any time with the ${prefix}optOut command.\n`
-        + `For a list of my commands, use !help.\n\n`);
+        + `rules found in ${rulesChannel}.\n\n`
+        + `In addition to the above, this bot will collect user data while you remain in ${serverName}, but `
+        + `you can opt out of this at any time with the \\${prefix}optOut command.\n`
+        + `To see what data the bot has on you, use the \\${prefix}profile command.\n\n`
+        + `For a list of bot commands, use the \\${prefix}help.\n\n`);
 
     return welcomeMessage;
 }
