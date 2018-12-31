@@ -50,7 +50,7 @@
   "purge": true,
   "question": true,
   "restart": true,
-  "rip": true,
+  "rip": false,
   "setbattlecode": true,
   "setbc": true,
   "setlevel": true,
