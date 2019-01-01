@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/22/18
-    Last Updated: 11/24/18
+    Last Updated: 12/31/18
     Last Update By: AllusiveBox
 
 */
@@ -51,7 +51,7 @@ module.exports.run = async (client, message, args, sql) => {
     debug(`Generating userData for ${message.author.username}`);
     
     let userProfile = `${message.author}, this is the data that I have collected on you:\n`
-        + `userID: ${row.userId} (This data is provided by Discord's API. It is public data)\n`
+        + `userID: ${row.userId || row.userID} (This data is provided by Discord's API. It is public data)\n`
         + `userName: ${row.userName} (This is stored to keep up with nicknames. Updates every time you increase point count. It is public data)\n`
         + `battlecode: ${row.battlecode} (Set by you, the user, using the !setBC or !setBattlecode command)\n`
         + `favechip: ${row.favechip} (Feature coming soon! Maybe.)\n`
