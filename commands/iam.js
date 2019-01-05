@@ -29,7 +29,7 @@ const command = {
         + "Arguments:\n\t"
         + "{nickname} -> The nickname you wish to change to (limit of 32 characters).\n"
         + "Returns:\n\t" + config.returnsDM),
-    description: "Allows a user to update their username in the server",
+    description: "Allows a user to update their username in the server.\nUsing the command independently will reset your current nickname.",
     enabled: true,
     fullName: "I am",
     name: "iam",
