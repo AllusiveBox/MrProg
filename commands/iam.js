@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 10/27/18
-    Last Update By: AllusiveBox
+    Last Updated: 01/05/19
+    Last Update By: DeCoded_Void
 
 */
 
@@ -29,7 +29,7 @@ const command = {
         + "Arguments:\n\t"
         + "{nickname} -> The nickname you wish to change to (limit of 32 characters).\n"
         + "Returns:\n\t" + config.returnsDM),
-    description: "Allows a user to update their username in the server.\nUsing the command independently will reset your current nickname.",
+    description: "Allows a user to update their username in the server.\n\tUsing the command independently will reset your current nickname.",
     enabled: true,
     fullName: "I am",
     name: "iam",
