@@ -4,8 +4,8 @@
     Clearance: none
   	Default Enabled: Yes
     Date Created: 10/15/17
-    Last Updated: 09/30/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 01/06/19
+    Last Update By: AllusiveBox
 
 */
 
@@ -59,7 +59,7 @@ module.exports.run = async (bot, message) => {
     } else {
         return message.channel.send(`What did you just say to me, ${message.author}`
             + `? I'll have you know that I graduated at the top of my class in the `
-            + `${bot.user.username} accademy. You better watch yourself, kiddo.`);
+            + `${bot.user.username} academy. You better watch yourself, kiddo.`);
     }
 }
 

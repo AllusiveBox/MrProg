@@ -50,7 +50,7 @@
   "purge": true,
   "question": true,
   "restart": true,
-  "rip": false,
+  "rip": true,
   "setbattlecode": true,
   "setbc": true,
   "setlevel": true,
@@ -61,6 +61,8 @@
   "stats": true,
   "story": true,
   "stream": true,
+  "update": true,
   "wiki": true,
-  "welcome": true
+  "welcome": true,
+  "wikiresources": true
 }

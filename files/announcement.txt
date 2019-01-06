@@ -1,10 +1,6 @@
-Updated: 12/31/18
+Updated: 01/06/19
 
-	* messageUpdate and messageDelete events have had the core functionality of their code removed from the main script and moved into functions to minimalize the main script.
-	* The embed for deleted messages will now use a different color then the message updated embed.
-	* The purge function has been adjusted to correctly account for attachments.
-	* The messageUpdate and messageDelete functions have been adjusted to account for message lengths larger than the maximum embed field limit.
-	* The messageUpdate and messageDelete functions have been adjusted to correctly account for attachments.
-	* A bit of logic has been added to account for potential changes to the command prefix in certain areas.
-	* A command has been added that allows users to see the welcome message at will.
-	* The welcome message was updated slightly.
+	* Added a new command, wikiresources, that returns commonly referred to wiki pages to new users.
+	* A typo was fixed in the bork command.
+	* The rip command has been reverted back to it's original functionality and been re-enabled. 
+		* There are no plans to restore the lost functionality. You guys ruined it.

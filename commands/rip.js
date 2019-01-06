@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/17/17
-    Last Updated: 12/02/18
+    Last Updated: 01/06/19
     Last Updated By: AllusiveBox
 
 */
@@ -15,7 +15,6 @@ const fs = require(`fs`);
 const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
-const roles = require('../files/roles.json');
 
 // Command Stuff
 const command = {
@@ -123,6 +122,7 @@ module.exports.run = async (bot, message, args=null) => {
         return disabledCommand(command.name, message);
     }
 
+    /*
     if(message.mentions.everyone || message.content.includes("everyone") || message.content.includes("here")) {
 	debug(`${message.author} tried to make the bot ping everyone`);
         if (message.channel.type !== "dm") {
@@ -139,6 +139,7 @@ module.exports.run = async (bot, message, args=null) => {
         let respectTo = args.slice(0).join(" ");
         return message.channel.send(`${message.author} has paid respect to ${respectTo}! RIP!`);
     }
+    */
 
     // Get Counter
     try {
