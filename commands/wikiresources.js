@@ -2,10 +2,11 @@
     Command Name: wikiresources.js
     Function: DMs recommended urls from the Chrono X wiki
     Clearance: none
-	Default Enabled: Yes
+    Default Enabled: Yes
     Date Created: 01/05/19
-    Last Updated: 01/05/19
-    Last Update By: DeCoded_Void
+    Last Updated: 01/06/19
+    Last Update By: AllusiveBox
+
 */
 
 // Load in Required Files
@@ -19,7 +20,7 @@ const { run: react } = require(`../functions/react.js`);
 // Command Stuff
 const command = {
     bigDescription: ("DMs the Standard Chips, Chip Trader, and Upgrade pages from the mmbnchronox wikia.\n"
-        + "Returns:\n\t" + config.returnsChannel),
+        + "Returns:\n\t" + config.returnsDM),
     description: "DMs recommended wiki articles to help you get started!",
     enabled: true,
     fullName: "Wiki Resources",
