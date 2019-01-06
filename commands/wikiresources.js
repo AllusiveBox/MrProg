@@ -13,6 +13,8 @@ const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const { debug } = require(`../functions/log.js`);
 const { run: disabledCommand } = require(`../functions/disabledCommand.js`);
+const { run: disabledDMs } = require(`../functions/disabledDMs`);
+const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
 const command = {
@@ -41,12 +43,17 @@ module.exports.run = async (bot, message) => {
     }
 
     // Build Reply
+    debug(`Generating the Wiki Resources reply for ${message.author.username}`);
     let reply = (`Here is a list of recommended wiki articles to help you obtain chips and upgrades for netbattling:\n`
         + "**Standard Chips**: <http://mmbnchronox.wikia.com/wiki/List_of_Standard_Chips> \n"
         + "**Chip Trader**: <http://mmbnchronox.wikia.com/wiki/Chip_Trader> \n"
         + "**Upgrades List**: <http://mmbnchronox.wikia.com/wiki/Upgrade> \n");
-
-    message.author.send(reply);
+	
+    // Send the Message
+    await react(message);
+    return message.author.send(reply).catch(error => {
+        return disabledDMs(message, reply);
+    });
 }
 
 module.exports.help = command;
