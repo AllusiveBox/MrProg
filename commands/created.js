@@ -13,6 +13,7 @@
 const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const {run: disabledDMs} = require(`../functions/disabledDMs.js`);
 
 // Command Variables
 const command = {
@@ -40,7 +41,10 @@ module.exports.run = async (bot, message) => {
     return message.author.send(`Account created on: **${createdOn}**`)
         .catch(error => {
             errorLog(error);
-            return message.channel.send(`*${error.toString()}*`);
+            //return message.channel.send(`*${error.toString()}*`);
+            disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+            + `Please check your privacy settings and try again.`);
+            return;
         });
 }
 
