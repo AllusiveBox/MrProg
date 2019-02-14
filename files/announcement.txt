@@ -1,4 +1,5 @@
-Updated: 02/13/19
+Updated: 02/14/19
 
-	* Updated the mod only avatar command's response for sanity's sake
-	* Updated the mistake command so mods can use it as well
+	* Updated the mod only !avatar command's response for sanity's sake
+	* Updated the !mistake command so mods can use it as well
+	* !created command now replies with a DM
