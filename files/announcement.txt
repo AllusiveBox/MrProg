@@ -1,6 +1,4 @@
-Updated: 01/06/19
+Updated: 02/13/19
 
-	* Added a new command, wikiresources, that returns commonly referred to wiki pages to new users.
-	* A typo was fixed in the bork command.
-	* The rip command has been reverted back to it's original functionality and been re-enabled. 
-		* There are no plans to restore the lost functionality. You guys ruined it.
+	* Updated the mod only avatar command's response for sanity's sake
+	* Updated the mistake command so mods can use it as well
