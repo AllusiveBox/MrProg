@@ -1,5 +1,5 @@
-Updated: 02/14/19
+Updated: 02/18/19
 
-	* Updated the mod only !avatar command's response for sanity's sake
-	* Updated the !mistake command so mods can use it as well
-	* !created command now replies with a DM
+	* Updated the debug logging code
+	* Updated the Welcome message on joining the server to indicate that DMs are *always* logged, even if a user opts out.
+	* Added a beep command, because we need to beep. Also, more image spam, yay.

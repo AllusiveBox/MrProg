@@ -4,8 +4,8 @@
     Version: 1
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 10/07/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 02/18/19
+    Last Update By: AllusiveBox
 
 **/
 
@@ -51,6 +51,8 @@ module.exports.run = (member) => {
         + `you have a verified e-mail linked to your Discord account.\n`
         + `Please note that by posting in ${serverName}, you are agreeing to the `
         + `rules found in ${rulesChannel}.\n\n`
+        + `In order to better maintain both the bot and server, certain things will be logged.`
+        + `This includes join dates, edited messages, deleted messages, and DMs sent to the server's bot(s).\n\n`
         + `In addition to the above, this bot will collect user data while you remain in ${serverName}, but `
         + `you can opt out of this at any time with the \\${prefix}optOut command.\n`
         + `To see what data the bot has on you, use the \\${prefix}profile command.\n\n`
