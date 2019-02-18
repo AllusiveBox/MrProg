@@ -1,9 +1,9 @@
 /**
  * Mr. Prog Bot Script
- * Version 4.2.1
+ * Version 4.2.2
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 12/31/18
+ * Last Updated: 01/26/19
  * Last Updated By: AllusiveBox
  * 
  */
@@ -50,7 +50,7 @@ var commandRegex = new RegExp("[^A-Za-z0-9]");
 
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
-        return error(error);
+        return errorLog(error);
     }
 
     let jsFile = files.filter(f => f.split(".").pop() === "js");
