@@ -4,8 +4,8 @@
     Clearance: none
     Default Enabled: Cannot be disabled.
     Date Created: 05/23/18
-    Last Updated: 10/20/18
-    Last Update By: AllusiveBox
+    Last Updated: 02/14/19
+    Last Update By: Th3_M4j0r
 
 */
 
@@ -13,12 +13,13 @@
 const Discord = require(`discord.js`);
 const config = require(`../files/config.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
+const {run: disabledDMs} = require(`../functions/disabledDMs.js`);
 
 // Command Variables
 const command = {
     bigDescription: ("This command will return the date and time you created your discord account.\n"
         + "Returns:\n\t"
-        + config.returnsChannel),
+        + config.returnsDM),
     description: "Find out when your account was made.",
     enabled: null,
     fullName: "Created",
@@ -37,10 +38,13 @@ module.exports.run = async (bot, message) => {
 
     let createdOn = await new Date((message.author.id / 4194304) + 1420070040000);
 
-    return message.channel.send(`Account created on: **${createdOn}**`)
+    return message.author.send(`Account created on: **${createdOn}**`)
         .catch(error => {
             errorLog(error);
-            return message.channel.send(`*${error.toString()}*`);
+            //return message.channel.send(`*${error.toString()}*`);
+            disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
+            + `Please check your privacy settings and try again.`);
+            return;
         });
 }
 

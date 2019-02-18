@@ -4,8 +4,8 @@
     Clearance: Mod+
 	Default Enabled: Cannot be disabled
     Date Created: 04/14/18
-    Last Updated: 11/23/18
-    Last Update By: AllusiveBox
+    Last Updated: 02/13/19
+    Last Update By: Th3_M4j0r
 
 */
 
@@ -103,7 +103,8 @@ module.exports.run = async (bot, message, args, sql) => {
                 return disabledDMs(message, reply);
             });
     } else {
-        bot.channels.get(logID).send(bot.users.get(member.id).avatarURL)
+        let userToGet = bot.users.get(member.id);
+        bot.channels.get(logID).send(`Avatar for ${userToGet.tag}\n` + userToGet.avatarURL)
             .then(function () {
                 return react(message);
             })

@@ -4,19 +4,21 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/13/18
-    Last Updated: 10/13/18
+    Last Updated: 02/13/19
     Last Updated By: AllusiveBox
 
 */
 
 // Load in Required Files
 const Discord = require(`discord.js`);
+const { run: hasElevatedPermissions } = require(`../functions/hasElevatedPermissions.js`);
 const config = require(`../files/config.json`);
 const userids = require(`../files/userids.json`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 
 // Command Variables
 const command = {
+    adminOnly: false,
     bigDescription: ("This command informs you of what the mistake was."
         + "Returns\n\t"
         + config.returnsChannel),
@@ -24,7 +26,7 @@ const command = {
     enabled: true, // true/false
     fullName: "Mistake",
     name: "mistake",
-    permissionLevel: "owner"
+    permissionLevel: "mod"
 }
 
 /**
@@ -33,11 +35,11 @@ const command = {
  * @param {Discord.Message} message
  */
 
-module.exports.run = async (bot, message) => {
+module.exports.run = async (bot, message, args, sql) => {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
-    if ((message.author.id === userids.maxID) || (message.author.id === userids.ownerID)) {
+    if (await hasElevatedPermissions(bot, message, adminOnly, sql, true)) {
         return message.channel.send({ file: "./img/mistake.png" }).catch(error => {
             errorLog(error);
             return message.channel.send(error.toString());
