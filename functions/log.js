@@ -1,16 +1,16 @@
 ﻿/** 
  *  
  *  Mr. Prog Logging Script
- *  Version: 1
+ *  Version: 2
  *  Date Created: 09/21/18
- *  Last Updated: 10/08/18
+ *  Last Updated: 01/26/19
  *  Last Updated By: AllusiveBox
  *
  */
 
 // Load in Required Libraries and Files
-const Logger = require(`../classes/Logger.js`);
-const config = require(`../files/config.json`);
+const Logger = require('../classes/Logger.js');
+const { debugSet } = require('../files/config.json');
 
 /**
  * 
@@ -20,7 +20,7 @@ const config = require(`../files/config.json`);
 async function debugLogger(string) {
     let debug = new Logger("DebugLogger");
 
-    debug.log(string, config.debug);
+    debug.log(string, debugSet);
 }
 
 /**
@@ -31,7 +31,6 @@ async function debugLogger(string) {
 async function errorLogger(error) {
     let errorLogger = new Logger("ErrorLogger");
 
-    //errorLogger.log(error);
     errorLogger.log(error.stack);
 }
 
