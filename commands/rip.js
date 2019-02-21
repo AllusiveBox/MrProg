@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/17/17
-    Last Updated: 01/06/19
+    Last Updated: 02/21/19
     Last Updated By: AllusiveBox
 
 */
@@ -163,12 +163,12 @@ module.exports.run = async (bot, message, args=null) => {
     debug(`Successfully saved!`);
 
     // Build the Reply
-    let reply = `${counter.rip.total} `;
+    let reply = "";
 
     if (counter.rip.total > 1) {
-        reply = (reply + "people have paid respect to fallen Mr. Progs.");
+        reply = (`${counter.rip.total} people have paid respect to fallen ${bot.user.username}.`);
     } else if (counter.rip.total === 1) {
-        reply = (reply + "person has paid respect to fallen Mr. Progs.");
+        reply = (`${counter.rip.total} person has paid respect to fallen ${bot.user.username}`);
     } else {
         reply = `How did you get here, ${message.author}? Please don't do that again.`;
     }
