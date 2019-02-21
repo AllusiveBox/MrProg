@@ -4,8 +4,8 @@
     Version: 1
     Author: AllusiveBox
     Date Created: 12/30/18
-    Date Last Updated: 12/31/18
-    Last Update By: AllusiveBox
+    Date Last Updated: 02/20/19
+    Last Update By: DeCoded_Void
 
 **/
 
@@ -87,8 +87,8 @@ module.exports.messageUpdate = async (bot, oldMessage, newMessage) => {
         });
     }
 
-    // Set the Message Channel
-    updateMessageEmbed.addField("Channel", oldMessage.channel.name);
+    // Set the Message Channel and gives the Message Context
+    updateMessageEmbed.addField("Channel", `#${oldMessage.channel.name} - [Context](${newMessage.url})`);
 
     // Set the Update Time
     updateMessageEmbed.addField("Updated On", new Date());
