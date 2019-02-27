@@ -1,5 +1,3 @@
-Updated: 02/21/19
+Updated: 02/27/19
 
-	* Updated the RIP command to use the bots name, instead of just defaulting to "Mr. Prog." This brings me much more joy.
-	* A slight change was made to how logging edited messages is done. A URL to the link message should now also be included.
-	* In an effort to prevent image spam, the beep command now has a cooldown of five minutes. It will still beep back, but less beep will be included.
+	* The "!DeleteMe" command should now work if DMed

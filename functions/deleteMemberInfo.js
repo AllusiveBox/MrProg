@@ -28,7 +28,7 @@ module.exports.run = async (bot, member, sql) => {
     // Check if Member is in User ID List
     Object.keys(userids).forEach(function (key) {
         if (userids[key] === member.id) { // If Member is in User ID List...
-            return debug(`Preserving data on ${member.user.username} due to being in `
+            return debug(`Preserving data on ${member.username} due to being in `
                 + `the userids list.`);
         }
     });
