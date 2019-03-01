@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/13/18
-    Last Updated: 02/13/19
+    Last Updated: 02/28/19
     Last Updated By: AllusiveBox
 
 */
@@ -39,7 +39,7 @@ module.exports.run = async (bot, message, args, sql) => {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
-    if (await hasElevatedPermissions(bot, message, adminOnly, sql, true)) {
+    if (await hasElevatedPermissions(bot, message, command.adminOnly, sql, true)) {
         return message.channel.send({ file: "./img/mistake.png" }).catch(error => {
             errorLog(error);
             return message.channel.send(error.toString());
