@@ -10,7 +10,7 @@
 
 // Load in Required Libraries and Files
 const Logger = require('../classes/Logger.js');
-const { debug: debugSet } = require('../files/config.json');
+const config = require('../files/config.json');
 
 /**
  * 
@@ -20,7 +20,7 @@ const { debug: debugSet } = require('../files/config.json');
 async function debugLogger(string) {
     let debug = new Logger("DebugLogger");
 
-    debug.log(string, debugSet);
+    debug.log(string, config.debug);
 }
 
 /**
