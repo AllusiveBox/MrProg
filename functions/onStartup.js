@@ -22,17 +22,18 @@ module.exports.run = async (bot, args) => {
     // Read in Passed Along Arguments
     passedArgs = await args[2];
     try {
+		let message = "";
         switch (passedArgs) {
             case null:
             case undefined:
             case '0':
                 break;
             case '99':
-                let message = (`Update Complete.`);
+                message = (`Update Complete.`);
                 bot.users.get(userids.ownerID).send(message);
                 break;
             default:
-                let message = (`Starting up...\n`
+                message = (`Starting up...\n`
                     + `Previous iteration terminated with error code: ${passedArgs}`);
                 if (args[3]) {
                     let additioalArgs = args.slice(2).join(" ");
