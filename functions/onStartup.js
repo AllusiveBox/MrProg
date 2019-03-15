@@ -32,7 +32,7 @@ module.exports.run = async (bot, args) => {
                 bot.users.get(userids.ownerID).send(message);
                 break;
             default:
-                message = (`Starting up...\n`
+                let message = (`Starting up...\n`
                     + `Previous iteration terminated with error code: ${passedArgs}`);
                 if (args[3]) {
                     let additioalArgs = args.slice(2).join(" ");
