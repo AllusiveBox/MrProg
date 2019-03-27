@@ -6,8 +6,8 @@
   "audit": true,
   "avatar": true,
   "ban": true,
-  "bentquote": true,
   "beep": true,
+  "bentquote": true,
   "bigoof": true,
   "bork": true,
   "created": true,
@@ -50,6 +50,7 @@
   "promote": true,
   "purge": true,
   "question": true,
+  "reminder": true,
   "restart": true,
   "rip": true,
   "setbattlecode": true,
@@ -63,7 +64,7 @@
   "story": true,
   "stream": true,
   "update": true,
-  "wiki": true,
   "welcome": true,
+  "wiki": true,
   "wikiresources": true
 }
