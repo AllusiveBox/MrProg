@@ -45,7 +45,7 @@ module.exports.run = async (bot, message, args, sql) => {
     debug(`I am inside the ${command.fullName} command.`);
 
     // DM Check
-    if (await dmCheck(message, command.fullName)) return; // Return on DM channel
+    //if (await dmCheck(message, command.fullName)) return; // Return on DM channel
 
     //SQL Stuff
 
@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, args, sql) => {
             return disabledDMs(message, reply);
         });
     } else {
-        deleteMemberInfo(bot, message.member, sql).catch(error => {
+        deleteMemberInfo(bot, message.author, sql).catch(error => {
             errorLog(error);
             react(message, false);
             return message.channel.send(`*${error.toString()}*`);

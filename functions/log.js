@@ -3,14 +3,14 @@
  *  Mr. Prog Logging Script
  *  Version: 2
  *  Date Created: 09/21/18
- *  Last Updated: 01/26/19
+ *  Last Updated: 02/18/19
  *  Last Updated By: AllusiveBox
  *
  */
 
 // Load in Required Libraries and Files
 const Logger = require('../classes/Logger.js');
-const { debugSet } = require('../files/config.json');
+const config = require('../files/config.json');
 
 /**
  * 
@@ -20,7 +20,7 @@ const { debugSet } = require('../files/config.json');
 async function debugLogger(string) {
     let debug = new Logger("DebugLogger");
 
-    debug.log(string, debugSet);
+    debug.log(string, config.debug);
 }
 
 /**
