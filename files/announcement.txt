@@ -1,4 +1,4 @@
-Updated: 03/27/19
+Updated: 03/31/19
 
-	* The "deleteMe" command should now work if DMed
-	* A new command, "reminder" has been added in case you forget that DMs are logged. 
+	* The typo in the "iam" command has been fixed. 
+	* A new command has been added. Check the help list to find out what it is...
