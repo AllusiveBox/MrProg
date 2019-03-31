@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 01/05/19
-    Last Update By: DeCoded_Void
+    Last Updated: 03/31/19
+    Last Update By: Th3_M4j0r
 
 */
 
@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args) => {
 
     if (usedRecently.has(message.author.id)) {
         debug(`${message.author.username} has used the ${command.fullName} command recently.`);
-        let reply = `I am sorry, ${message.author}, you cannot use this command agian so soon.`;
+        let reply = `I am sorry, ${message.author}, you cannot use this command again so soon.`;
         await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
