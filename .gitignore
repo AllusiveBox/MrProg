@@ -90,3 +90,6 @@ purgedMessages.txt
 files/textfaces.txt
 files/textfaces.txt
 .vscode/*
+
+# bootLog
+bootLog.txt

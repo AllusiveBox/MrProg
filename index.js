@@ -34,10 +34,6 @@ const { command: commandLog, debug, error: errorLog} = require(`./functions/log.
 const bot = new Discord.Client({ disableEveryone: true });
 bot.commands = new Discord.Collection();
 
-// Open SQ Database
-const sql = new betterSql();
-sql.open(`./files/userinfo.sqlite`);
-
 // readline Stuff
 const rl = readline.createInterface({
     input: process.stdin,
@@ -48,14 +44,21 @@ const rl = readline.createInterface({
 falseCommandUsedRecently = new Set();
 var commandRegex = new RegExp("[^A-Za-z0-9]");
 
+let logMessage = "\t====================== Starting Script ======================\n\n";
+let bootLog = logMessage;
+console.log(logMessage);
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
-        return errorLog(error);
+        logMessage = `[ ERROR ]\t ${error}`;
+        bootLog += logMessage + "\n";
+        return console.log("\x1b[31m%s\x1b[0m", logMessage);
     }
 
     let jsFile = files.filter(f => f.split(".").pop() === "js");
     if (jsFile.length <= 0) {
-        return debug(`Unable to locate any commands!`);
+        logMessage = "[ ERROR ]\t Unable to locate commands!";
+        bootLog += logMessage + "\n";
+        return console.log("\x1b[31m%s\x1b[0m", logMessage);
     }
 
     jsFile.forEach(async (file, i) => {
@@ -63,20 +66,69 @@ fs.readdir(`./commands/`, async (error, files) => {
 
         // Test if Including Command
         if (!toInclude) {
-            return debug(`${file} not loaded!`);
+            logMessage = `[ WARN  ]\t ${file} command not loaded!`;
+            console.log("\x1b[33m%s\x1b[0m", logMessage);
+        } else {
+            logMessage = `[ INFO  ]\t ${file} command loaded`;
+            console.log(logMessage);
         }
 
-        // Require Command
+        bootLog += logMessage + "\n";
+
         let props = require(`./commands/${file}`);
 
         bot.commands.set(props.help.name.toLowerCase(), props);
     });
 });
 
+// Open SQ Database
+const sql = new betterSql();
+logMessage = "[ INFO  ]\t Opening "
+logMessage = "[ INFO  ]\t Preparing Statements";
+console.log(logMessage);
+try {
+    let path = `./files/userinfo.sqlite`;
+    logMessage = `[ INFO  ]\t Opening sqlite DB at ${path}`;
+    bootLog += logMessage + "\n";
+    console.log(logMessage);
+    logMessage = "[ INFO  ]\t Preparing Statements";
+    bootLog += logMessage + "\n";
+    console.log(logMessage);
+    sql.open(path);
+    logMessage = `[ INFO  ]\t Statements loaded`;
+    console.log(logMessage);
+} catch (error) {
+    logMessage = `[ ERROR ]\t ${error}`;
+    console.log("\x1b[31m%s\x1b[0m", logMessage);
+}
+
+bootLog += logMessage + "\n";
+
 // Bot on Startup
 bot.on("ready", async () => {
-    debug(`${bot.user.username} is starting up...`);
-    bot.commands.get("setstatus").updateStatus(bot, config.defaultStatus);
+    //debug(`${bot.user.username} is starting up...`);
+    //bot.commands.get("setstatus").updateStatus(bot, config.defaultStatus);
+    logMessage = `[ INFO  ]\t Setting status to ${config.defaultStatus}`;
+    bootLog += logMessage + "\n";
+    console.log(logMessage);
+    try {
+        bot.user.setActivity(config.defaultStatus);
+        logMessage = `[ INFO  ]\t Status Successfully updated`;
+        console.log(logMessage);
+    } catch (error) {
+        logMessage = `[ ERROR ]\t ${error}`;
+        console.log("\x1b[31m%s\x1b[0m", logMessage);
+
+    }
+    bootLog += logMessage + "\n";
+
+    fs.writeFile("bootLog.txt", bootLog, function (error, bootLog) {
+        if (error) {
+            error(error);
+        } else {
+            debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
+        }
+    });
     onStartup(bot, process.argv);
 });
 
