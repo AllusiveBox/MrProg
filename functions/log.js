@@ -3,7 +3,7 @@
  *  Mr. Prog Logging Script
  *  Version: 2
  *  Date Created: 09/21/18
- *  Last Updated: 02/18/19
+ *  Last Updated: 04/10/19
  *  Last Updated By: AllusiveBox
  *
  */
@@ -85,7 +85,49 @@ async function dmLogger(message) {
     }
 }
 
+/**
+ * 
+ * @param {Discord.Message} message
+ * @param {?String} [logType="info"]
+ * @return {String}
+ */
+
+var bootLog;
+function bootLogger(message, logType = "info") {
+    let bootLogger = new Logger("BootLogger");
+    bootLog = bootLog ? bootLog : "";
+    if (!message) return bootLog;
+    switch (logType) {
+        case "info":
+            bootLogger.info(message);
+            bootLog +=  `[ INFO  ]\t ${message}\n`
+            break;
+        case "warn":
+            bootLogger.warn(message);
+            bootLog += `[ WARN  ]\t ${message}\n`
+            break;
+        case "alert":
+            bootLogger.alert(message);
+            bootLog += `[ ALERT ]\t ${message}\n`
+            break;
+        case "error":
+            bootLogger.error(message);
+            bootLog += `[ ERROR ]\t ${message}\n`
+            break;
+        case "none":
+            bootLogger.none(message);
+            bootLog += message;
+            break;
+        default:
+            console.log(`[UNKNOWN]\t ${message}`);
+            bootLog += `[UNKNOWN]\t ${message}\n`
+            break;
+    }
+    return bootLog;
+}
+
 module.exports.debug = debugLogger;
 module.exports.error = errorLogger;
 module.exports.command = commandLogger;
 module.exports.dmLog = dmLogger;
+module.exports.boot = bootLogger;

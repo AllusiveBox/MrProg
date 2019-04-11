@@ -3,7 +3,7 @@
  * Version 4.2.2
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 01/26/19
+ * Last Updated: 04/10/19
  * Last Updated By: AllusiveBox
  * 
  */
@@ -28,15 +28,11 @@ const { run: memberJoin } = require(`./functions/memberJoin.js`);
 const { run: memberLeave } = require(`./functions/memberLeave.js`);
 const { run: onStartup } = require(`./functions/onStartup.js`);
 const { run: score } = require(`./functions/score.js`);
-const { command: commandLog, debug, error: errorLog} = require(`./functions/log.js`);
+const { command: commandLog, debug, error: errorLog, boot} = require(`./functions/log.js`);
 
 // Declare the Bot Stuff
 const bot = new Discord.Client({ disableEveryone: true });
 bot.commands = new Discord.Collection();
-
-// Open SQ Database
-const sql = new betterSql();
-sql.open(`./files/userinfo.sqlite`);
 
 // readline Stuff
 const rl = readline.createInterface({
@@ -48,14 +44,15 @@ const rl = readline.createInterface({
 falseCommandUsedRecently = new Set();
 var commandRegex = new RegExp("[^A-Za-z0-9]");
 
+boot("\t====================== Starting Script ======================\n\n", "none");
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
-        return errorLog(error);
+        return boot(error, "error");
     }
 
     let jsFile = files.filter(f => f.split(".").pop() === "js");
     if (jsFile.length <= 0) {
-        return debug(`Unable to locate any commands!`);
+        return boot(error, "error");
     }
 
     jsFile.forEach(async (file, i) => {
@@ -63,21 +60,52 @@ fs.readdir(`./commands/`, async (error, files) => {
 
         // Test if Including Command
         if (!toInclude) {
-            return debug(`${file} not loaded!`);
+            return boot(`${file} commad not loaded`, "warn");
+        } else {
+            boot(`${file} command loaded`);
         }
 
-        // Require Command
+
         let props = require(`./commands/${file}`);
 
         bot.commands.set(props.help.name.toLowerCase(), props);
     });
 });
 
+// Open SQ Database
+const sql = new betterSql();
+try {
+    let path = `./files/userinfo.sqlite`;
+    boot(`Opening sqlite DB at ${path}`);
+    sql.open(path);
+    boot("Preparing Statements");
+    boot("Statements Loaded");
+} catch (error) {
+    boot(error, "error");
+}
+
 // Bot on Startup
 bot.on("ready", async () => {
-    debug(`${bot.user.username} is starting up...`);
-    bot.commands.get("setstatus").updateStatus(bot, config.defaultStatus);
-    onStartup(bot, process.argv);
+    boot(`Setting status to ${config.defaultStatus}`);
+    try {
+        bot.user.setActivity(config.defaultStatus);
+        boot(`Status Successfully updated`);
+    } catch (error) {
+        boot(error, "error");
+    }
+
+    await onStartup(bot, process.argv);
+
+    fs.writeFile("bootLog.txt", boot(), function (error) {
+        if (error) {
+            errorLog(error);
+        } else {
+            debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
+            // Load in Log Channel ID
+            let logID = channels.log;
+            if (logID) bot.channels.get(logID).send({ file: `./bootLog.txt` });
+        }
+    });
 });
 
 // Bot on Unexpected Error
@@ -104,6 +132,9 @@ bot.on("disconnect", async () => {
 // Unhandled Rejection
 process.on("unhandledRejection", async (reason, p) => {
     await errorLog(reason);
+    if (reason.includes("getaddrinfo")) {
+        return process.exit(4);
+    }
 });
 
 // Bot on Member Joining Server
