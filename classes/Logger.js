@@ -4,7 +4,7 @@
  * Version: 1
  * Author: AllusiveBox
  * Date Started: 09/21/18
- * Date Last Updated: 02/28/19
+ * Date Last Updated: 04/10/19
  * Last Updated By: AllusiveBox
  * 
  */
@@ -60,6 +60,46 @@ class Logger {
 
     logln(logText, debug = true) {
         this.log(`${logText}\n`, debug);
+    }
+
+    /**
+     * 
+     * @param {String} logText
+     */
+    info(logText) {
+        console.log(`[ INFO  ]\t ${logText}`);
+    }
+
+    /**
+     * 
+     * @param {String} logText
+     */
+    warn(logText) {
+        console.log("\x1b[33m%s\x1b[0m", `[ WARN  ]\t ${logText}`);
+    }
+
+    /**
+     * 
+     * @param {String} logText
+     */
+    alert(logText) {
+        console.log("\x1b[41m%s\x1b[0m", `[ ALERT ]\t ${logText}`);
+    }
+
+    /**
+     * 
+     * @param {String} logText
+     */
+    error(logText) {
+        console.log("\x1b[31m%s\x1b[0m", `[ ERROR ]\t ${logText}`);
+    }
+
+    /**
+     * 
+     * @param {String} logText
+     */
+    none(logText) {
+        console.log(logText);
     }
 
     /**

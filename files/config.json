@@ -1,11 +1,11 @@
 ﻿{
   "about": {
     "author": "AllusiveBox",
-    "lastUpdated": "04/01/2019",
-    "verNum": "4.3.8"
+    "lastUpdated": "04/10/2019",
+    "verNum": "4.5.0"
   },
   "auditColor": "#800000",
-  "debug": true,
+  "debug": false,
   "defaultStatus": "!help for a list of commands.",
   "disabledMessage": "I am sorry, this command is currently disabled.",
   "fail": "❎",

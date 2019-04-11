@@ -3,7 +3,7 @@
  * Version 4.2.2
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 01/26/19
+ * Last Updated: 04/10/19
  * Last Updated By: AllusiveBox
  * 
  */
@@ -28,7 +28,7 @@ const { run: memberJoin } = require(`./functions/memberJoin.js`);
 const { run: memberLeave } = require(`./functions/memberLeave.js`);
 const { run: onStartup } = require(`./functions/onStartup.js`);
 const { run: score } = require(`./functions/score.js`);
-const { command: commandLog, debug, error: errorLog} = require(`./functions/log.js`);
+const { command: commandLog, debug, error: errorLog, boot} = require(`./functions/log.js`);
 
 // Declare the Bot Stuff
 const bot = new Discord.Client({ disableEveryone: true });
@@ -44,21 +44,15 @@ const rl = readline.createInterface({
 falseCommandUsedRecently = new Set();
 var commandRegex = new RegExp("[^A-Za-z0-9]");
 
-let logMessage = "\t====================== Starting Script ======================\n\n";
-let bootLog = logMessage;
-console.log(logMessage);
+boot("\t====================== Starting Script ======================\n\n", "none");
 fs.readdir(`./commands/`, async (error, files) => {
     if (error) {
-        logMessage = `[ ERROR ]\t ${error}`;
-        bootLog += logMessage + "\n";
-        return console.log("\x1b[31m%s\x1b[0m", logMessage);
+        return boot(error, "error");
     }
 
     let jsFile = files.filter(f => f.split(".").pop() === "js");
     if (jsFile.length <= 0) {
-        logMessage = "[ ERROR ]\t Unable to locate commands!";
-        bootLog += logMessage + "\n";
-        return console.log("\x1b[31m%s\x1b[0m", logMessage);
+        return boot(error, "error");
     }
 
     jsFile.forEach(async (file, i) => {
@@ -66,14 +60,11 @@ fs.readdir(`./commands/`, async (error, files) => {
 
         // Test if Including Command
         if (!toInclude) {
-            logMessage = `[ WARN  ]\t ${file} command not loaded!`;
-            console.log("\x1b[33m%s\x1b[0m", logMessage);
+            return boot(`${file} commad not loaded`, "warn");
         } else {
-            logMessage = `[ INFO  ]\t ${file} command loaded`;
-            console.log(logMessage);
+            boot(`${file} command loaded`);
         }
 
-        bootLog += logMessage + "\n";
 
         let props = require(`./commands/${file}`);
 
@@ -83,53 +74,38 @@ fs.readdir(`./commands/`, async (error, files) => {
 
 // Open SQ Database
 const sql = new betterSql();
-logMessage = "[ INFO  ]\t Opening "
-logMessage = "[ INFO  ]\t Preparing Statements";
-console.log(logMessage);
 try {
     let path = `./files/userinfo.sqlite`;
-    logMessage = `[ INFO  ]\t Opening sqlite DB at ${path}`;
-    bootLog += logMessage + "\n";
-    console.log(logMessage);
-    logMessage = "[ INFO  ]\t Preparing Statements";
-    bootLog += logMessage + "\n";
-    console.log(logMessage);
+    boot(`Opening sqlite DB at ${path}`);
     sql.open(path);
-    logMessage = `[ INFO  ]\t Statements loaded`;
-    console.log(logMessage);
+    boot("Preparing Statements");
+    boot("Statements Loaded");
 } catch (error) {
-    logMessage = `[ ERROR ]\t ${error}`;
-    console.log("\x1b[31m%s\x1b[0m", logMessage);
+    boot(error, "error");
 }
-
-bootLog += logMessage + "\n";
 
 // Bot on Startup
 bot.on("ready", async () => {
-    //debug(`${bot.user.username} is starting up...`);
-    //bot.commands.get("setstatus").updateStatus(bot, config.defaultStatus);
-    logMessage = `[ INFO  ]\t Setting status to ${config.defaultStatus}`;
-    bootLog += logMessage + "\n";
-    console.log(logMessage);
+    boot(`Setting status to ${config.defaultStatus}`);
     try {
         bot.user.setActivity(config.defaultStatus);
-        logMessage = `[ INFO  ]\t Status Successfully updated`;
-        console.log(logMessage);
+        boot(`Status Successfully updated`);
     } catch (error) {
-        logMessage = `[ ERROR ]\t ${error}`;
-        console.log("\x1b[31m%s\x1b[0m", logMessage);
-
+        boot(error, "error");
     }
-    bootLog += logMessage + "\n";
 
-    fs.writeFile("bootLog.txt", bootLog, function (error, bootLog) {
+    await onStartup(bot, process.argv);
+
+    fs.writeFile("bootLog.txt", boot(), function (error) {
         if (error) {
-            error(error);
+            errorLog(error);
         } else {
             debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
+            // Load in Log Channel ID
+            let logID = channels.log;
+            if (logID) bot.channels.get(logID).send({ file: `./bootLog.txt` });
         }
     });
-    onStartup(bot, process.argv);
 });
 
 // Bot on Unexpected Error
@@ -156,6 +132,9 @@ bot.on("disconnect", async () => {
 // Unhandled Rejection
 process.on("unhandledRejection", async (reason, p) => {
     await errorLog(reason);
+    if (reason.includes("getaddrinfo")) {
+        return process.exit(4);
+    }
 });
 
 // Bot on Member Joining Server
