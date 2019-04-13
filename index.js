@@ -3,7 +3,7 @@
  * Version 4.2.2
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 04/10/19
+ * Last Updated: 04/13/19
  * Last Updated By: AllusiveBox
  * 
  */
@@ -132,7 +132,7 @@ bot.on("disconnect", async () => {
 // Unhandled Rejection
 process.on("unhandledRejection", async (reason, p) => {
     await errorLog(reason);
-    if (reason.includes("getaddrinfo")) {
+    if ((reason) && (reason.toString().includes("getaddrinfo"))) {
         return process.exit(4);
     }
 });
