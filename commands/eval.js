@@ -4,8 +4,8 @@
     Clearance: Owner Only
   	Default Enabled: Disabled
     Date Created: 10/17/17
-    Last Updated: 10/06/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 04/23/19
+    Last Update By: AllusiveBox
 
 */
 
@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, args, sql) => {
     debug(`I am inside the ${command.fullName} command.`);
 
     // Owner ID Check
-    if (message.author.id !== userids.ownerID) {
+    if (message.author.id !== userids.ownerID && message.author.id !== userids.majorID) {
         let reply = (`WARNING. ATTEMPTED USE OF EVAL COMMAND BY `
             + `**${message.author.username}**`);
         debug(reply);
