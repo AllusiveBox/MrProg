@@ -4,8 +4,8 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 09/08/18
-    Date Last Updated: 11/24/18
-    Last Update By: AllusiveBox
+    Date Last Updated: 04/23/19
+    Last Update By: The Major
 
 **/
 
@@ -14,12 +14,11 @@ const sql = require(`sqlite`);
 const { debug, error: errorLog } = require(`../functions/log.js`);
 const { NotConnectedError } = require(`../classes/CustomErrors.js`);
 
-
 //the strings for each statement to prepare after connecting
 //prepared statements are faster and also safer
 const insertUserString = "INSERT INTO userinfo (userId, userName, battlecode, favechip, "
-    + "navi, clearance, points, level, optOut, joinDate, leaveDate, firstJoinDate) VALUES (?, ?, ?, ?, ?, ?, "
-    + "?, ?, ?, ?, ?, ?)";
+    + "navi, clearance, points, level, optOut, joinDate, leaveDate, firstJoinDate, lastNameUpdate) VALUES (?, ?, ?, ?, ?, ?, "
+    + "?, ?, ?, ?, ?, ?, ?)";
 const setPointsString = "UPDATE userinfo SET points = ?, level = "
     + "?, userName = ? WHERE userId = ?";
 const promoteString = "UPDATE userinfo SET clearance = ? WHERE userId = ?"; //don't know how AllusiveBox does this yet
@@ -39,6 +38,7 @@ const optOutString = "UPDATE userinfo SET optOut = 1 WHERE userId = ?";
 const optInString = "UPDATE userinfo SET optOut = 0 WHERE userId = ?";
 const userLookupString = "SELECT * FROM userinfo WHERE userID = ? OR userID = ? "
     + "OR userName = ? OR userName = ?";
+const userUpdatedNicknameString = "UPDATE userinfo SET lastNameUpdate = ? WHERE userId = ?";
 
 
 
@@ -74,6 +74,7 @@ module.exports = class betterSql {
         this._optOutStmt = await this._Database.prepare(optOutString);
         this._optInStmt = await this._Database.prepare(optInString);
         this._userLookupStmt = await this._Database.prepare(userLookupString);
+        this._userUpdatedNicknameStmt = await this._Database.prepare(userUpdatedNicknameString);
         this._dbOpen = true;
         return true;
     }
@@ -114,8 +115,9 @@ module.exports = class betterSql {
         if (!this._dbOpen) {
             throw new NotConnectedError();
         }
+        let lastNameUpdate = new Date(0); //use time 0 for new users
         await this._userInsertStmt.run(
-            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0, joinDate, null, joinDate);
+            userId, username, "0000-0000-0000", null, "megaman", null, 0, 0, 0, joinDate, null, joinDate, lastNameUpdate);
     }
 
     /**
@@ -285,6 +287,21 @@ module.exports = class betterSql {
         await this._userLeftStmt.run(new Date(), userId);
     }
 
+    /**
+     * A user has updated their nickname
+     * Put a day seven days from now into the check for when they can next
+     * 
+     * @param {Discord.Snowflake} userId 
+     */
+    async userUpdatedNickname(userId) {
+        debug(`I am in the sql.userUpdatedNickname function`);
+        if(!this._dbOpen) {
+            throw new NotConnectedError();
+        }
+        let cooldownEnd = new Date();
+        cooldownEnd.setDate(cooldownEnd.getDate() + 7);
+        await this._userUpdatedNicknameStmt.run(cooldownEnd, userId);
+    }
 
     /**
      * 

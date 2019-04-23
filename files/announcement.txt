@@ -1,6 +1,4 @@
-Updated: 04/10/19
+Updated: 04/23/19
 
-	* The April Fools command was removed.
-	* A lot of behind the scenes logging things were changed. 
-	* Hopefully the annoying discord API error that the bot was getting that prevented a successful hookup should now be fixed, or at the very least, handled correctly so the bot doesn't hang in limbo.
-	* Uhhh, I did a few other things too. I really can't remember and can't be bothered to log in the commit log. Nothing really important to normal users, though. Mods might thank me, though.
+	* Some behind the scenes changes so that less data is lost on restarts, like when a nickname can be changed next
+	* Kicks and Bans by command now show who used it in the log

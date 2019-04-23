@@ -4,8 +4,8 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 10/27/18
-    Last Update By: AllusiveBox
+    Date Last Updated: 04/23/19
+    Last Update By: The Major
 
 **/
 
@@ -68,6 +68,7 @@ module.exports.run = async (bot, message, member, reason) => {
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
         .addField("Banned On", new Date())
+        .addField("Banned By", message.author.tag)
         .addField("Reason", reason);
 
     // Check if there is an ID Now

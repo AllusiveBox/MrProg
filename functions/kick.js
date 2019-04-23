@@ -4,8 +4,8 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 10/27/18
-    Last Update By: AllusiveBox
+    Date Last Updated: 04/23/19
+    Last Update By: The Major
 
 **/
 
@@ -70,6 +70,7 @@ module.exports.run = async (bot, message, member, reason, sql) => {
         .addField("Member Name", member.user.username)
         .addField("Member ID", member.user.id)
         .addField("Kicked On", new Date())
+        .addField("Kicked By", message.author.tag)
         .addField("Reason", reason);
 
     // Check if there is an ID Now

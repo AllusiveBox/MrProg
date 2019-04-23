@@ -21,7 +21,7 @@ const { run: dmCheck } = require(`../functions/dmCheck.js`);
 const { run: react } = require(`../functions/react.js`);
 
 // Command Stuff
-var usedRecently = new Set();
+//var usedRecently = new Set();
 
 const command = {
     bigDescription: ("Changes your nickname in the server, "
@@ -41,9 +41,10 @@ const command = {
  * @param {Discord.Client} bot
  * @param {Discord.Message} message
  * @param {string[]} args
+ * @param {betterSql} sql
  */
 
-module.exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args, sql) => {
     // Debug to Console
     debug(`I am inside the ${command.fullName} command.`);
 
@@ -56,7 +57,19 @@ module.exports.run = async (bot, message, args) => {
         return react(message, false); // Return on DM channel
     }
 
-    if (usedRecently.has(message.author.id)) {
+    /*if (usedRecently.has(message.author.id)) {
+        debug(`${message.author.username} has used the ${command.fullName} command recently.`);
+        let reply = `I am sorry, ${message.author}, you cannot use this command again so soon.`;
+        await react(message, false);
+        return message.author.send(reply).catch(error => {
+            disabledDMs(message, reply);
+        });
+    }*/
+
+    let userRow = await sql.getUserRow(message.author.id);
+    let lastUpdate = new Date(userRow.lastNameUpdate);
+    let rightNow = new Date();
+    if(lastUpdate.getTime() > rightNow.getTime()) {//true if it has not yet been seven days
         debug(`${message.author.username} has used the ${command.fullName} command recently.`);
         let reply = `I am sorry, ${message.author}, you cannot use this command again so soon.`;
         await react(message, false);
@@ -107,12 +120,12 @@ module.exports.run = async (bot, message, args) => {
     }
 
     // Update the Set of Users that have Used the Command
-    usedRecently.add(message.author.id);
+    /*usedRecently.add(message.author.id);
     setTimeout(() => {
         debug(`Removing ${message.author.id} from the set...`);
         usedRecently.delete(message.author.id);
-    }, 36288000); // Remove After 7 Days.
-
+    }, 36288000); // Remove After 7 Days.*/
+    await sql.userUpdatedNickname(message.author.id);
     // Load in Log channel ID
     let logID = channels.log;
 
