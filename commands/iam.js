@@ -68,7 +68,7 @@ module.exports.run = async (bot, message, args, sql) => {
 
     let userRow = await sql.getUserRow(message.author.id);
     let num = Number(userRow.lastNameUpdate);
-    let num = num | 0;
+    num = num | 0;
     let lastUpdate = new Date(num);
     let rightNow = new Date();
     if(lastUpdate.getTime() > rightNow.getTime()) {//true if it has not yet been seven days
