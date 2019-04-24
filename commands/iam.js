@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 03/31/19
-    Last Update By: Th3_M4j0r
+    Last Updated: 04/23/19
+    Last Update By: The Major
 
 */
 
@@ -67,7 +67,9 @@ module.exports.run = async (bot, message, args, sql) => {
     }*/
 
     let userRow = await sql.getUserRow(message.author.id);
-    let lastUpdate = new Date(userRow.lastNameUpdate);
+    let num = Number(userRow.lastNameUpdate);
+    let num = num | 0;
+    let lastUpdate = new Date(num);
     let rightNow = new Date();
     if(lastUpdate.getTime() > rightNow.getTime()) {//true if it has not yet been seven days
         debug(`${message.author.username} has used the ${command.fullName} command recently.`);
