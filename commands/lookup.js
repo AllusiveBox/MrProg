@@ -4,8 +4,8 @@
     Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 07/19/18
-    Last Updated: 11/24/18
-    Last Updated By: AllusiveBox
+    Last Updated: 05/11/19
+    Last Updated By: The Major
 */
 
 // Load in Required Files
@@ -41,6 +41,7 @@ const command = {
         + "\t j => Includes the User's Join Date\n"
         + "\t b => Includes the User's Leave Date\n"
         + "\t g => Includes the User's First Join Date\n"
+        + "\t d => Includes the User's last nickname update time\n"
         + "Returns:\n\t"
         + "DM reply unless public flag is set"),
     description: "looks for a particular user in the database",
@@ -80,6 +81,7 @@ module.exports.run = async (client, message, args, sql) => {
     let includeJoinDate = false; //j
     let includeLeaveDate = false; //b
     let includeFirstJoinDate = false; //g
+    let includeNextNicknameUpdate = false; //d
 
 
     if (! await hasElevatedPermissions(client, message, command.adminOnly, sql)) return;
@@ -162,6 +164,10 @@ module.exports.run = async (client, message, args, sql) => {
             debug(`Setting First Join Date Flag.`);
             includeFirstJoinDate = true;
         }
+        if(params.includes('d')) {
+            debug(`Setting Next Nickname Update Flag`);
+            includeNextNicknameUpdate = true;
+        }
     }
 
     let toCheck = '';
@@ -239,6 +245,15 @@ module.exports.run = async (client, message, args, sql) => {
             if (includeAll || includeFirstJoinDate) {
                 reply += `User Original Join Date:\n\t ${new Date(row.firstJoinDate)}\n\n`;
                 userEmbed.addField("Original Join Date", new Date(row.firstJoinDate));
+            }
+            if(includeAll || includeNextNicknameUpdate) {
+                let nextNickname = row.lastNameUpdate;
+                if(nextNickname) {
+                    nextNickname = new Date(Number(nextNickname));
+                    nextNickname.setDate(nextNickname.getDate() - 7); 
+                }
+                reply += `User Last Nickname Update:\n\t ${nextNickname}\n\n`;
+                userEmbed.addField("Nickname Update:", nextNickname);
             }
             reply = "```" + reply + "```"
             if (publicMessage) {

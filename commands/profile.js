@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 05/22/18
-    Last Updated: 12/31/18
-    Last Update By: AllusiveBox
+    Last Updated: 05/11/19
+    Last Update By: The Major
 
 */
 
@@ -49,7 +49,11 @@ module.exports.run = async (client, message, args, sql) => {
         });
     }
     debug(`Generating userData for ${message.author.username}`);
-    
+    let nextNickname = row.lastNameUpdate;
+    if (nextNickname) {
+        nextNickname = new Date(Number(nextNickname));
+    }
+
     let userProfile = `${message.author}, this is the data that I have collected on you:\n`
         + `userID: ${row.userId || row.userID} (This data is provided by Discord's API. It is public data)\n`
         + `userName: ${row.userName} (This is stored to keep up with nicknames. Updates every time you increase point count. It is public data)\n`
@@ -63,6 +67,7 @@ module.exports.run = async (client, message, args, sql) => {
         + `joinDate: ${new Date(row.joinDate)} (Date you joined the server)\n\n`
         + `leftDate: ${row.leaveDate !== null ? new Date(row.leaveDate) : "N/A"} (Date you last left the server)\n\n`
         + `firstJoinDate: ${new Date(row.firstJoinDate)} (Date you originally joined the server)\n\n`
+        + `lastNameUpdate: ${nextNickname} (Next time you can update your nickname)\n\n`
         + `To prevent me from collecting information on you, use the ${config.prefix}optOut command.\n`
         + `To have me delete all the data I have on you, use the ${config.prefix}deleteMe command. (**Note: This won't change your opt-out status**)\n`
         + `**WARNING:** Use of the ${config.prefix}deleteMe command will _permanently_ delete all data recorded on you, with no way to restore it.`;
