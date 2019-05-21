@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 04/23/19
+    Last Updated: 05/13/19
     Last Update By: The Major
 
 */
@@ -34,7 +34,7 @@ const command = {
     fullName: "I am",
     name: "iam",
     permissionLevel: "normal"
-}
+};
 
 /**
  * 
@@ -70,9 +70,9 @@ module.exports.run = async (bot, message, args, sql) => {
     let num = Number(userRow.lastNameUpdate);
     let lastUpdate = new Date(num);
     let rightNow = new Date();
-    if(lastUpdate.getTime() > rightNow.getTime()) {//true if it has not yet been seven days
+    if (lastUpdate.getTime() > rightNow.getTime()) {//true if it has not yet been seven days
         debug(`${message.author.username} has used the ${command.fullName} command recently.`);
-        let reply = `I am sorry, ${message.author}, you cannot use this command again so soon.`;
+        let reply = `I am sorry, ${message.author}, you cannot use this command again until ${lastUpdate}.`;
         await react(message, false);
         return message.author.send(reply).catch(error => {
             disabledDMs(message, reply);
@@ -81,7 +81,7 @@ module.exports.run = async (bot, message, args, sql) => {
 
     // Get Nickname to Change to
     let nickName = args.slice(0).join(" ");
-	
+
     if (nickName.length > 32) { // If Nickname is too long...
         await react(message, false);
         return message.channel.send(`I am sorry, ${message.author}, that username is too long. Discord only allows names up to 32 characters!`);
@@ -97,7 +97,7 @@ module.exports.run = async (bot, message, args, sql) => {
         await react(message, false);
         return message.author.send(reply).catch(error => {
             return disabledDMs(message, reply);
-        })
+        });
     }
 
     if (!(message.guild.members.get(message.author.id).nickname) && (nickName === "")) { // If User Has yet to Set Nickname and they didn't Provide a Nickname...
@@ -179,6 +179,6 @@ module.exports.run = async (bot, message, args, sql) => {
     debug("Username Updated.");
 
     return react(message);
-}
+};
 
 module.exports.help = command;
