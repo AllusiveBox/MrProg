@@ -1,3 +1,5 @@
-Updated: 05/13/19
+Updated: 05/21/19
 
 	* !iam now indicates when you can change your nickname again if it has not yet been a week
+	* The welcome message now informs new members that you *must* have a safe for work profile picture to remain
+	
