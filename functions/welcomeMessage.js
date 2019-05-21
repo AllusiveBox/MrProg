@@ -50,7 +50,7 @@ module.exports.run = (member) => {
         + `Before you are able to post in the server, you will need to make sure `
         + `you have a verified e-mail linked to your Discord account.\n`
         + `Please note that by posting in ${serverName}, you are agreeing to the `
-        + `rules found in ${rulesChannel}. In addition, in order to stay in the server your profile picture`
+        + `rules found in ${rulesChannel}. In addition, in order to stay in the server your profile picture `
 		+ `**must** be safe for work. We will remove members that do not meet this requirement.\n\n`
         + `In order to better maintain both the bot and server, certain things will be logged.`
         + `This includes join dates, edited messages, deleted messages, and DMs sent to the server's bot(s).\n\n`
