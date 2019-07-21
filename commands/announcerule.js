@@ -50,7 +50,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('**The official Discord Terms of Service and Guidelines are still in full effect.**', 'For anything beyond the rules laid out above, they can be found in the following links:\n\nhttps://discordapp.com/terms \nhttps://discordapp.com/guidelines');
     //return message.channel.send({ file: "./img/rule.png", embed: ruleEmbed });
 	try {
-		bot.channels.get(channels.general).send({ file: "./img/rule.png", embed: ruleEmbed });
+		bot.channels.get(channels.rules).send({ file: "./img/rule.png", embed: ruleEmbed });
 		console.log("sent!");
 	} catch(error) {
 		message.channel.send(error);
