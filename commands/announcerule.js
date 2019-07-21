@@ -47,7 +47,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('5) **No promotional or affiliated links without prior approval from an admin or moderator.**', 'This includes links to art pages, fangame projects, streams, commission pages, and other forms of media sharing that does not involve Chrono X.')
         .addField('6) **Circumventing disciplinary action**', 'taken against you will result in increased severity, increased length, or even a ban.')
         .addBlankField()
-        .addField('**For anything beyond the rules laid out above, they can be found in the following links:**', 'https://discordapp.com/terms \nhttps://discordapp.com/guidelines');
+        .addField('**The official Discord Terms of Service and Guidelines are still in full effect.**', 'For anything beyond the rules laid out above, they can be found in the following links:\n\nhttps://discordapp.com/terms \nhttps://discordapp.com/guidelines');
     //return message.channel.send({ file: "./img/rule.png", embed: ruleEmbed });
 	try {
 		bot.channels.get(channels.general).send({ file: "./img/rule.png", embed: ruleEmbed });
