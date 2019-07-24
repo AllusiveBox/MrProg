@@ -4,8 +4,8 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 01/05/19
-    Last Updated: 01/06/19
-    Last Update By: AllusiveBox
+    Last Updated: 07/23/19
+    Last Update By: DeCoded_Void
 
 */
 
@@ -46,8 +46,9 @@ module.exports.run = async (bot, message) => {
     // Build Reply
     debug(`Generating the Wiki Resources reply for ${message.author.username}`);
     let reply = (`Here is a list of recommended wiki articles to help you obtain chips and upgrades for netbattling:\n`
-        + "**Standard Chips**: <http://mmbnchronox.wikia.com/wiki/List_of_Standard_Chips> \n"
-        + "**Chip Trader**: <http://mmbnchronox.wikia.com/wiki/Chip_Trader> \n"
+        + "**Chip Locations**: <https://mmbnchronox.fandom.com/wiki/List_of_Chip_Locations> \n"
+        + "**Virus Locations**: <https://mmbnchronox.fandom.com/wiki/List_of_Virus_Encounters> \n"
+        + "**NaviCust Parts**: <https://mmbnchronox.fandom.com/wiki/List_of_Navi_Customizer_Programs> \n"
         + "**Upgrades List**: <http://mmbnchronox.wikia.com/wiki/Upgrade> \n");
 	
     // Send the Message
