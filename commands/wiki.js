@@ -1,11 +1,11 @@
-﻿/*
+/*
     Command Name: wiki.js
     Function: Returns a link to the Wiki
     Clearance: none
-	Default Enabled: Yes
+    Default Enabled: Yes
     Date Created: 10/25/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 07/23/19
+    Last Updated By: DeCoded_Void
 
 */
 
@@ -43,7 +43,8 @@ module.exports.run = async (bot, message) => {
     }
 
     let reply = (`The official Chrono X Wiki can be found with the following link:\n`
-        + `<http://mmbnchronox.wikia.com/wiki/MMBN_Chrono_X_Wiki>`);
+        + `<http://mmbnchronox.wikia.com/wiki/MMBN_Chrono_X_Wiki>\n\n`
+        + `For links to commonly used wiki pages, please use:  \`!wikiresources\``);
 
     return message.channel.send(reply);
 }
