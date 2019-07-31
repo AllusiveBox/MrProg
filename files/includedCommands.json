@@ -55,6 +55,7 @@
   "reminder": true,
   "restart": true,
   "rip": true,
+  "sc": true,
   "setbattlecode": true,
   "setbc": true,
   "setlevel": true,

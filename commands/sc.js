@@ -4,8 +4,8 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 07/25/19
-    Last Updated: 07/25/19
-    Last Update By: DeCoded_Void
+    Last Updated: 07/31/19
+    Last Update By: AllusiveBox
 */
 
 // Load in Required Files
@@ -54,9 +54,9 @@ module.exports.run = async (bot, message, args) => {
 
     try {
       // Build the Embed
-      let scEmbed = new Discord.RichEmbed()
+      var scEmbed = new Discord.RichEmbed()
           .setTitle('Screenshare')
-          .setDescription(`[\uD83D\uDD0A{ctx.author.voice.channel.name}](<https://discordapp.com/channels/${message.guild.id}/${message.member.voiceChannel.id}>)`)
+          .setDescription(`[\uD83D\uDD0A${message.member.voiceChannel.name}](<https://discordapp.com/channels/${message.guild.id}/${message.member.voiceChannel.id}>)`)
           .setColor('#00C957')
           .setFooter(`${message.author.username}`, `${avatar}`);
     } catch (error) {
