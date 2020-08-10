@@ -54,9 +54,8 @@ module.exports.run = (member) => {
 		+ `**must** be safe for work. We will remove members that do not meet this requirement.\n\n`
         + `In order to better maintain both the bot and server, certain things will be logged.`
         + `This includes join dates, edited messages, deleted messages, and DMs sent to the server's bot(s).\n\n`
-        + `In addition to the above, this bot will collect user data while you remain in ${serverName}, but `
-        + `you can opt out of this at any time with the \\${prefix}optOut command.\n`
-        + `To see what data the bot has on you, use the \\${prefix}profile command.\n\n`
+        + `You can opt out of this at any time with the \\${prefix}optOut command.\n`
+        + `To see what data the bot has collected for you, use the \\${prefix}profile command.\n\n`
         + `For a list of bot commands, use the \\${prefix}help.\n\n`);
 
     return welcomeMessage;
