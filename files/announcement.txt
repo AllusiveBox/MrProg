@@ -1,7 +1,6 @@
-Updated: 07/31/19
+Updated: 08/17/20
 
-	* Woowee the last update was back in May. Let's dust this off, shall we?
-	* A new command has been added that will generate the link for screensharing for you, since you guys are lazy and can't do it yourself (we kid!). Use `!sc` to get it when in a voice channel.
-	* The `!wiki` command has received a wording update to inform users of the `!wikiresources` command if you weren't already aware of it...
-	* The `!wikiresources` command has been updated to include some new links to help you with your game needs!
-	* Maybe the bot will update again before the year is over...
+	* Last update was back in July of 2019...well...
+	* Gave mods the ability to add / remove points from users using the new `addPoints` and `subpoints` commands.
+	* Updated some error logging.
+	* Todays update brought to you by day 1 of the #100DaysOfCode Challenge.
