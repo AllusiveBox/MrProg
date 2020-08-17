@@ -1,9 +1,9 @@
-﻿/** 
- *  
+﻿/**
+ *
  *  Mr. Prog Logging Script
  *  Version: 2
  *  Date Created: 09/21/18
- *  Last Updated: 04/13/19
+ *  Last Updated: 08/17/20
  *  Last Updated By: AllusiveBox
  *
  */
@@ -13,7 +13,7 @@ const Logger = require('../classes/Logger.js');
 const config = require('../files/config.json');
 
 /**
- * 
+ *
  * @param {string} string
  */
 
@@ -24,14 +24,14 @@ async function debugLogger(string) {
 }
 
 /**
- * 
+ *
  * @param {string} error
  */
 
 async function errorLogger(error) {
     let errorLogger = new Logger("ErrorLogger");
 
-    errorLogger.log(error);
+    errorLogger.log(error.stack);
 }
 
 /**
@@ -58,7 +58,7 @@ async function commandLogger(user, command, args) {
 }
 
 /**
- * 
+ *
  * @param {Discord.Message} message
  */
 
@@ -86,7 +86,7 @@ async function dmLogger(message) {
 }
 
 /**
- * 
+ *
  * @param {Discord.Message} message
  * @param {?String} [logType="info"]
  * @return {String}

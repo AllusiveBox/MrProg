@@ -1,5 +1,6 @@
 {
   "about": true,
+  "addpoints":true,
   "alertme": true,
   "announce": true,
   "announcerule": true,
@@ -66,6 +67,7 @@
   "stats": true,
   "story": true,
   "stream": true,
+  "subpoints": true,
   "update": true,
   "welcome": true,
   "wiki": true,
