@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Yes
     Date Created: 08/17/20
-    Last Updated: 08/17/20
+    Last Updated: 09/05/20
     Last Update By: AllusiveBox
 */
 
@@ -25,13 +25,20 @@ const command = {
         + `!subpoints {user} {int}\n`
         + "Returns:\n\t"
         + "This command returns nothing."),
-        description: "Allows an admin or mod the ability to decrease someone's points.",
-        enabled: true,
-        fullName: "Subtract Points",
-        name: "subpoints",
-        permissionLevel: "mod"
+    description: "Allows an admin or mod the ability to decrease someone's points.",
+    enabled: true,
+    fullName: "Subtract Points",
+    name: "subpoints",
+    permissionLevel: "mod"
 }
 
+/**
+ * 
+ * @param {Discord.Client} bot
+ * @param {Discord.Message} message
+ * @param {string[]} args
+ * @param {betterSql} sql
+ */
 module.exports.run = async (bot, message, args, sql) => {
     // Debug to Console Log
     debug(`I am inside the ${command.fullName} Command.`);
