@@ -133,11 +133,13 @@ bot.on("disconnect", async () => {
 process.on("unhandledRejection", async (reason, p) => {
     await errorLog(reason);
     if ((reason) && (reason.toString().includes("getaddrinfo"))) {
-		await sql.close();
+		// await sql.close();
         return process.exit(4);
     } else if ((reason) && (reason.toString().includes("ECONNRESET"))) {
-		await sql.close();
+		// await sql.close();
 		return process.exit(5);
+	} else if ((reason) && (reason.toString().includes("ETIMEDOUT"))) {
+		return process.exit(6)
 	}
 });
 
