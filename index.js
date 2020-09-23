@@ -101,6 +101,7 @@ bot.on("ready", async () => {
             errorLog(error);
         } else {
             debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
+            if (process.argv[2] === "77" || process.argv[2] === "66") return;
             // Load in Log Channel ID
             let logID = channels.log;
             if (logID) bot.channels.get(logID).send({ file: `./bootLog.txt` });
@@ -201,6 +202,14 @@ rl.on(`line`, async (input) => {
         case 'u':
             console.log("Restarting and checking for Bot Updates...");
             process.exit(99); // Restart and Update Exit Code
+            break;
+        case 's':
+            console.log("Restarting Silently...");
+            process.exit(77);
+            break;
+        case "su":
+            console.log("Updating Silently...");
+            process.exit(66);
             break;
         default:
             break;

@@ -36,6 +36,12 @@ module.exports.run = async (bot, args) => {
                 bot.users.get(userids.ownerID).send(message);
                 boot(message);
                 break;
+            case '77':
+                boot("Process Restarted Silently");
+                break;
+            case '66':
+                boot("Process Updated Silently");
+                break;
             default:
                 message = (`Previous iteration terminated with error code: ${passedArgs}`);
                 boot(message, "alert");
