@@ -108,16 +108,13 @@ bot.on("ready", async () => {
     if (process.argv[2] === "77" || process.argv[2] === "66") return;
     // Load in Log Channel ID
     let logID = channels.log;
-    console.log("Attemptig to send file...");
     try {
         if (logID) bot.channels.cache.get(logID).send({
             files: [{
                 attachment: './bootLog.txt',
                 name: 'boot.txt'
             }] });
-        console.log("File Sent!");
     } catch (error) {
-        console.log("Error!");
         console.log(error);
     }
 });
