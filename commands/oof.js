@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/15/18
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Updated By: AllusiveBox
 
 */
 
@@ -42,7 +42,12 @@ module.exports.run = async (bot, message) => {
         return disabledCommand(command.name, message);
     }
 
-    return message.channel.send({ file: "./img/oof.png" }).catch(error => {
+    return message.channel.send({
+        files: [{
+            attachment: "./img/oof.png",
+            name: "oof.png"
+        }]
+    }).catch(error => {
         errorLog(error);
         message.channel.send(`Unexpected error caused by ${message.author} when using the ${command.name} command.`);
     });

@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/15/18
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Updated By: AllusiveBox
 
 */
 
@@ -43,7 +43,12 @@ module.exports.run = async (bot, message) => {
     }
 
     try {
-        return message.channel.send({ file: "./img/bigoof.png" });
+        return message.channel.send({
+            files: [{
+                attachment: "./img/bigoof.png",
+                name: "bigoof.png"
+            }]
+        });
     } catch (error) {
         errorLog(error);
     }

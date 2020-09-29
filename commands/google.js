@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/15/18
-    Last Updated: 10/06/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 
 */
 
@@ -50,7 +50,12 @@ module.exports.run = async (bot, message, args) => {
         });
     } 
 
-    return message.channel.send({ file: "./img/google.png" });
+    return message.channel.send({
+        files: [{
+            attachment: "./img/google.png",
+            name: "Let me Google that for you.png"
+        }]
+    });
 }
 
 module.exports.help = command;

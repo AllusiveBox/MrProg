@@ -4,7 +4,7 @@
     Clearance: Owner Only
   	Default Enabled: Cannot be Disabled
     Date Created: 12/03/17
-    Last Updated: 10/27/18
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 */
@@ -153,15 +153,15 @@ module.exports.run = async (bot, message) => {
         return message.channel.send(reply);
     }
 
-    bot.channels.get(command.announceChat).send(`<@&${command.alertMe.ID}>: The bot has recently `
+    bot.channels.cache.get(command.announceChat).send(`<@&${command.alertMe.ID}>: The bot has recently `
         + `been updated! Below is a list of changes.`);
-    bot.channels.get(command.announceChat).send(command.announcement).catch(error => {
+    bot.channels.cache.get(command.announceChat).send(command.announcement).catch(error => {
         errorLog(error);
         react(message, false);
         return message.channel.send(`*${error.toString()}*`);
     });
     await react(message);
-    return bot.channels.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
+    return bot.channels.cache.get(command.announceChat).send(`To report bugs, issues, or suggest new features/commands, please use the github repo!\n`
         + `https://github.com/AllusiveBox/MrProgIssues/issues`);
 }
 

@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 11/18/18
+    Date Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 **/
@@ -56,6 +56,11 @@ module.exports.run = async (bot, message, level) => {
     message.channel.send(`You have been promoted to `
         + `**__${roles.levelUp[level].name}!__**`);
     if (roles.levelUp[level].img) {
-        message.channel.send({ file: `./img/license/${roles.levelUp[level].img}` });
+        message.channel.send({
+            files: [{
+                attachment: `./img/license/${roles.levelUp[level].img}`,
+                name: `${roles.levelUp[level].img}`
+            }]
+        });
     }
 }

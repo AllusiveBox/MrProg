@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 11/17/18
-    Date Last Updated: 11/17/18
+    Date Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 **/
@@ -56,7 +56,7 @@ module.exports.run = async (bot, message) => {
 
     // Build the Embed
 
-    let dmLogEmbed = new Discord.RichEmbed()
+    let dmLogEmbed = new Discord.MessageEmbed()
         .setDescription(`Direct Message Received!`)
         .setColor(logChannelColor)
         .setThumbnail(avatar)
@@ -67,9 +67,9 @@ module.exports.run = async (bot, message) => {
         .addField(`Time:`, new Date());
 
     try {
-        bot.channels.get(logID).send(dmLogEmbed);
+        bot.channels.cache.get(logID).send(dmLogEmbed);
     } catch (error) {
         errorLog(error);
-        return bot.users.get(userids.ownerID).send(`Error caused by ${message.author.username} in functions/dmLog\n*${error.toString}*`);
+        return bot.users.cache.get(userids.ownerID).send(`Error caused by ${message.author.username} in functions/dmLog\n*${error.toString}*`);
     }
 }

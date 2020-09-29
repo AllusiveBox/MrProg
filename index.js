@@ -3,7 +3,7 @@
  * Version 4.2.2
  * Author: AllusiveBox & Th3_M4j0r
  * Date Started: 09/21/18
- * Last Updated: 04/13/19
+ * Last Updated: 09/29/20
  * Last Updated By: AllusiveBox
  * 
  */
@@ -12,7 +12,7 @@ process.chdir(__dirname); // Ensure Working Directory is Same as Current File
 
 // Load in Required Libraries and Files
 const readline = require(`readline`);
-const Discord = require(`discord.js`);
+const {Client, Intents, Collection} = require(`discord.js`);
 const fs = require(`fs`);
 const betterSql = require(`./classes/betterSql.js`);
 const bottoken = require(`./files/bottoken.json`);
@@ -31,8 +31,8 @@ const { run: score } = require(`./functions/score.js`);
 const { command: commandLog, debug, error: errorLog, boot} = require(`./functions/log.js`);
 
 // Declare the Bot Stuff
-const bot = new Discord.Client({ disableEveryone: true });
-bot.commands = new Discord.Collection();
+const bot = new Client({ disableEveryone: true, ws: { intents: Intents.ALL }});
+bot.commands = new Collection();
 
 // readline Stuff
 const rl = readline.createInterface({
@@ -96,17 +96,30 @@ bot.on("ready", async () => {
 
     await onStartup(bot, process.argv);
 
-    fs.writeFile("bootLog.txt", boot(), function (error) {
+    fs.writeFileSync("bootLog.txt", boot(), function (error) {
         if (error) {
             errorLog(error);
         } else {
-            debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
-            if (process.argv[2] === "77" || process.argv[2] === "66") return;
-            // Load in Log Channel ID
-            let logID = channels.log;
-            if (logID) bot.channels.get(logID).send({ file: `./bootLog.txt` });
+            
         }
     });
+
+    debug("Successfully logged the booting proceedure. Switching from bootlog to debug log.");
+    if (process.argv[2] === "77" || process.argv[2] === "66") return;
+    // Load in Log Channel ID
+    let logID = channels.log;
+    console.log("Attemptig to send file...");
+    try {
+        if (logID) bot.channels.cache.get(logID).send({
+            files: [{
+                attachment: './bootLog.txt',
+                name: 'boot.txt'
+            }] });
+        console.log("File Sent!");
+    } catch (error) {
+        console.log("Error!");
+        console.log(error);
+    }
 });
 
 // Bot on Unexpected Error

@@ -4,8 +4,8 @@
     Clearance: Owner Only
 	Default Enabled: Cannot be Disabled
     Date Created: 11/03/17
-    Last Updated: 10/06/18
-    Last Update By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 */
 
 // Load in Required Files
@@ -76,7 +76,7 @@ module.exports.run = async  (client, message, args, sql) => {
     }
     let name = toChange.user.username;
     try {
-        name = message.guild.members.get(toChange.id).nickname;
+        name = message.guild.members.cache.get(toChange.id).nickname;
         if (!name) name = toChange.user.username;
         debug(`Name set to: ${name}`);
     }

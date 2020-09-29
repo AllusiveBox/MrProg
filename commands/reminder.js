@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 03/27/19
-    Last Updated: 03/27/19
+    Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 */
@@ -44,7 +44,12 @@ module.exports.run = async (bot, message) => {
     if (usedRecently.has(message.author.id)) { // If user has used Command Recently...
         let reply = `Friendly reminder that ${bot.user.username} is watching you, ${message.author}.`
         try {
-            return message.author.send(reply, { file: "./img/bigBrother.png" });
+            return message.author.send(reply, {
+                files: [{
+                    attachment: "./img/bigBrother.png",
+                    name: "heIsWatching.png"
+                }]
+            });
         } catch (error) {
             if (error.toString().includes("Cannot send message to this user")) {
                 let reply = `I am sorry, ${message.author}, I am unable to DM you.\n`
@@ -63,7 +68,12 @@ module.exports.run = async (bot, message) => {
     }
 
     try {
-        return message.channel.send(`Friendly reminder that <@${bot.user.id}> is watching you.`, { file: "./img/bigBrother.png" });
+        return message.channel.send(`Friendly reminder that <@${bot.user.id}> is watching you.`, {
+            files: [{
+                attachment: "./img/bigBrother.png",
+                name: "heIsWatching.png"
+            }]
+        });
     } catch (error) {
         errorLog(error);
         return message.channel.send(`Error:\n${error.toString()}`);

@@ -4,8 +4,8 @@
     Version: 1
     Author: AllusiveBox
     Date Created: 12/30/18
-    Date Last Updated: 02/20/19
-    Last Update By: DeCoded_Void
+    Date Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 
 **/
 
@@ -44,7 +44,7 @@ module.exports.messageUpdate = async (bot, oldMessage, newMessage) => {
         debug("Unable to find log ID in channels.json. Looking for another log channel.");
 
         // Look for Log Cannel in Server
-        let logChannel = oldMessage.guild.channels.find(val => val.name === "log");
+        let logChannel = oldMessage.guild.channels.cache.find(val => val.name === "log");
         if (!logChannel) { // If Unable to Find Log Channel...
             return debug("Unable to find any king of log channel.");
         } else {
@@ -61,7 +61,7 @@ module.exports.messageUpdate = async (bot, oldMessage, newMessage) => {
 
     // Build the Embed
 
-    let updateMessageEmbed = new Discord.RichEmbed()
+    let updateMessageEmbed = new Discord.MessageEmbed()
         .setDescription("Message Updated!")
         .setColor(logChannelColor)
         .setAuthor(oldMessage.author.username, avatar);
@@ -94,7 +94,7 @@ module.exports.messageUpdate = async (bot, oldMessage, newMessage) => {
     updateMessageEmbed.addField("Updated On", new Date());
 
     try {
-        bot.channels.get(logID).send(updateMessageEmbed);
+        bot.channels.cache.get(logID).send(updateMessageEmbed);
     } catch (error) {
         errorLog(error);
     }
@@ -124,7 +124,7 @@ module.exports.messageDelete = async (bot, deletedMessage) => {
         debug("Unable to find log ID in channels.json. Looking for another log channel.");
 
         // Look for Log Channel in Server
-        let logChannel = deletedMessage.guild.channels.find(val => val.name === "log");
+        let logChannel = deletedMessage.guild.channels.cache.find(val => val.name === "log");
         if (!logChannel) {// If Unable to Find Log Channel...
             debug("Unable to find any kind of log channel.");
         } else {
@@ -139,7 +139,7 @@ module.exports.messageDelete = async (bot, deletedMessage) => {
     let avatar = deletedMessage.author.avatarURL;
 
     // Build the Embed
-    let deletedMessageEmbed = new Discord.RichEmbed()
+    let deletedMessageEmbed = new Discord.MessageEmbed()
         .setDescription("Message Deleted!")
         .setColor(logChannelColor)
         .setAuthor(deletedMessage.author.username, avatar);
@@ -165,7 +165,7 @@ module.exports.messageDelete = async (bot, deletedMessage) => {
     deletedMessageEmbed.addField("Updated On", new Date());
 
     try {
-        bot.channels.get(logID).send(deletedMessageEmbed);
+        bot.channels.cache.get(logID).send(deletedMessageEmbed);
     } catch (error) {
         errorLog(error);
     }

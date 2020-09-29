@@ -4,7 +4,7 @@
     Version: 2
     Author: AllusiveBox
     Date Started: 08/09/18
-    Date Last Updated: 04/10/19
+    Date Last Updated: 09/29/20
     Last Update By: AllusivveBox
 
 **/
@@ -33,7 +33,7 @@ module.exports.run = async (bot, args) => {
                 break;
             case '99':
                 message = (`Update Complete.`);
-                bot.users.get(userids.ownerID).send(message);
+                bot.users.cache.get(userids.ownerID).send(message);
                 boot(message);
                 break;
             case '77':
@@ -50,10 +50,10 @@ module.exports.run = async (bot, args) => {
                     message += (`The following arguemtns were also included: ${additionalArgs}`);
                     boot(message, "alert");
                 }
-                bot.users.get(userids.ownerID).send(message);
+                bot.users.cache.get(userids.ownerID).send(message);
                 // Load in Log Channel ID
                 let logID = channels.log;
-                if (logID) bot.channels.get(logID).send(message);
+                if (logID) bot.channels.cache.get(logID).send(message);
         }
     }
     catch (error) {

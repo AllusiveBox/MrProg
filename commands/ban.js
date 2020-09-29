@@ -4,7 +4,7 @@
     Clearance: Mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 12/02/17
-    Last Updated: 10/27/18
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 */
@@ -74,7 +74,7 @@ module.exports.run = async (bot, message, args, sql) => {
     if (toBan.user.id == userids.ownerID) { // If Attempt to Ban Owner...
         await react(message, false);
         return debug(`${message.author.username} attempted to ban owner.`);
-    } else if (toBan.roles.some(r => [command.adminRole.ID, command.modRole.ID,
+    } else if (toBan.roles.cache.some(r => [command.adminRole.ID, command.modRole.ID,
     command.shadowModRole.ID].includes(r.id))) { // If Attempt to Ban Admin/Mod/SMod
         debug(`${message.author.username} attempted to ban `
             + `${toBan.user.username}.`);

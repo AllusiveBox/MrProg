@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Only during Streaming Sessions
     Date Created: 12/02/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Updated By: AllusiveBox
 
 */
 
@@ -67,7 +67,7 @@ module.exports.run = async (bot, message, args) => {
             + `Looking for another Question channel.`);
 
         // Look for Question Channel in Server
-        let questionChannel = member.guild.channels.find(val => val.name === "question");
+        let questionChannel = member.guild.channels.cache.find(val => val.name === "question");
         if (!questionChannel) {
             debug(`Unable to find any kind of question channel. Silently disabling command.`);
             return command.enabled = false;
@@ -101,7 +101,7 @@ module.exports.run = async (bot, message, args) => {
     let avatar = message.member.user.avatarURL;
 
     // Build the Question Embed
-    let questionEmbed = new Discord.RichEmbed()
+    let questionEmbed = new Discord.MessageEmbed()
         .setDescription(`Question`)
         .setColor(questionChannelColor)
         .setThumbnail(avatar)
@@ -109,7 +109,7 @@ module.exports.run = async (bot, message, args) => {
         .addField("Question", question)
         .addField("Asked on", new Date());
 
-    return bot.channels.get(questionID).send(questionEmbed).catch(error => {
+    return bot.channels.cache.get(questionID).send(questionEmbed).catch(error => {
         return errorLog(error);
     });
 }

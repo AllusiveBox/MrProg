@@ -4,7 +4,7 @@
     Clearance: Mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 08/31/18
-    Last Updated: 10/27/18
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 */
@@ -75,7 +75,7 @@ module.exports.run = async (bot, message, args, sql) => {
     if (toKick.user.id == userids.ownerID) { // If Attempt to Kick Owner...
         await react(message, false);
         return debug(`${message.author.username} attempted to kick owner.`);
-    } else if (toKick.roles.some(r => [command.adminRole.ID, command.modRole.ID,
+    } else if (toKick.roles.cache.some(r => [command.adminRole.ID, command.modRole.ID,
     command.shadowModRole.ID].includes(r.id))) { // If Attempt to kick Admin/Mod/SMod
         debug(`${message.author.username} attempted to kick `
             + `${toKick.user.username}.`);

@@ -4,8 +4,8 @@
     Clearance: mod+
 	Default Enabled: Cannot be Disabled
     Date Created: 07/19/18
-    Last Updated: 05/11/19
-    Last Updated By: The Major
+    Last Updated: 09/29/20
+    Last Updated By: AllusiveBox
 */
 
 // Load in Required Files
@@ -194,7 +194,7 @@ module.exports.run = async (client, message, args, sql) => {
             let reply = `SQL Data on: ${row.userName}\n`;
             // Build the Embed
             let lookupColor = config.logChannelColors.memberLookup;
-            let userEmbed = new Discord.RichEmbed()
+            let userEmbed = new Discord.MessageEmbed()
                 .setDescription(`Data on ${toCheck}`)
                 .setColor(lookupColor);
 

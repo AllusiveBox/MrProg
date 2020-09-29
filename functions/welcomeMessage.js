@@ -4,7 +4,7 @@
     Version: 1
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 09/05/2020
+    Date Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 **/
@@ -31,7 +31,7 @@ module.exports.run = (member) => {
         debug(`Unable to find the rules ID in channels.json.`
             + `Looking for another rules channel.`);
         // Look for Rules Channel in the Server
-        let rulesChannel = member.guild.channels.find(val => val.name === 'rules'); //changed to function, since other way is deprecated
+        let rulesChannel = member.guild.channels.cache.find(val => val.name === 'rules'); //changed to function, since other way is deprecated
         if (!rulesChannel) {
             debug(`Unable to find any kind of rules channel.`);
         } else {

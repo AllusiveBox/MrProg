@@ -4,7 +4,7 @@
     Clearance: Owner Only
   	Default Enabled: Disabled
     Date Created: 10/17/17
-    Last Updated: 04/23/19
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 */
@@ -63,7 +63,7 @@ module.exports.run = async (bot, message, args, sql) => {
             + `**${message.author.username}**`);
         debug(reply);
         console.log(reply);
-        return bot.users.get(userids.ownerID).send(reply).catch(error => {
+        return bot.users.cache.get(userids.ownerID).send(reply).catch(error => {
             errorLog(reply);
             errorLog(error);
         });

@@ -18,7 +18,7 @@
   "homepage": "https://github.com/AllusiveBox/discordBot#readme",
   "dependencies": {
     "discord": "^0.8.2",
-    "discord.js": "^11.6.4",
+    "discord.js": "^12.3.1",
     "ffmpeg": "0.0.4",
     "opusscript": "0.0.6",
     "sqlite": "^2.9.3",

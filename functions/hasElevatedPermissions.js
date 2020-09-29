@@ -4,8 +4,8 @@
     Version: 1
     Author: Th3_M4j0r
     Date Started: 08/30/18
-    Date Last Updated: 10/07/18
-    Last Update By: Th3_M4j0r
+    Date Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 
 **/
 
@@ -37,7 +37,7 @@ function isServerCommand(bot, message, adminOnly) {
         allowedRoles.push(modRole.ID);
         allowedRoles.push(shadowModRole.ID);
     }
-    return message.member.roles.some(r => allowedRoles.includes(r.id));
+    return message.member.roles.cache.some(r => allowedRoles.includes(r.id));
 }
 
 /**

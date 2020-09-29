@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 02/27/18
-    Last Updated: 10/07/18
+    Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 */
@@ -56,7 +56,7 @@ module.exports.run = async (bot, message, args, sql) => {
     // Get the Member's Avatar
     let avatar = "https://vignette.wikia.nocookie.net/aura-kingdom/images/1/18/Discord_icon.png/revision/latest?cb=20170108193813";
     try {
-        avatar = message.author.avatarURL.split("?");
+        avatar = message.author.avatarURL().split("?");
         avatar = avatar[0];
     } catch (error) {
         errorLog(error);
@@ -69,8 +69,8 @@ module.exports.run = async (bot, message, args, sql) => {
     let untilLevel = (Math.floor(((user.level + 1) / (0.142)) * ((user.level + 1) / (0.142))) - user.points);
 
     // Build the Embed
-    let statsEmbed = new Discord.RichEmbed()
-        .attachFile({ attachment: navi_sym, name: "navi_sym.png" })
+    let statsEmbed = new Discord.MessageEmbed()
+        .attachFiles({ attachment: navi_sym, name: "navi_sym.png" })
         .setAuthor(`${message.author.username}`, `attachment://navi_sym.png`)
         .setDescription(`${serverName} stats for ${user.userName}`)
         .setColor(config.statsColor)

@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 02/18/19
-    Last Updated: 02/21/19
+    Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 */
@@ -50,7 +50,12 @@ module.exports.run = async (bot, message) => {
     }
 
     try {
-        return message.channel.send("Beeeeeep!", { file: "./img/beep.jpg" });
+        return message.channel.send("Beeeeeep!", {
+            files: [{
+                attachment: "./img/beep.jpg",
+                name: "beep.jpg"
+            }]
+        });
     } catch (error) {
         errorLog(error);
         return message.channel.send(`Unable to beep due to error:\n`

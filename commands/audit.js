@@ -6,7 +6,7 @@
     clearance: Mod+
     Default Enabled: Cannot be Disabled
     Date Started: 09/16/18
-    Date Last Updated: 10/27/18
+    Date Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 **/
@@ -73,7 +73,7 @@ module.exports.run = async (bot, message, args, sql) => {
         let audit = await message.guild.fetchAuditLogs();
         let entries = audit.entries.array();
         debug(`Attempting to Generate embed of entries ${startPos} through ${startPos + 4}`);
-        let embed = new Discord.RichEmbed()
+        let embed = new Discord.MessageEmbed()
             .setTitle(`Page#${page}`)
             .setColor(config.auditColor)
             .addField(`Log#${startPos + 1}`, format(entries[startPos]))

@@ -4,7 +4,7 @@
     Clearance: none
   	Default Enabled: Yes
     Date Created: 05/19/18
-    Last Updated: 10/27/18
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 */
@@ -57,19 +57,19 @@ module.exports.run = async (bot, message) => {
     var toUpdate = message.member;
 
     // Grab the Server Roles
-    let serverRoles = message.guild.roles;
+    let serverRoles = message.guild.roles.cache;
 
     // Get the Current Command Prefix
     let prefix = config.prefix;
 
     // Check if Member has the Role Already
-    if (toUpdate.roles.some(r => [command.tournyRole.ID].includes(r.id))) {
+    if (toUpdate.roles.cache.some(r => [command.tournyRole.ID].includes(r.id))) {
         debug(`${message.author.username} already has the ${command.tournyRole.name} `
             + `role. Removing role now.`);
         let role = await serverRoles.get(command.tournyRole.ID);
 
         try {
-            await toUpdate.removeRole(role);
+            await toUpdate.roles.remove(role);
         } catch (error) {
             errorLog(error);
             await react(message, false);
@@ -94,7 +94,7 @@ module.exports.run = async (bot, message) => {
         let role = await serverRoles.get(command.tournyRole.ID);
 
         try {
-            await toUpdate.addRole(role);
+            await toUpdate.roles.add(role);
         } catch (error) {
             errorLog(error);
             await react(message, false);

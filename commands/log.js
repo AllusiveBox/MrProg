@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Yes
     Date Created: 11/23/18
-    Last Updated: 11/24/18
+    Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 */
@@ -62,7 +62,12 @@ module.exports.run = async (bot, message, args, sql) => {
     month = month < 10 ? '0' + month : month;
     let fileName = ((args[1] != undefined) && (validateFileName(args[1]))) ? `${args[1]}.txt` : `${year}-${month}.txt`;
 
-    message.author.send({ file: `${logPath}/${fileName}` });
+    message.author.send({
+        files: [{
+            attachment: `${logPath}/${fileName}`,
+            name: '${fileName}'
+        }]
+    });
 }
 
 module.exports.help = command;

@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
         return disabledCommand(command.name, message);
     }
 
-    let ruleEmbed = new Discord.RichEmbed()
+    let ruleEmbed = new Discord.MessageEmbed()
         .setAuthor('Rules', 'https://i.imgur.com/a75vd6Y.png')
         .addField('0) **We reserve the right to update and change the server rules at any time with a notice.**', 'We will provide a ping with any rule changes when they take place.')
         .addField('1) **Don\'t be that guy.**', 'This means no nsfw content, spam, doxxing, and verbally harassing other users.')
@@ -48,14 +48,18 @@ module.exports.run = async (bot, message, args) => {
         .addField('6) **Circumventing disciplinary action**', 'taken against you will result in increased severity, increased length, or even a ban.')
         .addBlankField()
         .addField('**The official Discord Terms of Service and Guidelines are still in full effect.**', 'For anything beyond the rules laid out above, they can be found in the following links:\n\nhttps://discordapp.com/terms \nhttps://discordapp.com/guidelines');
-    //return message.channel.send({ file: "./img/rule.png", embed: ruleEmbed });
 	try {
-		bot.channels.get(channels.rules).send({ file: "./img/rule.png", embed: ruleEmbed });
+        bot.channels.cache.get(channels.rules).send({
+            files: [{
+                attachment: './img/rule.png',
+                name: 'rule.png'
+            }],
+            embed: ruleEmbed
+        })
 		console.log("sent!");
 	} catch(error) {
 		message.channel.send(error);
 	}
-    //return message.channel.send(ruleEmbed)
 
 }
 

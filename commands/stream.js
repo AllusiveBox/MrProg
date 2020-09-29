@@ -4,8 +4,8 @@
     Clearance: Admin+
 	Default Enabled: Cannot be Disabled
     Date Created: 12/02/17
-    Last Updated: 10/06/18
-    Last Updated By: Th3_M4j0r
+    Last Updated: 09/29/20
+    Last Updated By: AllusiveBox
 
 */
 
@@ -83,7 +83,7 @@ module.exports.run = async (bot, message, args, sql) => {
 
         
 
-        return bot.channels.get(announceChat).send(reply).then(function () {
+        return bot.channels.cache.get(announceChat).send(reply).then(function () {
             return react(message);
         }).catch(error => {
             errorLog(error);
@@ -92,7 +92,7 @@ module.exports.run = async (bot, message, args, sql) => {
         });
     } else { // Stream is Currently Off...
         debug(`isStreaming is set to: ${isStreaming}.`);
-        oldStatus = bot.user.localPresence.game.name;
+        oldStatus = bot.user.presence.clientStatus;
         let newStatus = "We are Streaming!";
         let method = "STREAMING";
         let streamURL = args.join(" ");
@@ -129,7 +129,7 @@ module.exports.run = async (bot, message, args, sql) => {
         reply = ("everyone: We have entered **Streaming Mode**\n"
             + `The ${config.prefix}question command is now enabled!`);
 
-        return bot.channels.get(announceChat).send(reply).then(function () {
+        return bot.channels.cache.get(announceChat).send(reply).then(function () {
             return react(message);
         }).catch(error => {
             errorLog(error);

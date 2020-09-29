@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 10/13/18
-    Last Updated: 02/28/19
+    Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 */
@@ -40,9 +40,14 @@ module.exports.run = async (bot, message, args, sql) => {
     debug(`I am inside the ${command.fullName} command.`);
 
     if (await hasElevatedPermissions(bot, message, command.adminOnly, sql, true)) {
-        return message.channel.send({ file: "./img/mistake.png" }).catch(error => {
+        return message.channel.send({
+            files: [{
+                attachment: "./img/mistake.png",
+                name: "mistake.png"
+            }]
+        }).catch(error => {
             errorLog(error);
-            return message.channel.send(error.toString());
+            return message.channel.send(errr.toString());
         });
     }
 }

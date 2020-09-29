@@ -4,7 +4,7 @@
     Clearance: none
     Default Enabled: Yes
     Date Created: 07/25/19
-    Last Updated: 07/31/19
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 */
 
@@ -54,7 +54,7 @@ module.exports.run = async (bot, message, args) => {
 
     try {
       // Build the Embed
-      var scEmbed = new Discord.RichEmbed()
+      var scEmbed = new Discord.MessageEmbed()
           .setTitle('Screenshare')
           .setDescription(`[\uD83D\uDD0A${message.member.voiceChannel.name}](<https://discordapp.com/channels/${message.guild.id}/${message.member.voiceChannel.id}>)`)
           .setColor('#00C957')

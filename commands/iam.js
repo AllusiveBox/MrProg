@@ -4,8 +4,8 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 05/13/19
-    Last Update By: The Major
+    Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 
 */
 
@@ -90,7 +90,7 @@ module.exports.run = async (bot, message, args, sql) => {
     // Test if they want to Reset Nickname
     if (!nickName) {
         nickName = "";
-    } else if ((message.guild.members.get(message.author.id).nickname === nickName) || (message.author.username === nickName)) { // If Nickname is Same as Current Nickname...
+    } else if ((message.guild.members.cache.get(message.author.id).nickname === nickName) || (message.author.username === nickName)) { // If Nickname is Same as Current Nickname...
         debug(`Unable to update username for ${message.author.username} as they attempted to update to their current name already.`);
         // Build Reply
         let reply = `I am sorry, ${message.author}, I can't update your username to what it already is!`;
@@ -100,7 +100,7 @@ module.exports.run = async (bot, message, args, sql) => {
         });
     }
 
-    if (!(message.guild.members.get(message.author.id).nickname) && (nickName === "")) { // If User Has yet to Set Nickname and they didn't Provide a Nickname...
+    if (!(message.guild.members.cache.get(message.author.id).nickname) && (nickName === "")) { // If User Has yet to Set Nickname and they didn't Provide a Nickname...
         debug(`User does not have a nickname, nor did they provide a nickname to change to...`);
         let reply = `${message.author}, you haven't set a nickname yet, so I am unable to reset your nickname...`;
         await react(message, false);
@@ -111,7 +111,7 @@ module.exports.run = async (bot, message, args, sql) => {
 
     // Attempt to Change Username
     try {
-        await message.guild.members.get(message.author.id).setNickname(nickName);
+        await message.guild.members.cache.get(message.author.id).setNickname(nickName);
     } catch (error) {
         errorLog(error);
         let reply = (`I am sorry, ${message.author}, I am unable to update your username due to the following error:\n`
@@ -134,7 +134,7 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`Unable to find log ID in channels.json. Looking for another log channel.`);
 
         // Look for Log Channel in Server
-        logChannel = message.member.guild.channels.find(val => val.name === "log");
+        logChannel = message.member.guild.channels.cache.find(val => val.name === "log");
         if (!logChannel) { // If Unable to Find Log Channel...
             debug(`Unable to find any kind of log channel.`);
         } else {
@@ -159,7 +159,7 @@ module.exports.run = async (bot, message, args, sql) => {
     let avatar = message.member.user.avatarURL;
 
     // Build the Embed
-    let updatedUserEmbed = new Discord.RichEmbed()
+    let updatedUserEmbed = new Discord.MessageEmbed()
         .setDescription(`Member Updated!`)
         .setColor(logChannelColor)
         .setThumbnail(avatar)
@@ -170,9 +170,9 @@ module.exports.run = async (bot, message, args, sql) => {
 
     // Check if there is an ID Now...
     if (!logID) { // If no Log ID...
-        bot.users.get(userids.ownerID).send(updatedUserEmbed);
+        bot.users.cache.get(userids.ownerID).send(updatedUserEmbed);
     } else {
-        bot.channels.get(logID).send(updatedUserEmbed).catch(error => {
+        bot.channels.cache.get(logID).send(updatedUserEmbed).catch(error => {
             return errorLog(error);
         });
     }

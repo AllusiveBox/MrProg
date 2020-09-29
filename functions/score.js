@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 12/06/18
+    Date Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 **/
@@ -71,7 +71,7 @@ module.exports.run = async (bot, message, sql) => {
             debug(`Row found for ${message.author.username}.`);
             let name = message.author.username;
             try {
-                name = message.guild.members.get(message.author.id).nickname;
+                name = message.guild.members.cache.get(message.author.id).nickname;
                 if (!name) name = message.author.username;
                 debug(`Name set to: ${name}`);
             }

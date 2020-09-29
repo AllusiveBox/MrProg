@@ -4,8 +4,8 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 04/23/19
-    Last Update By: The Major
+    Date Last Updated: 09/29/20
+    Last Update By: AllusiveBox
 
 **/
 
@@ -39,7 +39,7 @@ module.exports.run = async (bot, message, member, reason, sql) => {
             + `Looking for another log channel.`);
 
         // Look for Log Channel in Server
-        logChannel = message.member.guild.channels.find(val => val.name === "log");
+        logChannel = message.member.guild.channels.cache.find(val => val.name === "log");
         if (!logChannel) { // If Unable to Find Log Channel...
             debug(`Unable to find any kind of log channel.`);
         } else {
@@ -63,7 +63,7 @@ module.exports.run = async (bot, message, member, reason, sql) => {
     let avatar = member.user.avatarURL;
 
     // Build the Embed
-    let kickedEmbed = new Discord.RichEmbed()
+    let kickedEmbed = new Discord.MessageEmbed()
         .setDescription(`Member Kicked!`)
         .setColor(logchannelColor)
         .setThumbnail(avatar)
@@ -75,9 +75,9 @@ module.exports.run = async (bot, message, member, reason, sql) => {
 
     // Check if there is an ID Now
     if (!logID) { // If no Log ID...
-        bot.users.get(userids.ownerID).send(kickedEmbed);
+        bot.users.cache.get(userids.ownerID).send(kickedEmbed);
     } else {
-        bot.channels.get(logID).send(kickedEmbed);
+        bot.channels.cache.get(logID).send(kickedEmbed);
     }
 
     await react(message);

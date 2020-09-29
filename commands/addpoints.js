@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Yes
     Date Created: 08/17/20
-    Last Updated: 09/05/20
+    Last Updated: 09/29/20
     Last Update By: AllusiveBox
 */
 
@@ -77,7 +77,7 @@ module.exports.run = async (bot, message, args, sql) => {
 
     let name = toChange.user.username;
     try {
-        name = message.guild.members.get(toChange.id).nickname;
+        name = message.guild.members.cache.get(toChange.id).nickname;
         if (!name) name = toChange.user.username;
         debug(`Name set to: ${name}`);
     }

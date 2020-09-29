@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 10/07/18
-    Date Last Updated: 12/30/18
+    Date Last Updated: 09/29/20
     Last Updated By: AllusiveBox
 
 **/
@@ -93,7 +93,7 @@ module.exports.run = async (bot, message, amount, user = null) => {
             debug(`Unable to find purgeLog ID in channels.json. Looking for another log channel.`);
 
             // Look for Log Channel in Server
-            logChannel = message.member.guild.channels.find(val => val.name === "purgeLog");
+            logChannel = message.member.guild.channels.cache.find(val => val.name === "purgeLog");
             if (!logChannel) { // If Unable to Find Log Channel...
                 debug(`Unable to find any kind of log channel.`);
             } else {
@@ -105,7 +105,7 @@ module.exports.run = async (bot, message, amount, user = null) => {
         let logChannelColor = config.logChannelColors.messagesPurged;
     
         // Build the Embed
-        let purgeEmbed = new Discord.RichEmbed()
+        let purgeEmbed = new Discord.MessageEmbed()
             .attachFile({ attachment: "purgedMessages.txt", name: "purgedMessages.txt" })
             .setDescription("Messages Purged!")
             .setColor(logChannelColor)
@@ -117,9 +117,9 @@ module.exports.run = async (bot, message, amount, user = null) => {
 
         // Check if there is an ID Now...
         if (!logID) { // If no Log ID...
-            bot.users.get(userids.ownerID).send(purgeEmbed);
+            bot.users.cache.get(userids.ownerID).send(purgeEmbed);
         } else {
-            bot.channels.get(logID).send(purgeEmbed).catch(error => {
+            bot.channels.cache.get(logID).send(purgeEmbed).catch(error => {
                 return errorLog(error);
             });
         }

@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/09/18
-    Date Last Updated: 11/24/18
+    Date Last Updated: 09/29/20
     Last Update By: AllusiveBox
 
 **/
@@ -39,7 +39,7 @@ module.exports.run = async (bot, member, sql) => {
         debug(`Unable to find the log ID in channels.json.`
             + `Looking for another log channel.`);
         // Look for Log Channel in the Server
-        logChannel = member.guild.channels.find(val => val.name === 'log'); //changed to function, since other way is deprecated
+        logChannel = member.guild.channels.cache.find(val => val.name === 'log'); //changed to function, since other way is deprecated
         if (!logChannel) {
             debug(`Unable to find any kind of log channel.`);
         } else {
@@ -53,7 +53,7 @@ module.exports.run = async (bot, member, sql) => {
     let joinDate = await sql.getJoinDate(member.user.id);
 
     // Build the Embed
-    let leaveEmbed = new Discord.RichEmbed()
+    let leaveEmbed = new Discord.MessageEmbed()
         .setDescription(`Member Left`)
         .setColor(logchannelColor)
         .setThumbnail(avatar)
@@ -65,9 +65,9 @@ module.exports.run = async (bot, member, sql) => {
 
     // Check if there is an ID Now
     if (!logID) { // If no Log ID...
-        bot.users.get(userids.ownerID).send(leaveEmbed);
+        bot.users.cache.get(userids.ownerID).send(leaveEmbed);
     } else {
-        bot.channels.get(logID).send(leaveEmbed);
+        bot.channels.cache.get(logID).send(leaveEmbed);
     }
 
     deleteMemberInfo(bot, member, sql);
