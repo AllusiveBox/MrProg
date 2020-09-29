@@ -1,6 +1,7 @@
-Updated: 08/17/20
+Updated: 09/29/20
 
-	* Last update was back in July of 2019...well...
-	* Gave mods the ability to add / remove points from users using the new `addPoints` and `subpoints` commands.
-	* Updated some error logging.
-	* Todays update brought to you by day 1 of the #100DaysOfCode Challenge.
+	I had originally decided on not doing these anymore, but the update from Version whatever the hell I was on to Version 12 was massive...
+	* All the data types that now need to be cached to access should now reference the cache correctly. 
+	  * This should be limited to members and channels, mainly.
+	* All the file attachments will now correctly be sent again, yay!
+	* Cleaned up logging a bit
