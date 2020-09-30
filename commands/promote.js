@@ -116,12 +116,12 @@ module.exports.run = async (bot, message, args, sql) => {
         });
         sql.promoteUser(toPromote.id, "mod");
         role = serverRoles.get(adminRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not an admin.`);
             });
         role = serverRoles.get(shadowModRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a shadow mod.`);
             });
@@ -132,28 +132,28 @@ module.exports.run = async (bot, message, args, sql) => {
         });
         sql.promoteUser(toPromote.id, "mod");
         role = serverRoles.get(adminRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not an admin.`);
             });
         role = serverRoles.get(modRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a mod.`);
             });
     } else { //"none"
         let role = serverRoles.get(adminRole.ID);
-        toPromote.removeRole(role).catch(error => {
+        toPromote.roles.remove(role).catch(error => {
             debug(`${toPromote.user.username} is not an admin.`);
         });
         sql.promoteUser(toPromote.id, "none");
         role = serverRoles.get(modRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a mod.`);
             });
         role = serverRoles.get(shadowModRole.ID);
-        toPromote.removeRole(role)
+        toPromote.roles.remove(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a shadow mod.`);
             });
