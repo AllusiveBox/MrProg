@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 08/11/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 09/30/20
     Last Update By: AllusiveBox
 
 **/
@@ -25,7 +25,7 @@ module.exports.run = async (bot, message, level) => {
     debug(`I am in the changerole function.`);
 
     // Default Assignments
-    let serverRoles = message.guild.roles;
+    let serverRoles = message.guild.roles.cache;
     let member = message.member;
     let has = ` has been promoted to: `;
 
