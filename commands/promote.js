@@ -4,7 +4,7 @@
     Clearance: Admin
 	Default Enabled: Yes
     Date Created: 10/18/17
-    Last Updated: 10/27/18
+    Last Updated: 09/30/20
     Last Updated By: AllusiveBox
 
 */
@@ -90,7 +90,7 @@ module.exports.run = async (bot, message, args, sql) => {
     }
 
     // Grab the Server Roles
-    let serverRoles = message.guild.roles;
+    let serverRoles = message.guild.roles.cache;
 
     debug(`Setting ${toPromote.user.username} to ${toLevel}.`);
     if (toLevel === "admin") {
