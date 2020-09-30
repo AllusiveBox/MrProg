@@ -95,23 +95,23 @@ module.exports.run = async (bot, message, args, sql) => {
     debug(`Setting ${toPromote.user.username} to ${toLevel}.`);
     if (toLevel === "admin") {
         let role = serverRoles.get(adminRole.ID)
-        toPromote.addRole(role).catch(error => {
+        toPromote.roles.add(role).catch(error => {
             return errorLog(error);
         });
         sql.promoteUser(toPromote.id, "admin");
         role = serverRoles.get(modRole.ID);
-        toPromote.addRole(role)
+        toPromote.roles.add(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a mod.`);
             });
         role = serverRoles.get(shadowModRole.ID);
-        toPromote.addRole(role)
+        toPromote.roles.add(role)
             .catch(error => { // No Role to Remove
                 debug(`${toPromote.user.username} is not a shadow mod.`);
             });
     } else if (toLevel === "mod") {
         let role = serverRoles.get(modRole.ID);
-        toPromote.addRole(role).catch(error => {
+        toPromote.roles.add(role).catch(error => {
             return errorLog(error);
         });
         sql.promoteUser(toPromote.id, "mod");
@@ -127,7 +127,7 @@ module.exports.run = async (bot, message, args, sql) => {
             });
     } else if (toLevel === "smod") {
         let role = serverRoles.get(shadowModRole.ID);
-        toPromote.addRole(role).catch(error => {
+        toPromote.roles.add(role).catch(error => {
             return errorLog(error);
         });
         sql.promoteUser(toPromote.id, "mod");

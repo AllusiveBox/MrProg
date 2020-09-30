@@ -46,7 +46,7 @@ module.exports.run = async (bot, message, level) => {
     }
 
     try {
-        await member.addRole(role);
+        await member.roles.add(role);
     } catch (error) {
         errorLog(error);
         return message.channel.send(`*${error.toString()}*`);
