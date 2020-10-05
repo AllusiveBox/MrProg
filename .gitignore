@@ -86,7 +86,7 @@ img/license/*
 log.txt
 error.txt
 purgedMessages.txt
-
+ecosystem.config.js
 files/textfaces.txt
 files/textfaces.txt
 .vscode/*
