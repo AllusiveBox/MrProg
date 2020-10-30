@@ -2,6 +2,7 @@ Updated: 10/30/20
 
 	* Added a new command, `!gameRole` that allows users the ability to add / remove roles from themselves, in a method similar to the `!dendome` and `!alertMe` commands.
 		* Currently only roles for Among Us and Monster Hunter World are supported, but more can be added if requested!
+	* Added a new command, `!serverUpdates` that allows users the ability to add / remove the Server Update role from themselves. This will be used going forward for all server related updates not worthy of an `@everyone` update
 	* Added a few missing reactions to commands that the bot recognizes
 		* The `!addPoints` and `!subPoints` will now react any time the command used, regardless of if it is successful or not.
 		* The `!help` command will now successfully react when an individual command is passed as an argument, regardless of if it is successful or not.
