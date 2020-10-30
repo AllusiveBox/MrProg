@@ -1,7 +1,7 @@
-Updated: 09/29/20
+Updated: 10/30/20
 
-	I had originally decided on not doing these anymore, but the update from Version whatever the hell I was on to Version 12 was massive...
-	* All the data types that now need to be cached to access should now reference the cache correctly. 
-	  * This should be limited to members and channels, mainly.
-	* All the file attachments will now correctly be sent again, yay!
-	* Cleaned up logging a bit
+	* Added a new command, `!gameRole` that allows users the ability to add / remove roles from themselves, in a method similar to the `!dendome` and `!alertMe` commands.
+		* Currently only roles for Among Us and Monster Hunter World are supported, but more can be added if requested!
+	* Added a few missing reactions to commands that the bot recognizes
+		* The `!addPoints` and `!subPoints` will now react any time the command used, regardless of if it is successful or not.
+		* The `!help` command will now successfully react when an individual command is passed as an argument, regardless of if it is successful or not.

@@ -7,6 +7,9 @@
     "name": "",
     "ID": ""
   },
+  "gameRoles": {
+
+  },
   "levelUp": {
     "1": {
       "name": "",
@@ -73,6 +76,10 @@
     }
   },
   "modRole": {
+    "name": "",
+    "ID": ""
+  },
+  "serverUpdates": {
     "name": "",
     "ID": ""
   },

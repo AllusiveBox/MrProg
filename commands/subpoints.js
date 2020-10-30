@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Yes
     Date Created: 08/17/20
-    Last Updated: 09/29/20
+    Last Updated: 10/30/20
     Last Update By: AllusiveBox
 */
 
@@ -86,7 +86,15 @@ module.exports.run = async (bot, message, args, sql) => {
         debug(`Unable to get Nickname. Name set to: ${name}`);
     }
 
-    sql.setPoints(toChange.id, row.points - amount, row.level, name);
+    try {
+        sql.setPoints(toChange.id, row.points - amount, row.level, name);
+        return react(message);
+    } catch (error) {
+        message.channel.send(`I'm sorry ${message.author}, I am unable to do that at this time due to the following error:\n`
+            + `*${error.toString()}*`);
+        errorLog(error);
+        return react(message, false);
+    }
 }
 
 module.exports.help = command;

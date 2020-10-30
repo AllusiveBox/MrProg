@@ -1,6 +1,6 @@
 {
   "about": true,
-  "addpoints":true,
+  "addpoints": true,
   "alertme": true,
   "announce": true,
   "announcerule": true,
@@ -23,6 +23,7 @@
   "enable": true,
   "eval": true,
   "faq": true,
+  "gamerole": true,
   "getbattlecode": true,
   "getbc": true,
   "google": true,
@@ -58,6 +59,7 @@
   "restart": true,
   "rip": true,
   "sc": true,
+  "serverupdates": true,
   "setbattlecode": true,
   "setbc": true,
   "setlevel": true,

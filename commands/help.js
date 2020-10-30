@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Cannot be Disabled
     Date Created: 10/15/17
-    Last Updated: 10/27/18
+    Last Updated: 10/30/20
     Last Updated By: AllusiveBox
 
 */
@@ -54,9 +54,11 @@ module.exports.run = async (bot, message, args, sql) => {
         if (command === undefined) {
             debug(`Unable to locate command, ${args[0]}.`);
             let reply = `I am unable to locate command: ${args[0]}.`;
-            return message.author.send(reply).catch(error => {
+            message.author.send(reply).catch(error => {
                 disabledDMs(message, reply);
             });
+
+            return react(message, false);
         }
 
         if ((command.help.permissionLevel === "mod") && !(isMod || isAdmin || isOwner))
@@ -68,10 +70,12 @@ module.exports.run = async (bot, message, args, sql) => {
 
         debug(`Generating help message for ${message.author.username} for the ${args[0]} command.`);
 
-        return message.author.send(command.help.bigDescription).catch(error => {
+        message.author.send(command.help.bigDescription).catch(error => {
             disabledDMs(message, `I am sorry, ${message.author}, I am unable to DM you.\n`
                 + `Please check your privacy settings and try again.`)
         });
+
+        return react(message);
     }
 
     let reply = "**__A list of My Commands__**\n\n";

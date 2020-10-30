@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes
     Date Created: 01/29/18
-    Last Updated: 09/29/20
+    Last Updated: 10/30/20
     Last Update By: AllusiveBox
 
 */
@@ -30,7 +30,7 @@ const command = {
     enabled: true,
     fullName: "Alert Me",
     name: "alertme",
-    permissionLeve: "normal"
+    permissionLevel: "normal"
 }
 
 

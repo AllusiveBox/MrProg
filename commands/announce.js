@@ -135,7 +135,7 @@ module.exports.run = async (bot, message) => {
 
     // Check if Announcement Channel is Defined
     if (!command.announceChat) { // If Announcement Channel Not Defined...
-        let reply = (`No channel set for ${name} command. Please update `
+        let reply = (`No channel set for ${command.name} command. Please update `
             + `files/channels.json and add a role for the "announceChat" entry. For a `
             + `tmplate, please check in the templates directory.`);
         debug(reply);
