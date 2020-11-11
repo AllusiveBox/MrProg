@@ -4,7 +4,7 @@
     Clearance: none
 	Default Enabled: Yes 
     Date Created: 07/29/18
-    Last Updated: 09/29/20
+    Last Updated: 11/11/20
     Last Update By: AllusiveBox
 
 */
@@ -121,11 +121,6 @@ module.exports.run = async (bot, message, args, sql) => {
     }
 
     // Update the Set of Users that have Used the Command
-    /*usedRecently.add(message.author.id);
-    setTimeout(() => {
-        debug(`Removing ${message.author.id} from the set...`);
-        usedRecently.delete(message.author.id);
-    }, 36288000); // Remove After 7 Days.*/
     await sql.userUpdatedNickname(message.author.id);
     // Load in Log channel ID
     let logID = channels.log;
@@ -156,7 +151,7 @@ module.exports.run = async (bot, message, args, sql) => {
     }
 
     // Get Member's Avatar
-    let avatar = message.member.user.avatarURL;
+    let avatar = message.member.user.avatarURL();
 
     // Build the Embed
     let updatedUserEmbed = new Discord.MessageEmbed()
