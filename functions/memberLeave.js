@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/09/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 11/10/20
     Last Update By: AllusiveBox
 
 **/
@@ -48,7 +48,7 @@ module.exports.run = async (bot, member, sql) => {
     }
 
     // Get the Member's Avatar
-    let avatar = member.user.avatarURL;
+    let avatar = member.user.avatarURL();
     //let user = await sql.getJoinDate(member.user.id);
     let joinDate = await sql.getJoinDate(member.user.id);
 

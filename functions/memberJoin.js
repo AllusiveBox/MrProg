@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Started: 08/08/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 11/10/20
     Last Update By: AllusiveBox
 
 **/
@@ -25,7 +25,7 @@ const { run: welcomeMessage } = require(`../functions/welcomeMessage.js`);
  */
 module.exports.run = async (bot, member, sql) => {
     // Debug to Console
-    debug(`I am inside the memberLeave Function.`);
+    debug(`I am inside the memberJoin Function.`);
 
     // Get Log Channel Color
     let logchannelColor = config.logChannelColors.memberJoin;
@@ -57,7 +57,7 @@ module.exports.run = async (bot, member, sql) => {
     });
 
     // Get the Member's Avatar
-    let avatar = member.user.avatarURL;
+    let avatar = member.user.avatarURL({ dynamic: true });
 
     // Build the Embed
     let joinEmbed = new Discord.MessageEmbed()
