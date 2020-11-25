@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 11/17/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 11/24/20
     Last Updated By: AllusiveBox
 
 **/
@@ -61,8 +61,18 @@ module.exports.run = async (bot, message) => {
         .setColor(logChannelColor)
         .setThumbnail(avatar)
         .addField(`DM From:`, message.author.username)
-        .addField(`User ID:`, message.author.id)
-        .addField(`Content:`, message.content ? message.content : "None")
+        .addField(`User ID:`, message.author.id);
+
+    if (message.content.length > 1024) {
+        debug(`message.content.length exceeds 1024 characters. Total length is: ${message.content.length}`);
+        dmLogEmbed
+            .addField("Content (1/2)", message.content.substring(0, 1023))
+            .addField("Content (2/2)", message.content.substring(1024, message.content.length));
+    } else {
+        dmLogEmbed.addField("Content", message.content);
+    }
+
+    dmLogEmbed
         .addField(`Attachments:`, message.attachments.size > 0 ? `Filename: ${attachments.filename}\n\tURL: ${attachments.proxyURL}` : `None`)
         .addField(`Time:`, new Date());
 

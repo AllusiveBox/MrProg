@@ -4,7 +4,7 @@
     Clearance: mod+
 	Default Enabled: Yes
     Date Created: 11/23/18
-    Last Updated: 09/29/20
+    Last Updated: 11/24/20
     Last Updated By: AllusiveBox
 
 */
@@ -65,7 +65,7 @@ module.exports.run = async (bot, message, args, sql) => {
     message.author.send({
         files: [{
             attachment: `${logPath}/${fileName}`,
-            name: '${fileName}'
+            name: `${fileName}`
         }]
     });
 }
