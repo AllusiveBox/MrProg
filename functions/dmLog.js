@@ -43,7 +43,7 @@ module.exports.run = async (bot, message) => {
     }
 
     // Get Avatar
-    let avatar = message.author.avatarURL;
+    let avatar = message.author.avatarURL();
 
     // Check if there are attachments
     let attachments;
