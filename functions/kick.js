@@ -4,7 +4,7 @@
     Version: 4
     Author: AllusiveBox
     Date Created: 08/08/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 12/03/20
     Last Update By: AllusiveBox
 
 **/
@@ -60,7 +60,7 @@ module.exports.run = async (bot, message, member, reason, sql) => {
     }
 
     // Get Avatar
-    let avatar = member.user.avatarURL;
+    let avatar = member.user.avatarURL();
 
     // Build the Embed
     let kickedEmbed = new Discord.MessageEmbed()

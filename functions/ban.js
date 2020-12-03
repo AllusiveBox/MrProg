@@ -4,7 +4,7 @@
     Version: 3
     Author: AllusiveBox
     Date Started: 02/28/18
-    Date Last Updated: 09/29/20
+    Date Last Updated: 12/03/20
     Last Update By: AllusiveBox
 
 **/
@@ -48,7 +48,7 @@ module.exports.run = async (bot, message, member, reason) => {
     debug(`Banning ${member.user.username} from ${message.member.guild.name} `
         + `for ${reason}.`);
     try {
-        await member.ban(reason);
+        await member.ban({ days: 0, reason: reason });
     } catch (error) {
         errorLog(error);
         await react(message, false);
@@ -58,7 +58,7 @@ module.exports.run = async (bot, message, member, reason) => {
     }
 
     // Get Avatar
-    let avatar = member.user.avatarURL;
+    let avatar = member.user.avatarURL();
 
     // Build the Embed
     let bannedEmbed = new Discord.MessageEmbed()
