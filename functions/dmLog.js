@@ -69,7 +69,7 @@ module.exports.run = async (bot, message) => {
             .addField("Content (1/2)", message.content.substring(0, 1023))
             .addField("Content (2/2)", message.content.substring(1024, message.content.length));
     } else {
-        dmLogEmbed.addField("Content", message.content);
+        dmLogEmbed.addField("Content", message.content ? message.content : "No Message Content");
     }
 
     dmLogEmbed
